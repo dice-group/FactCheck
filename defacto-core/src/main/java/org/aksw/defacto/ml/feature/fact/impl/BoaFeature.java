@@ -92,7 +92,7 @@ public class BoaFeature implements FactFeature {
 			}
 			
 			if ( proof.getProofPhrase().contains(p.getNormalized()) ) patternCounter++; 
-			if ( proof.getNormalizedProofPhrase().contains(p.getNormalized()) ) patternNormalizedCounter++; 
+			if ( proof.getNormalizedProofPhrase().toLowerCase().contains(p.getNormalized()) ) patternNormalizedCounter++;
         }
         
         proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);

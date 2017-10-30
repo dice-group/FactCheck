@@ -3,8 +3,6 @@
 .settings
 .directory
 
-/src/main/resources/defacto.ini
-
 /src/main/resources/training/arff/evidence/40%_false_all.arff
 /src/main/resources/training/arff/evidence/50-50_random_defacto_evidence.arff
 /src/main/resources/training/arff/evidence/all_defacto_evidence.arff

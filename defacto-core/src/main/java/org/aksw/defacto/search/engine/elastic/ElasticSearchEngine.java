@@ -80,7 +80,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"    \"match_phrase\" : {\n"+
 							"	 \"Article\" : {\n" +
 							"	\"query\" : "+q1+",\n"+
-							"	\"slop\"  : 20 \n"+
+							"	\"slop\"  : 100 \n"+
 							"} \n"+
 							"} \n"+
 							"} ,\n"+
@@ -95,7 +95,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"    \"match_phrase\" : {\n"+
 							"	 \"Article\" : {\n" +
 							"	\"query\" : "+q3+",\n"+
-							"	\"slop\"  : 30 \n"+
+							"	\"slop\"  : 100 \n"+
 							"} \n"+
 							"} \n"+
 							"} \n"+

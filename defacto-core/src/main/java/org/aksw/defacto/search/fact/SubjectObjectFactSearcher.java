@@ -101,10 +101,10 @@ public class SubjectObjectFactSearcher implements FactSearcher {
                 
                 // we need to check for both directions
                 List<String> subjectObjectOccurrences = new ArrayList<String>();
-                if (subjectObjectMatches != null) for ( String s : subjectObjectMatches ) subjectObjectOccurrences.add(s);
+                if (subjectObjectMatches != null) for ( String s : subjectObjectMatches ) subjectObjectOccurrences.add(getShortProofPhrase(s,subjectLabel,objectLabel));
                 // asdjklajsd
                 List<String> objectSubjectOccurrences = new ArrayList<String>();
-                if (objectSubjectMatches != null) for ( String s : objectSubjectMatches) objectSubjectOccurrences.add(s);
+                if (objectSubjectMatches != null) for ( String s : objectSubjectMatches) objectSubjectOccurrences.add(getShortProofPhrase(s,objectLabel, subjectLabel));
                 
                 // direction: subject property object
                 createProofsForEvidence(evidence, subjectObjectOccurrences, subjectLabel, objectLabel, websiteText, website, surfaceForms);
@@ -113,6 +113,23 @@ public class SubjectObjectFactSearcher implements FactSearcher {
             }
         }
         LOGGER.debug("#sLabels: "+  subjectLabels.size() + " #oLabels:" + objectLabels.size() + " #Proofs: " + evidence.getComplexProofs().size() + " #lang: " + model.getLanguages().size());
+    }
+
+    private String getShortProofPhrase(String input, String leftLabel, String rightLabel)
+    {
+        String temp1="";
+        String temp=input;
+        do
+        {
+            temp1 = temp;
+            temp = org.apache.commons.lang3.StringUtils.substringBetween(temp1+rightLabel, leftLabel, rightLabel);
+        }while(temp!=null);
+//		System.out.println("\n");
+//		System.out.println("===================================");
+//		System.out.println(leftLabel+temp1+rightLabel);
+//		System.out.println("===================================");
+//		System.out.println("\n");
+        return temp1;
     }
     
     public static void toLowerCase(Set<String> strings)
