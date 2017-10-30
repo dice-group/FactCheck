@@ -72,7 +72,8 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 
 
 			HttpEntity entity1 = new NStringEntity(
-					"{\n" +		 
+					"{\n" +
+							"	\"size\" : 100 ,\n" +
 							"    \"query\" : {\n" +
 							"	 \"bool\"  : {\n" +
 							"	 \"must\"  : [\n" +	
