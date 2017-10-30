@@ -13,7 +13,7 @@
 /src/main/resources/training/arff/evidence/random_defacto_evidence.arff
 /src/main/resources/training/arff/evidence/range_defacto_evidence copy.arff
 /src/main/resources/cache
+/defacto-core/.idea/
 
 /cache/sparql
 /target
-/log
