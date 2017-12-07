@@ -297,7 +297,7 @@
 			<scope>system</scope>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.elasticsearch.client</groupId>
 			<artifactId>rest</artifactId>
 			<version>5.0.0-rc1</version>
@@ -307,7 +307,7 @@
 					<artifactId>httpcore</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 
 		<!--<dependency> <groupId>org.aksw</groupId> <artifactId>sparql-metrics</artifactId> 
 			<version>0.0.1-SNAPSHOT</version> <exclusions> <exclusion> <groupId>org.aksw.jena-sparql-api</groupId> 
