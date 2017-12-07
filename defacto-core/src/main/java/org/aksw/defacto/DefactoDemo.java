@@ -36,14 +36,38 @@ public class DefactoDemo {
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
 
         org.apache.log4j.PropertyConfigurator.configure("../defacto-core/log/log4j.properties");
+		
+		String fileName = "";
+		byte[] data = fileToBytes(fileName);
 
         List<DefactoModel> models = new ArrayList<>();
         models.add(getEinsteinModel());
+		
+		
+		String modelName = "Einstein Model";
+		String lang = "en";
+		// once you have recieved data in form of bytes
+		// uncomment below line to create model from bytes array
+//		models.add(bytesToModel(data, modelName, lang));
 
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
 
 //        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
+    }
+
+    // for testing purpose
+    // as hobbit will send file in form of bytes
+    public static byte[] fileToBytes(String filePath) throws IOException {
+        Path fileLocation = Paths.get(filePath);
+        return Files.readAllBytes(fileLocation);
+    }
+
+    public static DefactoModel bytesToModel(byte[] data, String modelName, String lang) {
+        final Model model = ModelFactory.createDefaultModel();
+        model.read(new ByteArrayInputStream(data), null, "TURTLE");
+
+        return new DefactoModel(model, modelName, true, Arrays.asList(lang));
     }
 
     public static DefactoModel getEinsteinModel() {
