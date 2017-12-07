@@ -73,7 +73,7 @@ public class DefactoDemo {
         final Model model = ModelFactory.createDefaultModel();
         model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
                 "TURTLE");
-        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
+     //   model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
         return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
     }
 
