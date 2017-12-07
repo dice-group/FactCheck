@@ -47,13 +47,27 @@ public class DefactoDemo {
 //        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
     }
 
+    // for testing purpose
+    // as hobbit will send file in form of bytes
+    public static byte[] fileToBytes(String filePath) throws IOException {
+        Path fileLocation = Paths.get(filePath);
+        return Files.readAllBytes(fileLocation);
+    }
+
+    public static DefactoModel bytesToModel(byte[] data, String modelName, String lang) {
+        final Model model = ModelFactory.createDefaultModel();
+        model.read(new ByteArrayInputStream(data), null, "TURTLE");
+
+        return new DefactoModel(model, modelName, true, Arrays.asList(lang));
+    }
+
     public static DefactoModel getEinsteinModel() {
         final Model model = ModelFactory.createDefaultModel();
         model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
                 "TURTLE");
         return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
     }
-    
+
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException
     {
     	List<DefactoModel> models = new ArrayList<>();
