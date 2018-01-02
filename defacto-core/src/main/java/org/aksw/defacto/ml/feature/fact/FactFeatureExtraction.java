@@ -32,6 +32,7 @@ public class FactFeatureExtraction {
     static {
 
         FactFeatureExtraction.factFeatures.add(new BoaFeature());
+        //FactFeatureExtraction.factFeatures.add(new PattyPatterFeature());
         FactFeatureExtraction.factFeatures.add(new EndOfSentenceCharacterFeature());
         FactFeatureExtraction.factFeatures.add(new PageTitleFeature());
         FactFeatureExtraction.factFeatures.add(new SubjectObjectSimilarityFeature());
