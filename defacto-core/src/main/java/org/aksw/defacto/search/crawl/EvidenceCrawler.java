@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -35,6 +36,8 @@ import org.aksw.defacto.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 
 /**
@@ -77,7 +80,7 @@ public class EvidenceCrawler {
             LOGGER.info("Finished getting search results in " + (System.currentTimeMillis() - start));
             
             // multiple pattern bring the same results but we dont want that
-            //this.filterSearchResults(searchResults);
+            this.filterSearchResults(searchResults);
 
             Long totalHitCount = 0L; // sum over the n*m query results        
             for ( SearchResult result : searchResults ) {
@@ -88,6 +91,24 @@ public class EvidenceCrawler {
             // basically downloads all websites in parallel
             //crawlSearchResults(searchResults, model, evidence);
             // tries to find proofs and possible proofs and scores those
+            long startmodel = System.currentTimeMillis();
+            //System.out.println("Started Loading two pipilines "+startmodel);
+            Properties props = new Properties();
+    	    props.put("annotators", "tokenize, ssplit");
+    	    //this.model.pipeline = new StanfordCoreNLP(props);
+            Properties props1 = new Properties();
+            props1.put("tokenize.language", "English");
+    	    props1.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
+    	    props1.put("ner.model","edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
+    	    props1.put("ner.applyNumericClassifiers", "false");
+    	    props1.put("ner.useSUTime", "false");
+    	    props1.put("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
+    	    props1.put("coref.algorithm", "statistical");
+    	    props1.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
+    	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
+    	    //this.model.pipeline1 = new StanfordCoreNLP(props1);
+    	    long finishmodel = System.currentTimeMillis();
+    	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
             scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache
             //cacheSearchResults(searchResults);
