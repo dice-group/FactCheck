@@ -3,9 +3,14 @@ package org.aksw.defacto.search.fact;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
@@ -19,6 +24,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.SmithWaterman;
+
+import edu.stanford.nlp.coref.CorefCoreAnnotations;
+import edu.stanford.nlp.coref.CorefCoreAnnotations.CorefChainAnnotation;
+import edu.stanford.nlp.coref.data.CorefChain;
+import edu.stanford.nlp.coref.data.CorefChain.CorefMention;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.util.CoreMap;
 
 /**
  * 
@@ -36,6 +52,8 @@ public class SubjectObjectFactSearcher implements FactSearcher {
     private static final java.util.regex.Pattern SQUARED_BRACKETS   = java.util.regex.Pattern.compile("\\[.+?\\]");
     private static final java.util.regex.Pattern TRASH              = java.util.regex.Pattern.compile("[^\\p{L}\\p{N}.?!' ]");
     private static final java.util.regex.Pattern WHITESPACES        = java.util.regex.Pattern.compile("\\n");
+    private StanfordCoreNLP pipeline;
+    private StanfordCoreNLP pipeline1;
 
     /**
      * 
