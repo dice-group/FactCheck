@@ -31,6 +31,7 @@ public class WebSite {
     private Double topicCoverageScore = 0D;
 	private String annotatedSentences;
 	private String language ="";
+	private String predicate = "";
 	private String lowerCaseText = null;
 	private String lowerCaseTitle = null; 
     
@@ -67,6 +68,14 @@ public class WebSite {
 
         return this.pagerank;
     }
+    
+    public String getPredicate() {
+		return predicate;
+	}
+
+	public void setPredicate(String predicate) {
+		this.predicate = predicate;
+	}
 
     /**
      * 
