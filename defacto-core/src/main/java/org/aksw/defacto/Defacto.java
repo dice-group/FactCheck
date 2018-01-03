@@ -148,8 +148,7 @@ public class Defacto {
     	try {
     		
     		if ( Defacto.DEFACTO_CONFIG  == null )
-    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File("defacto.ini")));
-//    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File("D:\\Universitat Paderborn\\Semester 2\\Project\\Defacto\\defacto-core\\target\\classes\\defacto.ini")));
+    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Constants.RESOURCE_PATH + "defacto.ini")));
 //    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("/defacto.ini").getFile())));
     			
     		
