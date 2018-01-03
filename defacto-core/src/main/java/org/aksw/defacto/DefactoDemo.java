@@ -96,7 +96,7 @@ public class DefactoDemo {
     	  }
     	return models;
  }
-    
+
     public static List<DefactoModel> getTrainingData() {
 
         List<DefactoModel> models = new ArrayList<DefactoModel>();
