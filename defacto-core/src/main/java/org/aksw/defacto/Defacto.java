@@ -149,7 +149,10 @@ public class Defacto {
     	try {
     		
     		if ( Defacto.DEFACTO_CONFIG  == null )
-    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("/defacto.ini").getFile())));
+    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File("defacto.ini")));
+//    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File("D:\\Universitat Paderborn\\Semester 2\\Project\\Defacto\\defacto-core\\target\\classes\\defacto.ini")));
+//    			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("/defacto.ini").getFile())));
+    			
     		
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
@@ -163,7 +166,7 @@ public class Defacto {
 
     /**
      * 
-     * @param models
+//     * @param models
      * @return
      */
     public static Map<DefactoModel,Evidence> checkFacts(List<DefactoModel> defactoModel, TIME_DISTRIBUTION_ONLY onlyTimeDistribution) {
