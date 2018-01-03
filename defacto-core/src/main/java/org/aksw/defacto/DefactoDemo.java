@@ -1,9 +1,9 @@
 package org.aksw.defacto;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,20 +37,22 @@ public class DefactoDemo {
 
         org.apache.log4j.PropertyConfigurator.configure("../defacto-core/log/log4j.properties");
 		
-		String fileName = "";
+		String fileName = "Einstein.ttl";
 		byte[] data = fileToBytes(fileName);
 
-        List<DefactoModel> models = new ArrayList<>();
-        models.add(getEinsteinModel());
+//        List<DefactoModel> models = new ArrayList<>();
+//        models.add(getEinsteinModel());
 		
 		
-		String modelName = "Einstein Model";
-		String lang = "en";
+//		String modelName = "Einstein Model";
+//		String lang = "en";
 		// once you have recieved data in form of bytes
 		// uncomment below line to create model from bytes array
 //		models.add(bytesToModel(data, modelName, lang));
 
-        Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
+//        Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
+
+        DefactoBytes.FactCheckFromBytes("Einstein Model", data);
 
 
 //        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
