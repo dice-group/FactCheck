@@ -95,10 +95,7 @@ public class DefactoDemo {
     	    // directories.
     	  }
     	return models;
-//        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null, "TURTLE");
-        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
-        return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
-    }
+ }
     
     public static List<DefactoModel> getTrainingData() {
 
