@@ -42,7 +42,7 @@ public class DefactoDemo {
 
         org.apache.log4j.PropertyConfigurator.configure("../defacto-core/log/log4j.properties");
 
-        //        uncomment below lines if you want to run FactCheck from bytes Data
+//        uncomment below lines if you want to run FactCheck from bytes Data
 		/*String fileName = "Einstein.ttl";
 		byte[] data = fileToBytes(fileName);
         DefactoBytes.FactCheckFromBytes("Einstein Model", data);*/
@@ -51,9 +51,8 @@ public class DefactoDemo {
         models.add(getEinsteinModel());
         //models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
-
-
 //        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
+
     }
 
     // for testing purpose
@@ -74,6 +73,7 @@ public class DefactoDemo {
         final Model model = ModelFactory.createDefaultModel();
         model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
                 "TURTLE");
+        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
         return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
     }
 
@@ -95,6 +95,9 @@ public class DefactoDemo {
     	    // directories.
     	  }
     	return models;
+//        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null, "TURTLE");
+        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
+        return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
     }
     
     public static List<DefactoModel> getTrainingData() {
