@@ -36,26 +36,17 @@ public class DefactoDemo {
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
 
         org.apache.log4j.PropertyConfigurator.configure("../defacto-core/log/log4j.properties");
-		
-		String fileName = "Einstein.ttl";
+
+//        uncomment below lines if you want to run FactCheck from bytes Data
+		/*String fileName = "Einstein.ttl";
 		byte[] data = fileToBytes(fileName);
+        DefactoBytes.FactCheckFromBytes("Einstein Model", data);*/
 
-//        List<DefactoModel> models = new ArrayList<>();
-//        models.add(getEinsteinModel());
-		
-		
-//		String modelName = "Einstein Model";
-//		String lang = "en";
-		// once you have recieved data in form of bytes
-		// uncomment below line to create model from bytes array
-//		models.add(bytesToModel(data, modelName, lang));
+        List<DefactoModel> models = new ArrayList<>();
+        models.add(getEinsteinModel());
 
-//        Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
+        Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
-        DefactoBytes.FactCheckFromBytes("Einstein Model", data);
-
-
-//        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
     }
 
     // for testing purpose
@@ -65,17 +56,10 @@ public class DefactoDemo {
         return Files.readAllBytes(fileLocation);
     }
 
-    public static DefactoModel bytesToModel(byte[] data, String modelName, String lang) {
+    public static DefactoModel getEinsteinModel() throws FileNotFoundException {
         final Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(data), null, "TURTLE");
-
-        return new DefactoModel(model, modelName, true, Arrays.asList(lang));
-    }
-
-    public static DefactoModel getEinsteinModel() {
-        final Model model = ModelFactory.createDefaultModel();
-        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
-                "TURTLE");
+//        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null, "TURTLE");
+        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
         return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
     }
     
