@@ -121,7 +121,6 @@ public class FactScorer {
     private Classifier loadClassifier() {
 
         try {
-            
             return (Classifier) weka.core.SerializationHelper.read(
             		DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"));
         }
