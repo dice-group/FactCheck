@@ -1,5 +1,7 @@
 package org.aksw.defacto.search.engine.elastic;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,74 +66,28 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			String subject  = query.getSubjectLabel().replace("&", "and");
 			String property = normalizePredicate(query.getPropertyLabel().trim());
 			String object   = query.getObjectLabel().replace("&", "and");
-			String q1 = String.format("\"%s %s\"", subject, property);
+			String q1 = String.format("\"%s %s %s\"", subject, property, object);
 			if ( query.getPropertyLabel().equals("??? NONE ???") )
-				q1 = String.format("\"%s\"", subject);
+				q1 = String.format("\"%s %s\"", subject, object);
+			System.out.println(q1);
 			String q2 = String.format("\"%s\"", object);
 			String q3 = String.format("\"%s %s\"", subject,object);
 
 
-			HttpEntity entity1 = new NStringEntity(
-					"{\n" +
-							"	\"size\" : 100 ,\n" +
-							"    \"query\" : {\n" +
-							"	 \"bool\"  : {\n" +
-							"	 \"must\"  : [\n" +	
-							"	{\n"+
-							"    \"match_phrase\" : {\n"+
-							"	 \"Article\" : {\n" +
-							"	\"query\" : "+q1+",\n"+
-							"	\"slop\"  : 100 \n"+
-							"} \n"+
-							"} \n"+
-							"} ,\n"+
-							"	{\n"+
-							"    \"match_phrase\" : {\n"+
-							"	 \"Article\" : {\n" +
-							"	\"query\" : "+q2+"\n"+
-							"} \n"+
-							"} \n"+
-							"} ,\n"+
-							"	{\n"+
-							"    \"match_phrase\" : {\n"+
-							"	 \"Article\" : {\n" +
-							"	\"query\" : "+q3+",\n"+
-							"	\"slop\"  : 100 \n"+
-							"} \n"+
-							"} \n"+
-							"} \n"+
-							"] \n"+
-							"} \n"+
-							"} \n"+
+							HttpEntity entity1 = new NStringEntity(
+							 "{\n" +
+									"	\"size\" : 500 ,\n" +
+									"    \"query\" : {\n" +
+									"    \"match_phrase\" : {\n"+
+									"	 \"Article\" : {\n" +
+									"	\"query\" : "+q1+",\n"+
+									"	\"slop\"  : 30 \n"+
+									"} \n"+
+									"} \n"+
+									"} \n"+
 							"}", ContentType.APPLICATION_JSON);
-
-
-			//				HttpEntity entity1 = new NStringEntity(
-			//				 "{\n" +		 
-			//				"    \"query\" : {\n" +
-			//				"	 \"bool\"  : {\n" +
-			//				"	 \"must\"  : [\n" +	
-			//				"	{\n"+
-			//				"    \"match_phrase\" : {\n"+
-			//				"	 \"Article\" : {\n" +
-			//				"	\"query\" : "+q1+",\n"+
-			//				"	\"slop\"  : 10 \n"+
-			//				"} \n"+
-			//				"} \n"+
-			//				"} \n"+
-			//				"	{\n"+
-			//				"    \"match_phrase\" : {\n"+
-			//				"	 \"Article\" : {\n" +
-			//				"	\"query\" : "+q2+",\n"+
-			//				"	\"slop\"  : 10 \n"+
-			//				"} \n"+
-			//				"} \n"+
-			//				"} \n"+
-			//				"] \n"+
-			//				"} \n"+
-			//				"} \n"+
-			//				"}", ContentType.APPLICATION_JSON);
-			Response response = restClientobj.performRequest("GET", "/wiki/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
+			
+			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());			
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
@@ -140,6 +96,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
+			//System.out.println(docCount);
 			for(int i=0; i<docCount; i++)
 			{
 				JsonNode articleNode = hits.get("hits").get(i).get("_source").get("Article");
@@ -150,12 +107,12 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				String articleId = articleID.asText();
 				String articleURL = articleURLNode.asText();
 				String articleTitle = articleTitleNode.asText();
-
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);
 				website.setText(articleText);
 				website.setRank(i++);
 				website.setLanguage(query.getLanguage());
+				website.setPredicate(property);
 				results.add(website);
 			}
 
@@ -168,7 +125,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 		}
 	}
 	public String normalizePredicate(String propertyLabel) {
-		System.out.println(propertyLabel);
+		//System.out.println(propertyLabel);
 		return propertyLabel.replaceAll(",", "").replace("`", "").replace(" 's", "'s").replace("?R?", "").replace("?D?", "").replaceAll(" +", " ").replaceAll("'[^s]", "").replaceAll("&", "and").trim();
 	}
 

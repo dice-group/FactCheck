@@ -207,9 +207,13 @@ public class TopicTermExtractor {
         if ( numberOfSearchResults > 0 ) // make sure that denominator is above 0
             numberOfSearchResultsWithTopicTermProbability = (float) numberOfSearchResultsWithTopicTerm / (float) numberOfSearchResults;
 
+        if(numberOfSearchResultsWithQueryTermsInTitleAndTopicTermInBody==0)
+        	return numberOfSearchResultsWithTopicTermProbability>=0.8;
+        
         if ( numberOfSearchResultsWithQueryTermsInTitle > 0 ) //make sure that denominator is above 0
             numberOfSearchResultsWithQueryTermsInTitleAndTopicTermInBodyProbability = (float) numberOfSearchResultsWithQueryTermsInTitleAndTopicTermInBody / (float) numberOfSearchResultsWithQueryTermsInTitle;
-
+        
+        
         return numberOfSearchResultsWithQueryTermsInTitleAndTopicTermInBodyProbability >= numberOfSearchResultsWithTopicTermProbability;
     }
     

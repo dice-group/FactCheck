@@ -19,4 +19,6 @@ public interface FactSearcher {
      * @return
      */
     public void generateProofs(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern);
+
+	public void generateProofs1(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern);
 }

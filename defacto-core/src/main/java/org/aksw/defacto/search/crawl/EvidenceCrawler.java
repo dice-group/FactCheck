@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 
 
 /**
@@ -91,11 +92,9 @@ public class EvidenceCrawler {
             // basically downloads all websites in parallel
             //crawlSearchResults(searchResults, model, evidence);
             // tries to find proofs and possible proofs and scores those
-            long startmodel = System.currentTimeMillis();
-            //System.out.println("Started Loading two pipilines "+startmodel);
             Properties props = new Properties();
     	    props.put("annotators", "tokenize, ssplit");
-    	    //this.model.pipeline = new StanfordCoreNLP(props);
+    	    this.model.pipeline = new StanfordCoreNLPClient(props, "http://131.234.29.16", 9000, 1);
             Properties props1 = new Properties();
             props1.put("tokenize.language", "English");
     	    props1.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
@@ -106,8 +105,7 @@ public class EvidenceCrawler {
     	    props1.put("coref.algorithm", "statistical");
     	    props1.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
     	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    	    //this.model.pipeline1 = new StanfordCoreNLP(props1);
-    	    long finishmodel = System.currentTimeMillis();
+    	    this.model.pipeline1 = new StanfordCoreNLPClient(props1, "http://131.234.29.16", 9200, 1);
     	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
             scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache

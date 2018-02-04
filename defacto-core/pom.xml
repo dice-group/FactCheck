@@ -226,11 +226,11 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.3</version>
 		</dependency>
-<!-- 		<dependency>
+ 		<dependency>
 			<groupId>net.billylieurance</groupId>
 			<artifactId>azuresearch</artifactId>
 			<version>0.9.1</version>
-		</dependency> -->
+		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>

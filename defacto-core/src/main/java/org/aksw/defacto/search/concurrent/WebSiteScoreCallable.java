@@ -38,7 +38,7 @@ public class WebSiteScoreCallable implements Callable<WebSite> {
     @Override
     public WebSite call() {
         
-    	searcher.generateProofs(evidence, website, model, pattern);
+    	searcher.generateProofs1(evidence, website, model, pattern);
         return website;
     }
 }

@@ -27,6 +27,7 @@ import com.hp.hpl.jena.vocabulary.OWL;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
@@ -43,8 +44,8 @@ public class DefactoModel {
     public DefactoResource object;
     public DefactoTimePeriod timePeriod = new DefactoTimePeriod("", "");
     public List<String> languages = new ArrayList<String>();
-    public StanfordCoreNLP pipeline;
-    public StanfordCoreNLP pipeline1;
+    public StanfordCoreNLPClient pipeline;
+    public StanfordCoreNLPClient pipeline1;
     
     /**
      * Creates a new Defacto Model. This is a wrapper around a jena model. But with
