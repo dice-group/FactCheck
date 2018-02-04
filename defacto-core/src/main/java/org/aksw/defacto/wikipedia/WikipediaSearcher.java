@@ -37,7 +37,7 @@ public class WikipediaSearcher {
     public static ArrayList<WikipediaSearchResult> queryWikipedia(String searchQuery, String language) {
 
         ArrayList<WikipediaSearchResult> searchResults = new ArrayList<WikipediaSearchResult>();
-        User user = new User("", "", "http://"+language+".wikipedia.org/w/api.php");
+        User user = new User("", "", "https://"+language+".wikipedia.org/w/api.php");
         user.login();
 
         String[] queryParams = { "list", "search", "srsearch", searchQuery, "sroffset", "0", 

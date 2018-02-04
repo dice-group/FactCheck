@@ -101,6 +101,13 @@ public class DefaultFactSearcher implements FactSearcher {
         }
     }
     
+    
+    @Override
+	public void generateProofs1(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern) {
+		// TODO Auto-generated method stub
+		
+	}
+    
     /**
      * 
      */
