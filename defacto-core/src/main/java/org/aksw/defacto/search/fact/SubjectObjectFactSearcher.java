@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
@@ -151,9 +150,6 @@ public class SubjectObjectFactSearcher implements FactSearcher {
     @Override
 	public void generateProofs1(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern) {
 	
-    	String url = website.getUrl();
-    	Properties props = new Properties();
-	    props.put("annotators", "tokenize, ssplit");
 	    this.pipeline = model.pipeline;
 	    this.pipeline1 = model.pipeline1;
 	    Set<String> subjectLabels = new HashSet<String>();
