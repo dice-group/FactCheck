@@ -323,7 +323,7 @@ public class TopicTermExtractor {
 							"}\n"+
 							"}]\n"+
 					"}", ContentType.APPLICATION_JSON);
-			System.out.println(entity1.toString());
+			//System.out.println(entity1.toString());
 			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());
 			//System.out.println(json);
@@ -340,7 +340,7 @@ public class TopicTermExtractor {
 				JsonNode UCI = hits.get("hits").get(i).get("_source").get("Coherence_UCI");
 				String topicTerm = Term.asText();
 				float uciScore = Float.parseFloat(UCI.asText());
-				System.out.println("Term : "+topicTerm+" , "+"UCI Score : "+uciScore);
+				//System.out.println("Term : "+topicTerm+" , "+"UCI Score : "+uciScore);
 				Word word = new Word(topicTerm, uciScore);
 				wordList.add(word);
 			}
@@ -350,7 +350,7 @@ public class TopicTermExtractor {
 
 			e.printStackTrace();
     	}
-    	System.out.println(wordList.get(12).getWord().toString());
+    	//System.out.println(wordList.get(12).getWord().toString());
 		return wordList;
     	
     }

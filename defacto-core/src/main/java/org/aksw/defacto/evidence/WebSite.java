@@ -18,12 +18,12 @@ public class WebSite {
     private String text                     = "";
     private String title                    = "";
     private String url                      = "";
-    private int pagerank                    = Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK");
+    private float pagerank                    = Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK");
     private double score                    = 0D;
     private MetaQuery query                 = null;
     
     private Map<Word,Integer> topicTermsOccurrences    = new LinkedHashMap<Word,Integer>();
-    private int rank;
+    private float rank;
     private boolean cached;
     private Double topicMajorityWeb = 0D;
     private Double topicMajoritySearch = 0D;
@@ -64,7 +64,7 @@ public class WebSite {
      * 
      * @return
      */
-    public int getPageRank() {
+    public float getPageRank() {
 
         return this.pagerank;
     }
@@ -221,12 +221,12 @@ public class WebSite {
         return true;
     }
 
-    public void setRank(int rank) {
+    public void setRank(float rank) {
 
         this.rank = rank;
     }
     
-    public int getSearchRank() {
+    public float getSearchRank() {
 
         return this.rank;
     }

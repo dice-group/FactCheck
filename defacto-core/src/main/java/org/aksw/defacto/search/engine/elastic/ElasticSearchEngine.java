@@ -109,7 +109,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);
 				website.setText(articleText);
-				website.setRank(Integer.parseInt(pagerank.asText()));
+				website.setRank(Float.parseFloat(pagerank.asText()));
 				website.setLanguage(query.getLanguage());
 				website.setPredicate(property);
 				results.add(website);
