@@ -102,15 +102,14 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				JsonNode articleNode = hits.get("hits").get(i).get("_source").get("Article");
 				JsonNode articleURLNode = hits.get("hits").get(i).get("_source").get("URL");
 				JsonNode articleTitleNode = hits.get("hits").get(i).get("_source").get("Title");
-				JsonNode articleID = hits.get("hits").get(i).get("_id");
+				JsonNode pagerank = hits.get("hits").get(i).get("_source").get("Pagerank");
 				String articleText = articleNode.asText();
-				String articleId = articleID.asText();
 				String articleURL = articleURLNode.asText();
 				String articleTitle = articleTitleNode.asText();
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);
 				website.setText(articleText);
-				website.setRank(i++);
+				website.setRank(Integer.parseInt(pagerank.asText()));
 				website.setLanguage(query.getLanguage());
 				website.setPredicate(property);
 				results.add(website);

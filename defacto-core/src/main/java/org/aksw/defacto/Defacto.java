@@ -182,7 +182,7 @@ public class Defacto {
 
             // rewrite the fact training file after every proof
             if ( DEFACTO_CONFIG.getBooleanSetting("fact", "OVERWRITE_FACT_TRAINING_FILE") ) 
-            	writeFactTrainingDataFile(DEFACTO_CONFIG.getStringSetting("evidence", "FACT_TRAINING_DATA_FILENAME"));
+            	writeFactTrainingDataFile(DEFACTO_CONFIG.getStringSetting("fact", "FACT_TRAINING_DATA_FILENAME"));
             
             // rewrite the training file after every checked triple
             if ( DEFACTO_CONFIG.getBooleanSetting("evidence", "OVERWRITE_EVIDENCE_TRAINING_FILE")  ) 

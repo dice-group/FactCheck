@@ -374,6 +374,7 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	    		    	{
 	    		    		tinyContext = sentence.get(CoreAnnotations.TextAnnotation.class);
 	    		    		occurrence = resolvedStr;
+	    		    		break;
 	    		    	}
 	    		    	
 	    		    }
@@ -401,10 +402,12 @@ public class SubjectObjectFactSearcher implements FactSearcher {
     		    			tinyContext = breakString(occurrence.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
 	    		    }
 	                	
-	                	ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, occurrence, normalizeOccurrence(occurrence,surfaceForms), site);
-	                	proof.setTinyContext(tinyContext);
+	                if(sublabel.isEmpty()) sublabel = evidence.getModel().getSubjectLabel("en");
+	                if(objlabel.isEmpty()) objlabel = evidence.getModel().getObjectLabel("en");
+	    		    ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, occurrence, normalizeOccurrence(occurrence,surfaceForms), site);
+	                proof.setTinyContext(tinyContext);
 	                    
-	                    evidence.addComplexProof(proof);
+	                evidence.addComplexProof(proof);
 	            }
 	        }
 	    }

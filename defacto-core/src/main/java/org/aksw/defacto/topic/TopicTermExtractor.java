@@ -22,14 +22,25 @@ import org.aksw.defacto.config.DefactoConfig;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.search.cache.solr.TopicTermSolr4Cache;
+import org.aksw.defacto.search.engine.elastic.ElasticSearchEngine;
 import org.aksw.defacto.topic.frequency.Word;
 import org.aksw.defacto.wikipedia.WikipediaPageCrawler;
 import org.aksw.defacto.wikipedia.WikipediaSearchResult;
 import org.aksw.defacto.wikipedia.WikipediaSearcher;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.elasticsearch.client.Response;
+import org.elasticsearch.client.RestClient;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
@@ -39,6 +50,9 @@ import org.ini4j.InvalidFileFormatException;
 public class TopicTermExtractor {
 
     private static Logger logger = Logger.getLogger(TopicTermExtractor.class);
+    
+    //private static String ELASTIC_SERVER = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "SERVER_ADDRESS");;
+	//private static String ELASTIC_PORT = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "PORT_NUMBER");
 
     private static TopicTermSolr4Cache cache = new TopicTermSolr4Cache();
     
@@ -46,7 +60,8 @@ public class TopicTermExtractor {
     	
     	Defacto.init();
     	cache = new TopicTermSolr4Cache();
-        for ( Word w : getPotentialTopicTerms("Amazon", "Jeff Bezos"))  System.out.println(w + " " + w.getFrequency());;
+        //for ( Word w : getPotentialTopicTerms("Amazon", "Jeff Bezos"))  System.out.println(w + " " + w.getFrequency());;
+    	getTerms("Albert Einstein");
     }
     
     /**
@@ -83,7 +98,7 @@ public class TopicTermExtractor {
                 
                 // it is already there, then we should just increase its repetitions
                 Word newWord = topicTermsInPages.get(word.getWord());
-                newWord.setFrequency(word.getFrequency() + newWord.getFrequency());
+                //newWord.setFrequency(word.getFrequency() + newWord.getFrequency());
             }
         }
         
@@ -283,4 +298,61 @@ public class TopicTermExtractor {
         
         return potentialTopicTerms;
     }
+    
+    public static List<Word> getTerms(String label)
+    {
+    	ArrayList<Word> wordList = new ArrayList<Word>();
+    	
+    	try {
+
+			RestClient restClientobj = RestClient.builder(new HttpHost("131.234.28.255" , 6060, "http")).build();
+			HttpEntity entity1 = new NStringEntity(
+					 "{\n" +
+							"	\"size\" : 20 ,\n" +
+							"    \"query\" : {\n" +
+							"    \"match_phrase\" : {\n"+
+							"	  \"Topic\" : {\n" +
+							"	\"query\" : \""+label+"\"\n"+
+							"} \n"+
+							"} \n"+
+							"} ,\n"+
+							"  \"sort\": [\n"+
+							"{\n"+
+							"    \"Coherence_UCI\" : {\n" +
+							"  \"order\" : \"desc\""+
+							"}\n"+
+							"}]\n"+
+					"}", ContentType.APPLICATION_JSON);
+			System.out.println(entity1.toString());
+			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
+			String json = EntityUtils.toString(response.getEntity());
+			//System.out.println(json);
+			ObjectMapper mapper = new ObjectMapper();
+			@SuppressWarnings("unchecked")
+			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
+			JsonNode hits = rootNode.get("hits");
+			JsonNode hitCount = hits.get("total");
+			int docCount = Integer.parseInt(hitCount.asText());
+			//System.out.println(docCount);
+			for(int i=0; i<20; i++)
+			{				
+				JsonNode Term = hits.get("hits").get(i).get("_source").get("Term");
+				JsonNode UCI = hits.get("hits").get(i).get("_source").get("Coherence_UCI");
+				String topicTerm = Term.asText();
+				float uciScore = Float.parseFloat(UCI.asText());
+				System.out.println("Term : "+topicTerm+" , "+"UCI Score : "+uciScore);
+				Word word = new Word(topicTerm, uciScore);
+				wordList.add(word);
+			}
+    	}
+    	
+    	catch (Exception e) {
+
+			e.printStackTrace();
+    	}
+    	System.out.println(wordList.get(12).getWord().toString());
+		return wordList;
+    	
+    }
+    
 }
