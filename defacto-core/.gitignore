@@ -18,3 +18,10 @@
 /cache/sparql
 /target
 /log/info.log
+.idea/.name
+.idea/compiler.xml
+.idea/inspectionProfiles/
+.idea/libraries/
+.idea/misc.xml
+.idea/modules.xml
+repo/
