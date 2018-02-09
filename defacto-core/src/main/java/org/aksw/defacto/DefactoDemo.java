@@ -1,6 +1,7 @@
 package org.aksw.defacto;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class DefactoDemo {
 
         List<DefactoModel> models = new ArrayList<>();
         models.add(getEinsteinModel());
-
+        //models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
 
@@ -50,7 +51,27 @@ public class DefactoDemo {
         final Model model = ModelFactory.createDefaultModel();
         model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
                 "TURTLE");
-        return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
+        return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
+    }
+    
+    public static List<DefactoModel> getRDFModels() throws FileNotFoundException
+    {
+    	List<DefactoModel> models = new ArrayList<>();
+    	File dir = new File("E:\\RDFModels");
+    	  File[] directoryListing = dir.listFiles();
+    	  if (directoryListing != null) {
+    	    for (File child : directoryListing) {
+    	      final Model model = ModelFactory.createDefaultModel();
+    	      model.read(new FileInputStream(child), null, "TURTLE");
+    	      models.add(new DefactoModel(model, "award", true, Arrays.asList("en")));
+    	    }
+    	  } else {
+    	    // Handle the case where dir is not really a directory.
+    	    // Checking dir.isDirectory() above would not be sufficient
+    	    // to avoid race conditions with another process that deletes
+    	    // directories.
+    	  }
+    	return models;
     }
     
     public static List<DefactoModel> getTrainingData() {

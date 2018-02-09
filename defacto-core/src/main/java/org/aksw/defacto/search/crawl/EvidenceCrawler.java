@@ -133,7 +133,7 @@ public class EvidenceCrawler {
         		
         		if ( !subjectLabel.equals(Constants.NO_LABEL) && !objectLabel.equals(Constants.NO_LABEL) ) {
 
-        			List<Word> topicTerms = TopicTermExtractor.getTopicTerms(subjectLabel, objectLabel, language, evidence);
+        			List<Word> topicTerms = TopicTermExtractor.getTerms(subjectLabel);
         			evidence.setTopicTerms(language, topicTerms);
             		evidence.setTopicTermVectorForWebsites(language);
         		}

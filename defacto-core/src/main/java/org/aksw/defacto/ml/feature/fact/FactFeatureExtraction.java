@@ -12,6 +12,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.impl.GoodnessFeature;
 import org.aksw.defacto.ml.feature.fact.impl.BoaFeature;
 import org.aksw.defacto.ml.feature.fact.impl.ClassFeature;
+import org.aksw.defacto.ml.feature.fact.impl.DependencyParseFeature;
 import org.aksw.defacto.ml.feature.fact.impl.EndOfSentenceCharacterFeature;
 import org.aksw.defacto.ml.feature.fact.impl.NameFeature;
 import org.aksw.defacto.ml.feature.fact.impl.PageTitleFeature;
@@ -42,6 +43,7 @@ public class FactFeatureExtraction {
         FactFeatureExtraction.factFeatures.add(new NameFeature());
         FactFeatureExtraction.factFeatures.add(new PropertyFeature());
         FactFeatureExtraction.factFeatures.add(new ClassFeature());
+        FactFeatureExtraction.factFeatures.add(new DependencyParseFeature());
     }
     
     /**
