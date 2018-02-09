@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,7 +108,7 @@ public class Defacto {
         
         // 
     	 // 4. score the facts
-        long startFactScoring = System.currentTimeMillis();
+       /* long startFactScoring = System.currentTimeMillis();
         FactScorer factScorer = new FactScorer();
         factScorer.scoreEvidence(evidence);
         LOGGER.info("Fact Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startFactScoring));
@@ -126,7 +127,7 @@ public class Defacto {
             LOGGER.info("Evidence Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startScoring));
         }
         
-        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));
+        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));*/
         
         return evidence;
     }
@@ -209,9 +210,11 @@ public class Defacto {
 
         try {
             
-            BufferedWriter writer = new BufferedWriter(new FileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename));
-            writer.write(AbstractFactFeatures.factFeatures.toString().substring(0, AbstractFactFeatures.factFeatures.toString().indexOf("@data")));
-            writer.write("\n@data\n");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, true));
+            PrintWriter out = new PrintWriter(writer);
+            //out.println(AbstractFactFeatures.factFeatures.toString().substring(0, AbstractFactFeatures.factFeatures.toString().indexOf("@data")));
+            //writer.append("\n@data\n");
+            //out.println("\n@data\n");
 
 //            // add all instances to a list to shuffle them
 //            List<Instance> instances = new ArrayList<Instance>();
@@ -292,7 +295,7 @@ public class Defacto {
 //            for (Instance instance : pickedInstances) {
             while ( enumerateInstances.hasMoreElements() ) {
 //            	writer.write(instance.toString() + "\n");
-            	writer.write(enumerateInstances.nextElement().toString() + "\n");
+            	out.println(enumerateInstances.nextElement().toString());
             }
             
             writer.flush();

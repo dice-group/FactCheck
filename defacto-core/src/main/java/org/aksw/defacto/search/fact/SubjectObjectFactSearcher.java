@@ -287,6 +287,8 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	            // it makes no sense to look at longer strings 
 	            if ( occurrence.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
 	                	
+	            	if(occurrence.split(" ").length < 80)
+	            	{
 	            	Annotation doc = new Annotation(occurrence);
 	    		    this.pipeline1.annotate(doc);
 	    		    Map<Integer, CorefChain> corefs = doc.get(CorefChainAnnotation.class);
@@ -408,6 +410,31 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	                proof.setTinyContext(tinyContext);
 	                    
 	                evidence.addComplexProof(proof);
+	            	}
+	            	
+	            	else
+	            	{
+	            		for (String string : subjectlabels) {
+							if(StringUtils.containsIgnoreCase(occurrence, string))
+							{
+								sublabel = string;
+								//break;
+							}
+						}
+	    		    	for (String string : objectlabels) {
+							if(StringUtils.containsIgnoreCase(occurrence, string))
+							{
+								objlabel = string;
+								//break;
+							}
+						}
+	            		if(sublabel.isEmpty()) sublabel = evidence.getModel().getSubjectLabel("en");
+		                if(objlabel.isEmpty()) objlabel = evidence.getModel().getObjectLabel("en");
+		    		    ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, occurrence, normalizeOccurrence(occurrence,surfaceForms), site);
+		                proof.setTinyContext(tinyContext);
+		                    
+		                evidence.addComplexProof(proof);
+	            	}
 	            }
 	        }
 	    }

@@ -81,7 +81,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 									"    \"match_phrase\" : {\n"+
 									"	 \"Article\" : {\n" +
 									"	\"query\" : "+q1+",\n"+
-									"	\"slop\"  : 30 \n"+
+									"	\"slop\"  : 50 \n"+
 									"} \n"+
 									"} \n"+
 									"} \n"+
