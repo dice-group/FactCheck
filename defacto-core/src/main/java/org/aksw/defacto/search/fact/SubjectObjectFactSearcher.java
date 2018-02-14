@@ -30,7 +30,7 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.util.CoreMap;
 
 /**
@@ -49,8 +49,8 @@ public class SubjectObjectFactSearcher implements FactSearcher {
     private static final java.util.regex.Pattern SQUARED_BRACKETS   = java.util.regex.Pattern.compile("\\[.+?\\]");
     private static final java.util.regex.Pattern TRASH              = java.util.regex.Pattern.compile("[^\\p{L}\\p{N}.?!' ]");
     private static final java.util.regex.Pattern WHITESPACES        = java.util.regex.Pattern.compile("\\n");
-    private StanfordCoreNLPClient pipeline;
-    private StanfordCoreNLPClient pipeline1;
+    private StanfordCoreNLP pipeline;
+    private StanfordCoreNLP pipeline1;
 
     /**
      * 
@@ -236,7 +236,6 @@ public class SubjectObjectFactSearcher implements FactSearcher {
      * 
      * @param evidence
      * @param matches
-     * @param patternToSearch
      * @param firstLabel
      * @param secondLabel
      * @param site

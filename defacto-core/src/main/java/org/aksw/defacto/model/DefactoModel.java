@@ -44,8 +44,8 @@ public class DefactoModel {
     public DefactoResource object;
     public DefactoTimePeriod timePeriod = new DefactoTimePeriod("", "");
     public List<String> languages = new ArrayList<String>();
-    public StanfordCoreNLPClient pipeline;
-    public StanfordCoreNLPClient pipeline1;
+    public StanfordCoreNLP pipeline;
+    public StanfordCoreNLP pipeline1;
     
     /**
      * Creates a new Defacto Model. This is a wrapper around a jena model. But with
@@ -54,8 +54,7 @@ public class DefactoModel {
      * 
      * @param model - the jena model with 3 statements (1 link and 2 rdfs:label triples)
      * @param name - the name of the file we got the model from
-     * @param correct is the fact contained in this model correct?
-     */
+	 */
     public DefactoModel(Model model, String name, boolean isCorrect, List<String> languages) {
         
         this.model      = model;
