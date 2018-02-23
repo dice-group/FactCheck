@@ -14,6 +14,11 @@ import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
+import org.aksw.defacto.boa.BoaPatternSearcher;
+import org.aksw.defacto.boa.Pattern;
+import org.aksw.defacto.evidence.ComplexProof;
+import org.aksw.defacto.evidence.Evidence;
+import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
 import org.aksw.defacto.ml.feature.fact.FactFeature;
 
 import java.util.HashMap;
@@ -42,7 +47,7 @@ import edu.stanford.nlp.trees.TypedDependency;
 import edu.stanford.nlp.semgraph.SemanticGraph; 
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import edu.stanford.nlp.util.CoreMap;
-import weka.core.Attribute; 
+import weka.core.Attribute;
 /**
  * @author Zafar Syed <zsyed@mail.uni-paderborn.de>
  *
@@ -74,9 +79,9 @@ public class DependencyParseFeature implements FactFeature {
 				break;
 			}
 		}
-		
+
 		if(!(patternString==""))
-		{		
+		{
 		this.pipeline = proof.getModel().pipeline;
 		List<TypedDependency> tdl = null;
 		Annotation doc = new Annotation(proof.getProofPhrase());
@@ -90,7 +95,7 @@ public class DependencyParseFeature implements FactFeature {
 			GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
 			GrammaticalStructure gs = gsf.newGrammaticalStructure(tree);
 			tdl = gs.typedDependenciesCCprocessed();
-			
+
 			List<String> subLabels = new ArrayList<String>();
 			List<String> objLabels = new ArrayList<String>();
 			
@@ -101,7 +106,7 @@ public class DependencyParseFeature implements FactFeature {
 			for (String str : proof.getObject().split(" ")) {
 				objLabels.add(str.toLowerCase());
 			}
-			
+
 			Iterator<TypedDependency> it = tdl.iterator();
 			while(it.hasNext())
 			{
@@ -114,7 +119,7 @@ public class DependencyParseFeature implements FactFeature {
 						score = (float) (score + 0.25);
 				if((td.gov().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.dep().originalText().toLowerCase())))
 						|| (td.dep().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
-					score = (float) (score + 0.25);				
+					score = (float) (score + 0.25);
 				
 			}
 			if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(proof.getSubject().toLowerCase()))
@@ -122,7 +127,7 @@ public class DependencyParseFeature implements FactFeature {
 			}
 		}
 		}
-		
+
 		if(score > (float)1.0)
 			score = (float) 1.0;
 		proof.getFeatures().setValue(AbstractFactFeatures.DEPENDENCY_SUBJECT_OBJECT, score);
