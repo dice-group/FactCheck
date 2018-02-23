@@ -79,7 +79,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"	\"size\" : 100 ,\n" +
 							"    \"query\" : {\n" +
 							"	 \"bool\"  : {\n" +
-							"	 \"must\"  : [\n" +	
+							"	 \"must\"  : [\n" +
 							"	{\n"+
 							"    \"match_phrase\" : {\n"+
 							"	 \"Article\" : {\n" +
@@ -110,10 +110,10 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 
 
 			//				HttpEntity entity1 = new NStringEntity(
-			//				 "{\n" +		 
+			//				 "{\n" +
 			//				"    \"query\" : {\n" +
 			//				"	 \"bool\"  : {\n" +
-			//				"	 \"must\"  : [\n" +	
+			//				"	 \"must\"  : [\n" +
 			//				"	{\n"+
 			//				"    \"match_phrase\" : {\n"+
 			//				"	 \"Article\" : {\n" +
@@ -148,18 +148,16 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				JsonNode articleNode = hits.get("hits").get(i).get("_source").get("Article");
 				JsonNode articleURLNode = hits.get("hits").get(i).get("_source").get("URL");
 				JsonNode articleTitleNode = hits.get("hits").get(i).get("_source").get("Title");
-				JsonNode articleID = hits.get("hits").get(i).get("_id");
+				JsonNode pagerank = hits.get("hits").get(i).get("_source").get("Pagerank");
 				String articleText = articleNode.asText();
-				String articleId = articleID.asText();
 				String articleURL = articleURLNode.asText();
 				String articleTitle = articleTitleNode.asText();
-
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);
 				website.setText(articleText);
-				website.setRank(i++);
+				website.setRank(Float.parseFloat(pagerank.asText()));
 				website.setLanguage(query.getLanguage());
-//				website.setPredicate(property);
+				website.setPredicate(property);
 				results.add(website);
 			}
 
@@ -172,7 +170,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 		}
 	}
 	public String normalizePredicate(String propertyLabel) {
-		System.out.println(propertyLabel);
+		//System.out.println(propertyLabel);
 		return propertyLabel.replaceAll(",", "").replace("`", "").replace(" 's", "'s").replace("?R?", "").replace("?D?", "").replaceAll(" +", " ").replaceAll("'[^s]", "").replaceAll("&", "and").trim();
 	}
 

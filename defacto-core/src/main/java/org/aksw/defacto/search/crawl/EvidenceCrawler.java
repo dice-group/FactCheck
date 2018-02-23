@@ -93,7 +93,7 @@ public class EvidenceCrawler {
             // tries to find proofs and possible proofs and scores those
             Properties props = new Properties();
     	    props.put("annotators", "tokenize, ssplit");
-    	    this.model.pipeline = new StanfordCoreNLP(props);
+            this.model.pipeline = new StanfordCoreNLP(props);
             Properties props1 = new Properties();
             props1.put("tokenize.language", "English");
     	    props1.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
@@ -104,7 +104,7 @@ public class EvidenceCrawler {
     	    props1.put("coref.algorithm", "statistical");
     	    props1.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
     	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    	    this.model.pipeline1 = new StanfordCoreNLP(props1);
+            this.model.pipeline1 = new StanfordCoreNLP(props1);
     	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
             scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache
@@ -132,7 +132,7 @@ public class EvidenceCrawler {
         		
         		if ( !subjectLabel.equals(Constants.NO_LABEL) && !objectLabel.equals(Constants.NO_LABEL) ) {
 
-        			List<Word> topicTerms = TopicTermExtractor.getTopicTerms(subjectLabel, objectLabel, language, evidence);
+        			List<Word> topicTerms = TopicTermExtractor.getTerms(subjectLabel);
         			evidence.setTopicTerms(language, topicTerms);
             		evidence.setTopicTermVectorForWebsites(language);
         		}
@@ -233,8 +233,7 @@ public class EvidenceCrawler {
 
     /**
      * This filters out all duplicate websites which then improves crawling speed!
-     * 
-
+     *
      */
     private void filterSearchResults(Set<SearchResult> searchResults) {
 
@@ -278,7 +277,7 @@ public class EvidenceCrawler {
     }
     
     /**
-     * 
+     *
      * @param evidence
      */
     private void extractDates(Evidence evidence) {

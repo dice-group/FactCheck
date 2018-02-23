@@ -71,14 +71,14 @@ public class FactScorer {
                 
                 // create new instance and delete debugging features
                 Instance newInstance = new Instance(proof.getFeatures());
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
                 
                 // insert all the words which occur
-                for ( int i = 26 + 1 ; i < instancesWithStringVector.numAttributes(); i++) {
+                /*for ( int i = 26 + 1 ; i < instancesWithStringVector.numAttributes(); i++) {
                     
                 	List<String> parts = Arrays.asList(proof.getTinyContext().split(" "));
                     newInstance.insertAttributeAt(i);
@@ -86,13 +86,13 @@ public class FactScorer {
                     newInstance.setValue(attribute, parts.contains(attribute.name()) ? 1D : 0D);
                 }
                 newInstance.setDataset(instancesWithStringVector);
-                instancesWithStringVector.add(newInstance);
-                
+                instancesWithStringVector.add(newInstance);*/
+
                 proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
 //                System.out.println(proof.getScore() + " -> " + this.classifier.classifyInstance(newInstance) + " -> " + proof.getTinyContext());
                 
                 // remove the new instance again
-                instancesWithStringVector.delete();
+                //instancesWithStringVector.delete();
             }
             catch (Exception e) {
 

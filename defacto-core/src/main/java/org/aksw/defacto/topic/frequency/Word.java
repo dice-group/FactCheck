@@ -12,20 +12,20 @@ public class Word implements Comparable<Word> {
     }
 
     private String word;
-    private int frequency;
+    private float frequency;
     private boolean isFromWikipedia; // Is that term extracted from a Wikipedia
                                      // article
 
-    public Word(String word, int frequency, boolean fromWikipedia) {
+    public Word(String word, float uciScore, boolean fromWikipedia) {
 
         isFromWikipedia = fromWikipedia;
         this.word = word;
-        this.frequency = frequency;
+        this.frequency = uciScore;
     }
 
-    public Word(String word, int count) {
+    public Word(String word, float uciScore) {
 
-        this(word, count, false);
+        this(word, uciScore, false);
     }
 
     /**
@@ -33,7 +33,7 @@ public class Word implements Comparable<Word> {
      * 
      * @return The new frequency
      */
-    public int incrementFrequency() {
+    public float incrementFrequency() {
 
         return ++frequency;
     }
@@ -43,7 +43,7 @@ public class Word implements Comparable<Word> {
         if (this.frequency == otherWord.frequency) {
             return this.word.compareTo(otherWord.word);
         }
-        return otherWord.frequency - this.frequency;
+        return (int) (otherWord.frequency - this.frequency);
     }
 
     public String getWord() {
@@ -51,7 +51,7 @@ public class Word implements Comparable<Word> {
         return word;
     }
 
-    public int getFrequency() {
+    public float getFrequency() {
 
         return frequency;
     }
