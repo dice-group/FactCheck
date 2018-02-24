@@ -108,7 +108,7 @@ public class Defacto {
         
         // 
     	 // 4. score the facts
-       /* long startFactScoring = System.currentTimeMillis();
+       long startFactScoring = System.currentTimeMillis();
         FactScorer factScorer = new FactScorer();
         factScorer.scoreEvidence(evidence);
         LOGGER.info("Fact Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startFactScoring));
@@ -127,7 +127,7 @@ public class Defacto {
             LOGGER.info("Evidence Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startScoring));
         }
         
-        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));*/
+        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));
         
         return evidence;
     }
