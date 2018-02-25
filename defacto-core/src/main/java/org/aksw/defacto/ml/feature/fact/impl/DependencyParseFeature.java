@@ -98,11 +98,11 @@ public class DependencyParseFeature implements FactFeature {
 
 			List<String> subLabels = new ArrayList<String>();
 			List<String> objLabels = new ArrayList<String>();
-			
+
 			for (String str : proof.getSubject().split(" ")) {
 				subLabels.add(str.toLowerCase());
 			}
-			
+
 			for (String str : proof.getObject().split(" ")) {
 				objLabels.add(str.toLowerCase());
 			}
@@ -120,10 +120,10 @@ public class DependencyParseFeature implements FactFeature {
 				if((td.gov().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.dep().originalText().toLowerCase())))
 						|| (td.dep().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
 					score = (float) (score + 0.25);
-				
+
 			}
 			if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(proof.getSubject().toLowerCase()))
-				score = (float) (score + 0.25);			
+				score = (float) (score + 0.25);
 			}
 		}
 		}

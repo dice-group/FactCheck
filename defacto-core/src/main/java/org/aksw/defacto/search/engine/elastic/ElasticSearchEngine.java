@@ -96,7 +96,6 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
-			//System.out.println(docCount);
 			for(int i=0; i<docCount; i++)
 			{
 				JsonNode articleNode = hits.get("hits").get(i).get("_source").get("Article");

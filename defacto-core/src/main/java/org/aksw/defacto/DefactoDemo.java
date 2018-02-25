@@ -1,10 +1,5 @@
 package org.aksw.defacto;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,10 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -60,7 +51,6 @@ public class DefactoDemo {
         models.add(getEinsteinModel());
         //models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
-//        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
 
     }
 
@@ -69,6 +59,8 @@ public class DefactoDemo {
     public static byte[] fileToBytes(String filePath) throws IOException {
         Path fileLocation = Paths.get(filePath);
         return Files.readAllBytes(fileLocation);
+//        Defacto.checkFacts(new DefactoConfig(new Ini(new File("defacto.ini"))), getTrainingData());
+
     }
 
     public static DefactoModel bytesToModel(byte[] data, String modelName, String lang) {
@@ -78,12 +70,11 @@ public class DefactoDemo {
         return new DefactoModel(model, modelName, true, Arrays.asList(lang));
     }
 
-    public static DefactoModel getEinsteinModel() {
+    public static DefactoModel getEinsteinModel() throws FileNotFoundException {
         final Model model = ModelFactory.createDefaultModel();
-        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
-                "TURTLE");
-     //   model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
-        return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
+//        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null, "TURTLE");
+        model.read(new FileInputStream(Constants.RESOURCE_PATH + "Einstein.ttl"), null, "TURTLE");
+        return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
     }
 
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException
