@@ -55,7 +55,8 @@ import weka.core.Attribute;
 public class DependencyParseFeature implements FactFeature {
 
 	private final static String PCG_MODEL = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz";
-	private StanfordCoreNLPClient pipeline;
+	private StanfordCoreNLP pipeline;
+//	private StanfordCoreNLPClient pipeline;
 	public static LexicalizedParser parser;
 	static boolean found = false;
 	BoaPatternSearcher searcher = new BoaPatternSearcher();
