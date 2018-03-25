@@ -47,9 +47,9 @@ export class AppComponent {
 
   // Validates the user input
   validateInput() {
-    console.log('selction is: ' + this.selection);
+    console.log('selction= ' + this.selection);
     if (this.selection === 'file') {
-      console.log('file is ' + this.file);
+      console.log('file= ' + this.file);
       if (this.file !== undefined && this.file != null && this.file !== '') {
         if (this.file.name.endsWith('.ttl')) {
           // Read file contents
@@ -76,6 +76,11 @@ export class AppComponent {
 
     } else if (this.selection === 'text') {
       console.log('text selection: ' + this.subject + '\n' + this.predicate + '\n' + this.object);
+      if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
+        console.log('Predicate should not have only numeric value');
+        alert('Predicate should not have only numeric value');
+        return false;
+      }
       return true;
     } else {
       alert('Please select file or text before sending');
@@ -99,5 +104,9 @@ export class AppComponent {
     this.predicate = '';
     this.object = '';
 
+  }
+
+  isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
   }
 }
