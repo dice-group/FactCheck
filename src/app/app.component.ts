@@ -19,32 +19,41 @@ export class AppComponent {
   file;
   fileName = 'testName';
   result = '';
+  success = true;
   onClick() {
     console.log('on click called');
     let obj;
-    if (this.selection === 'file' && this.validateFileInput()) {
-      console.log('file= ' + this.file);
-      obj = this.file;
-    } else if (this.selection === 'text' && this.validateTextInput()) {
-      obj = { 'subject': this.subject, 'predicate': this.predicate, 'object': this.object };
+    if (this.selection === 'file') {
+      if (this.validateFileInput()) {
+        console.log('file= ' + this.file);
+        obj = this.file;
+      }
+    } else if (this.selection === 'text') {
+      if (this.validateTextInput()) {
+        obj = { 'subject': this.subject, 'predicate': this.predicate, 'object': this.object };
+      }
     } else {
       console.log('Please select file or text before sending');
       alert('Please select file or text before sending');
+      this.success = false;
     }
-    /* Use the JavaScript function JSON.stringify() to convert it into a string. */
-    const myJSON = JSON.stringify(obj);
-    /* Using the XMLHttpRequest to get data from the server: */
-    const xmlhttp = new XMLHttpRequest();
-    this.result = 'awaiting result';
-    xmlhttp.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        const myObj = JSON.parse(this.responseText);
-        document.getElementById('result').innerHTML = myObj.result;
-      }
-    };
-    xmlhttp.open('POST', 'vineet set path here', true);
-    xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xmlhttp.send(obj);
+
+    if (this.success) {
+      /* Use the JavaScript function JSON.stringify() to convert it into a string. */
+      const myJSON = JSON.stringify(obj);
+      /* Using the XMLHttpRequest to get data from the server: */
+      const xmlhttp = new XMLHttpRequest();
+      this.result = 'awaiting result';
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState === 4 && this.status === 200) {
+          const myObj = JSON.parse(this.responseText);
+          document.getElementById('result').innerHTML = myObj.result;
+        }
+      };
+      xmlhttp.open('POST', 'vineet set path here', true);
+      xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xmlhttp.send(obj);
+    }
   }
 
   /*
@@ -81,9 +90,7 @@ export class AppComponent {
     this.subject = '';
     this.predicate = '';
     this.object = '';
-
   }
-
   /*
     Returns true if given string contains only numbers, false otherwise.
   */
@@ -93,8 +100,10 @@ export class AppComponent {
 
   /* validates text input */
   validateTextInput() {
-    if ((this.subject === '') || (this.object === '') || (this.predicate === '') ) {
+    if ((this.subject === '') || (this.object === '') || (this.predicate === '')) {
       console.log('All field are required, please fill subject, predicate and object');
+      alert('All field are required, please fill subject, predicate and object');
+      return false;
     } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
       console.log('Predicate should not have only numeric value');
       alert('Predicate should not have only numeric value');
@@ -126,6 +135,7 @@ export class AppComponent {
     } else {
       alert('No file is selected, Please select ttl File...! ');
       console.log('No file is selected, Please select ttl File...! ');
+      return false;
     }
   }
 }
