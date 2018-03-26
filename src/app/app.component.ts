@@ -45,11 +45,6 @@ export class AppComponent {
     xmlhttp.open('POST', 'vineet set path here', true);
     xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xmlhttp.send(obj);
-
-
-
-
-
   }
 
   /*
@@ -61,12 +56,6 @@ export class AppComponent {
     console.log('uploadFile: ' + this.file);
     console.log('file name after: ' + this.fileName);
   }
-
-
-
-
-
-
 
   /*
     Resets the value of file selection when
@@ -104,7 +93,9 @@ export class AppComponent {
 
   /* validates text input */
   validateTextInput() {
-    if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
+    if ((this.subject === '') || (this.object === '') || (this.predicate === '') ) {
+      console.log('All field are required, please fill subject, predicate and object');
+    } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
       console.log('Predicate should not have only numeric value');
       alert('Predicate should not have only numeric value');
       return false;
