@@ -26,7 +26,7 @@ export class AppComponent {
     if (this.selection === 'file') {
       if (this.validateFileInput()) {
         console.log('file= ' + this.file);
-        obj = this.file;
+        obj = {'file': this.file } ;
       }
     } else if (this.selection === 'text') {
       if (this.validateTextInput()) {
