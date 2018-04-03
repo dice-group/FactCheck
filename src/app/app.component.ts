@@ -19,18 +19,24 @@ export class AppComponent {
   file;
   fileName = 'testName';
   result = '';
-  success = true;
+  success = false;
+  fileData: MSBaseReader;
+  text = 'sample';
   onClick() {
+    this.success = false;
     console.log('on click called');
     let obj;
     if (this.selection === 'file') {
       if (this.validateFileInput()) {
-        console.log('file= ' + this.file);
-        obj = {'file': this.file } ;
+        // console.log('file= ' + this.file);
+        // obj = {'file': this.file } ;
+        obj = { 'file': this.text };
+        this.success = true;
       }
     } else if (this.selection === 'text') {
       if (this.validateTextInput()) {
         obj = { 'subject': this.subject, 'predicate': this.predicate, 'object': this.object };
+        this.success = true;
       }
     } else {
       console.log('Please select file or text before sending');
@@ -47,12 +53,12 @@ export class AppComponent {
       xmlhttp.onreadystatechange = function () {
         if (this.readyState === 4 && this.status === 200) {
           const myObj = JSON.parse(this.responseText);
-          document.getElementById('result').innerHTML = myObj.result;
+          document.getElementById('result').innerHTML = myObj.defactoScore;
         }
       };
-      xmlhttp.open('POST', 'vineet set path here', true);
-      xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xmlhttp.send(obj);
+      xmlhttp.open('POST', 'http://localhost:8080/api/execTask/', true);
+      xmlhttp.setRequestHeader('Content-Type', 'application/json');
+      xmlhttp.send(myJSON);
     }
   }
 
@@ -64,6 +70,16 @@ export class AppComponent {
     this.fileName = this.file.name;
     console.log('uploadFile: ' + this.file);
     console.log('file name after: ' + this.fileName);
+    // Read file contents
+    const reader = new FileReader();
+    reader.onload = x => {
+      console.log('onLoad is called...');
+      // const text = reader.result;
+     this.text = reader.result;
+      console.log(this.text);
+      // var output = document.getElementById('output');
+    };
+    reader.readAsText(this.file);
   }
 
   /*
@@ -116,16 +132,6 @@ export class AppComponent {
   validateFileInput() {
     if (this.file !== undefined && this.file != null && this.file !== '') {
       if (this.file.name.endsWith('.ttl')) {
-        // Read file contents
-        const reader = new FileReader();
-        reader.onload = function () {
-          console.log('onLoad is called...');
-          const text = reader.result;
-          console.log(text);
-          // var output = document.getElementById('output');
-        };
-        reader.readAsText(this.file);
-
         return true;
       } else {
         console.log('Input file is not valid, please select ttl File...! ');
