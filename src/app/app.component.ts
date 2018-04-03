@@ -30,13 +30,14 @@ export class AppComponent {
       if (this.validateFileInput()) {
         // console.log('file= ' + this.file);
         // obj = {'file': this.file } ;
-        obj = { 'file': this.text };
+          obj = { 'taskid': 1112, 'filedata' : this.text };
+          this.success = true;
         this.success = true;
       }
     } else if (this.selection === 'text') {
-      if (this.validateTextInput()) {
-        obj = { 'subject': this.subject, 'predicate': this.predicate, 'object': this.object };
-        this.success = true;
+        if (this.validateTextInput()) {
+          obj = { 'taskid': 22323, 'filedata' : 'text ' };
+          this.success = true;
       }
     } else {
       console.log('Please select file or text before sending');
