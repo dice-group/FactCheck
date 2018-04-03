@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/FactCheckRestApi.iml" filepath="$PROJECT_DIR$/FactCheckRestApi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gs-rest-service.iml" filepath="$PROJECT_DIR$/gs-rest-service.iml" />
     </modules>
   </component>
 </project>
