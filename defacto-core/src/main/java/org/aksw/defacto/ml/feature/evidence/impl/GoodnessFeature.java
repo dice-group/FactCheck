@@ -61,6 +61,7 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
     		
     		evidence.getFeatures().setValue(AbstractEvidenceFeature.GOODNESS, goodness);
     	}
+    	
     }
     
     

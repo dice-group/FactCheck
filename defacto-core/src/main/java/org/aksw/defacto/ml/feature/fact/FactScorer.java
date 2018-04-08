@@ -17,6 +17,7 @@ import org.aksw.defacto.config.DefactoConfig;
 import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
+import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
@@ -71,11 +72,15 @@ public class FactScorer {
                 
                 // create new instance and delete debugging features
                 Instance newInstance = new Instance(proof.getFeatures());
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
-                newInstance.deleteAttributeAt(27);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                newInstance.deleteAttributeAt(28);
+                Instances withoutName = new Instances(AbstractFactFeatures.factFeatures);
+                withoutName.setClassIndex(withoutName.numAttributes() - 1);
+                withoutName.deleteStringAttributes();
+                newInstance.setDataset(withoutName);
                 
                 // insert all the words which occur
                 /*for ( int i = 26 + 1 ; i < instancesWithStringVector.numAttributes(); i++) {

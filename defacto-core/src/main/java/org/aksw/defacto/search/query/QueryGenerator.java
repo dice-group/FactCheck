@@ -74,7 +74,7 @@ public class QueryGenerator {
         }
         
         // add one query without any predicate
-        queryStrings.put(new Pattern("??? NONE ???", language), new MetaQuery(subjectLabel, "??? NONE ???", objectLabel, language, null));        
+        //queryStrings.put(new Pattern("??? NONE ???", language), new MetaQuery(subjectLabel, "??? NONE ???", objectLabel, language, null));        
         LOGGER.debug(String.format("Generated %s queries for fact ('%s'): %s", queryStrings.size(), language, fact.asTriple()));
         
         return queryStrings;

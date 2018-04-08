@@ -55,8 +55,8 @@ public class BoaFeature implements FactFeature {
 
 		if ( proof.getProofPhrase().trim().isEmpty() ) return; 
 
-		List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-
+		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+		List<Pattern> patterns = searcher.getNaturalLanguageRepresentations(evidence.getModel().getPredicate().getURI(), proof.getLanguage());
 		float smithWatermanSimilarity = 0f;
 		float qgramsSimilarity = 0f;
 		float levSimilarity = 0f;

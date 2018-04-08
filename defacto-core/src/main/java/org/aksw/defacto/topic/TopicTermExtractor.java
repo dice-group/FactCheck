@@ -333,8 +333,10 @@ public class TopicTermExtractor {
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
+			if(!(docCount<20))
+				docCount = 20;
 			//System.out.println(docCount);
-			for(int i=0; i<20; i++)
+			for(int i=0; i<docCount; i++)
 			{				
 				JsonNode Term = hits.get("hits").get(i).get("_source").get("Term");
 				JsonNode UCI = hits.get("hits").get(i).get("_source").get("Coherence_UCI");

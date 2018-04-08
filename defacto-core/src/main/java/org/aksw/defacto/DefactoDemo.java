@@ -57,13 +57,13 @@ public class DefactoDemo {
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException
     {
     	List<DefactoModel> models = new ArrayList<>();
-    	File dir = new File("E:\\RDFModels");
+    	File dir = new File("");
     	  File[] directoryListing = dir.listFiles();
     	  if (directoryListing != null) {
     	    for (File child : directoryListing) {
     	      final Model model = ModelFactory.createDefaultModel();
     	      model.read(new FileInputStream(child), null, "TURTLE");
-    	      models.add(new DefactoModel(model, "award", true, Arrays.asList("en")));
+    	      models.add(new DefactoModel(model, "leader", false, Arrays.asList("en")));
     	    }
     	  } else {
     	    // Handle the case where dir is not really a directory.
