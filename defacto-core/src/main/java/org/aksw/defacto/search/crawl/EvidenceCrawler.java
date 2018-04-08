@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -17,6 +18,7 @@ import java.util.regex.Matcher;
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.Defacto.TIME_DISTRIBUTION_ONLY;
+import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.cache.Cache;
 import org.aksw.defacto.evidence.ComplexProof;
@@ -51,6 +53,11 @@ public class EvidenceCrawler {
     java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("[0-9]{4}");
     private Map<Pattern,MetaQuery> patternToQueries;
     private DefactoModel model;
+    BoaPatternSearcher searcher = new BoaPatternSearcher();
+    private static String CORENLP_SERVER1;
+    private static String CORENLP_PORT1;
+    private static String CORENLP_SERVER2;
+    private static String CORENLP_PORT2;
     
     public static Map<DefactoModel,Evidence> evidenceCache = new HashMap<DefactoModel,Evidence>();
     
@@ -63,6 +70,10 @@ public class EvidenceCrawler {
 
         this.patternToQueries = queries;
         this.model            = model;
+        CORENLP_SERVER1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS1");
+        CORENLP_SERVER2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS2");
+        CORENLP_PORT1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER1");
+        CORENLP_PORT2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER2");
     }
 
     /**
@@ -94,7 +105,7 @@ public class EvidenceCrawler {
             // tries to find proofs and possible proofs and scores those
             Properties props = new Properties();
     	    props.put("annotators", "tokenize, ssplit");
-    	    this.model.pipeline = new StanfordCoreNLPClient(props, "http://131.234.29.16", 9000, 1);
+    	    this.model.pipeline = new StanfordCoreNLPClient(props, "http://"+CORENLP_SERVER1, Integer.parseInt(CORENLP_PORT1), 8);
             Properties props1 = new Properties();
             props1.put("tokenize.language", "English");
     	    props1.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
@@ -105,7 +116,7 @@ public class EvidenceCrawler {
     	    props1.put("coref.algorithm", "statistical");
     	    props1.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
     	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    	    this.model.pipeline1 = new StanfordCoreNLPClient(props1, "http://131.234.29.16", 9200, 1);
+    	    this.model.pipeline1 = new StanfordCoreNLPClient(props1, "http://"+CORENLP_SERVER2, Integer.parseInt(CORENLP_PORT2), 8);
     	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
             scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache
@@ -134,6 +145,18 @@ public class EvidenceCrawler {
         		if ( !subjectLabel.equals(Constants.NO_LABEL) && !objectLabel.equals(Constants.NO_LABEL) ) {
 
         			List<Word> topicTerms = TopicTermExtractor.getTerms(subjectLabel);
+        			if(topicTerms.isEmpty())
+        			{
+        				Word subject = new Word(subjectLabel, 0);
+        				Word object = new Word(objectLabel, 0);
+        				topicTerms.add(subject);
+        				topicTerms.add(object);
+        				List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, language);
+        				for ( Pattern p : patterns ) {
+        					Word predicate = new Word(p.getNormalized().trim(), 0);
+        					topicTerms.add(predicate);
+        				}
+        			}
         			evidence.setTopicTerms(language, topicTerms);
             		evidence.setTopicTermVectorForWebsites(language);
         		}
@@ -202,6 +225,7 @@ public class EvidenceCrawler {
 
         // ########################################
     	// 1. Score the websites 
+    	 Set<WebSite> results = new HashSet<WebSite>();
         List<WebSiteScoreCallable> scoreCallables =  new ArrayList<WebSiteScoreCallable>();
         for ( SearchResult result : searchResults ) 
             for (WebSite site : result.getWebSites() )
@@ -212,7 +236,26 @@ public class EvidenceCrawler {
                     
         long start = System.currentTimeMillis();
         // wait als long as the scoring needs, and score every website in parallel
-        this.executeAndWaitAndShutdownCallables(Executors.newFixedThreadPool(50), scoreCallables);
+        ExecutorService executor = Executors.newFixedThreadPool(100);
+        try {
+    		for ( Future<WebSite> result : executor.invokeAll(scoreCallables)) {
+
+    			results.add(result.get());
+            }
+/*            results = executor.invokeAll(callables);
+            executor.shutdownNow();*/
+    		
+        }
+        catch (InterruptedException e) {
+
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+        executor.shutdown();
+        //this.executeAndWaitAndShutdownCallables(Executors.newFixedThreadPool(100), scoreCallables);
         
         // ########################################
     	// 2. parse the pages to look for dates

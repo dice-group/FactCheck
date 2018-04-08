@@ -31,7 +31,9 @@ public abstract class AbstractEvidenceFeature implements EvidenceFeature {
     public static final Attribute MODEL_NAME                                   = new Attribute("name_feature", (FastVector) null);
     public static final Attribute DOMAIN_RANGE_CHECK                           = new Attribute("domain_range_check");
     public static final Attribute GOODNESS 									   = new Attribute("goodness");
+
     
+//    public static Attribute PROPERTY_NAME                     				   = new Attribute("property_name");    
     public static Attribute CLASS                                              = new Attribute("clazz");
     public static Instances provenance;
 
@@ -62,6 +64,21 @@ public abstract class AbstractEvidenceFeature implements EvidenceFeature {
         attributes.addElement(TOTAL_POSITIVES_EVIDENCE_SCORE);
         attributes.addElement(TOTAL_NEGATIVES_EVIDENCE_SCORE);
         attributes.addElement(DOMAIN_RANGE_CHECK);
+        
+        FastVector propertyName = new FastVector(2);
+        propertyName.addElement("team");
+        propertyName.addElement("spouse");
+        propertyName.addElement("foundationPlace");
+        propertyName.addElement("author");
+        propertyName.addElement("award");
+        propertyName.addElement("subsidiary");
+        propertyName.addElement("leaderName");
+        propertyName.addElement("birthPlace");
+        propertyName.addElement("deathPlace");
+        propertyName.addElement("starring");
+//        PROPERTY_NAME = new Attribute("property_name", propertyName);
+//        attributes.addElement(PROPERTY_NAME);
+        
         FastVector clazz = new FastVector(2);
         clazz.addElement("true");
         clazz.addElement("false");

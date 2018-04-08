@@ -31,8 +31,8 @@ public class PageRankFeature extends AbstractEvidenceFeature {
             for ( WebSite website : patternToWebSites.getValue() ) {
 
                 // unassigned is 11 so don't use it in the sum
-                if ( website.getPageRank() >= 0 && website.getPageRank() < Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK") ) {
-
+                //if ( website.getPageRank() >= 0 && website.getPageRank() < Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK") ) {
+                	if ( website.getSearchRank() >= 0 ) {
 //                    if ( website.getScore() > Constants.CONFIRMATION_THRESHOLD ) {
 //                        
 //                        pageRankSumConfirming += website.getPageRank();
@@ -44,7 +44,7 @@ public class PageRankFeature extends AbstractEvidenceFeature {
 //                        numberOfNonConfirmingWebsites++;
 //                    }
                     
-                    website.setPageRankScore(website.getScore() * website.getPageRank());
+                    website.setPageRankScore(website.getScore() * website.getSearchRank());
                     
                     maxScore = Math.max(maxScore, website.getPageRankScore());
                     sumScore += website.getPageRankScore();

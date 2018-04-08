@@ -82,14 +82,15 @@ public class DependencyParseFeature implements FactFeature {
 		Annotation doc = new Annotation(proof.getProofPhrase());
 		pipeline.annotate(doc);
 		for(CoreMap sentence: doc.get(SentencesAnnotation.class)) {
-			if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(patternString) && sentence.get(CoreAnnotations.TextAnnotation.class).split(" ").length<80)
+			if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(patternString) && sentence.get(CoreAnnotations.TextAnnotation.class).split(" ").length<30)
 			{
 			List<CoreLabel> tokens = sentence.get(TokensAnnotation.class);
 			Tree tree = parser.parse(tokens);
 			TreebankLanguagePack tlp = new PennTreebankLanguagePack();
 			GrammaticalStructureFactory gsf = tlp.grammaticalStructureFactory();
 			GrammaticalStructure gs = gsf.newGrammaticalStructure(tree);
-			tdl = gs.typedDependenciesCCprocessed();
+			tdl = gs.typedDependenciesEnhanced();
+			
 			
 			List<String> subLabels = new ArrayList<String>();
 			List<String> objLabels = new ArrayList<String>();

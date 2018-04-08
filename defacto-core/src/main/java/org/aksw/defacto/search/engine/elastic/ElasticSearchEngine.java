@@ -2,6 +2,8 @@ package org.aksw.defacto.search.engine.elastic;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -87,7 +89,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 									"} \n"+
 							"}", ContentType.APPLICATION_JSON);
 			
-			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
+			Response response = restClientobj.performRequest("GET", "/clueweb/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());			
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
@@ -96,6 +98,8 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
+			if(!(docCount<10))
+				docCount = 10;
 			//System.out.println(docCount);
 			for(int i=0; i<docCount; i++)
 			{
@@ -109,12 +113,20 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);
 				website.setText(articleText);
-				website.setRank(Float.parseFloat(pagerank.asText()));
+				String [] x = pagerank.asText().split("E");
+				if(x.length>=2)
+				{
+				website.setRank((float) (Double.parseDouble(x[0])*Math.pow(2.71828, Double.parseDouble(x[1]))));
+				}
+				else
+				{
+					website.setRank((float) 0.026926567497047815);
+				}
 				website.setLanguage(query.getLanguage());
 				website.setPredicate(property);
 				results.add(website);
 			}
-
+			restClientobj.close();
 			return new DefaultSearchResult(results, new Long(docCount), query, pattern, false);
 		}
 		catch (Exception e) {

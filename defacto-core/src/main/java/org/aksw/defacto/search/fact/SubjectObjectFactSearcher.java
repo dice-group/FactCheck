@@ -150,7 +150,9 @@ public class SubjectObjectFactSearcher implements FactSearcher {
     @Override
 	public void generateProofs1(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern) {
 	
-	    this.pipeline = model.pipeline;
+	    try
+	    {
+    	this.pipeline = model.pipeline;
 	    this.pipeline1 = model.pipeline1;
 	    Set<String> subjectLabels = new HashSet<String>();
 	    Set<String> objectLabels = new HashSet<String>();
@@ -164,6 +166,17 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	    }
 	    subjectLabels.removeAll(Collections.singleton(Constants.NO_LABEL));
 	    objectLabels.removeAll(Collections.singleton(Constants.NO_LABEL));
+	    String subjectLabel = evidence.getModel().getSubjectLabel(null);
+	    String objectLabel = evidence.getModel().getObjectLabel(null);
+    	for (String label : subjectLabel.split(" ")) {
+			if(label.length()>2)
+				subjectLabels.add(label.trim());
+		}	
+    	
+    	/*for (String label : objectLabel.split(" ")) {
+			if(label.length()>2)
+				objectLabels.add(label.trim());
+		}*/
 	    
 	    /**** Create regex Patterns for Subject and Object forms and add to list ****/
 	    List<java.util.regex.Pattern> subpatterns = new ArrayList<java.util.regex.Pattern>();
@@ -198,6 +211,10 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	    Set<String> surfaceForms = new HashSet<String>(subjectLabels);
 	    surfaceForms.addAll(objectLabels);
 	    createProofsForEvidence1(evidence, proofPhrases, "Albert Einstein", "Nobel Prize in Physics", website, surfaceForms, subjectLabels, objectLabels);
+	    }
+	    catch (Exception e) {
+			e.printStackTrace();
+		}
 	   
 	}
     
@@ -287,8 +304,11 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	            // it makes no sense to look at longer strings 
 	            if ( occurrence.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
 	                	
-	            	if(occurrence.split(" ").length < 80)
+	            	if(entry.getValue()>1)
 	            	{
+	            		try
+	            		{
+	            		
 	            	Annotation doc = new Annotation(occurrence);
 	    		    this.pipeline1.annotate(doc);
 	    		    Map<Integer, CorefChain> corefs = doc.get(CorefChainAnnotation.class);
@@ -300,11 +320,14 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	    		    	//System.out.println(sentence);
 
 	    		        List<CoreLabel> tokens = sentence.get(CoreAnnotations.TokensAnnotation.class);
-
+	    		        
 	    		        for (CoreLabel token : tokens) {
 
 	    		            Integer corefClustId= token.get(CorefCoreAnnotations.CorefClusterIdAnnotation.class);
-	    		            CorefChain chain = corefs.get(corefClustId);
+	    		            CorefChain chain = null;
+	    		            if(corefs!=null)
+	    		            chain = corefs.get(corefClustId);
+
 	    		            if(chain==null){
 	    		                resolved.add(token.word());
 	    		            }else{
@@ -410,6 +433,11 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	                proof.setTinyContext(tinyContext);
 	                    
 	                evidence.addComplexProof(proof);
+	            		}
+	            		catch (NullPointerException e)
+	            		{
+	            			e.printStackTrace();
+	            		}
 	            	}
 	            	
 	            	else
@@ -574,19 +602,25 @@ public class SubjectObjectFactSearcher implements FactSearcher {
 	    for(Entry<Integer, Integer> entry : sent.entrySet()) {
 	    	  if(entry.getKey().equals(entry.getValue()))
 	    	  {
+	    		  if(entry.getKey()<=sentencesNormal.size()-1)
+	    		  {
 	    		  CoreMap senten = sentencesNormal.get(entry.getKey());
 	    		  subjectObjectStrNormal.put(senten.get(CoreAnnotations.TextAnnotation.class),1);
 	    		  continue;
+	    		  }
 	    	  }
 	    	  int k=0;
 	    	  String temp = "";
 	    	  for(int i = entry.getKey(); i<=entry.getValue();i++)
-	    	  {
+	    	  {	    		  
+	    		  if(i<=sentencesNormal.size()-1)
+	    		  {
 	    		  if(!temp.isEmpty())
 	    			  temp = temp+" "+sentencesNormal.get(i).get(CoreAnnotations.TextAnnotation.class);
 	    		  else
 	    			  temp = temp+sentencesNormal.get(i).get(CoreAnnotations.TextAnnotation.class);
 	    		  k++;
+	    		  }
 	    	  }
 	    	  subjectObjectStrNormal.put(temp.trim(), k);
 	    	}

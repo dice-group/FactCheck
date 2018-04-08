@@ -3,6 +3,8 @@ package org.aksw.defacto;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -42,6 +44,16 @@ import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.ResourceFactory;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+import com.hp.hpl.jena.vocabulary.RDF;
 
 import weka.core.Instance;
 
@@ -108,7 +120,7 @@ public class Defacto {
         
         // 
     	 // 4. score the facts
-       /* long startFactScoring = System.currentTimeMillis();
+        long startFactScoring = System.currentTimeMillis();
         FactScorer factScorer = new FactScorer();
         factScorer.scoreEvidence(evidence);
         LOGGER.info("Fact Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startFactScoring));
@@ -127,8 +139,8 @@ public class Defacto {
             LOGGER.info("Evidence Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startScoring));
         }
         
-        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));*/
-        
+        LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));
+      		
         return evidence;
     }
     
@@ -165,13 +177,14 @@ public class Defacto {
      * 
      * @param models
      * @return
+     * @throws IOException 
      */
-    public static Map<DefactoModel,Evidence> checkFacts(List<DefactoModel> defactoModel, TIME_DISTRIBUTION_ONLY onlyTimeDistribution) {
+    public static Map<DefactoModel,Evidence> checkFacts(List<DefactoModel> defactoModel, TIME_DISTRIBUTION_ONLY onlyTimeDistribution) throws IOException {
 
     	init();
-        
+        Model m = ModelFactory.createDefaultModel();
         Map<DefactoModel,Evidence> evidences = new HashMap<DefactoModel, Evidence>();
-        
+        int i=0;
         for (DefactoModel model : defactoModel) {
         	
             Evidence evidence = checkFact(model, onlyTimeDistribution);
@@ -188,7 +201,15 @@ public class Defacto {
             // rewrite the training file after every checked triple
             if ( DEFACTO_CONFIG.getBooleanSetting("evidence", "OVERWRITE_EVIDENCE_TRAINING_FILE")  ) 
             	writeEvidenceTrainingDataFile(DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_TRAINING_DATA_FILENAME"));
+            //Defacto.wirteModel(m, model.model, "award_00001.ttl", "http://dbpedia.org/ontology/recievedAward", "http://dbpedia.org/ontology/award", (float)0.0, true);
         }
+        System.out.println("Done");
+        
+        /*System.out.println(m.toString());
+        File fileTurtle = new File("E://Turtle//Dataset.nt");
+		FileOutputStream fopturtle = new FileOutputStream(fileTurtle);
+		
+		m.write(fopturtle, "N-TRIPLES");*/
         
         return evidences;
     }
@@ -199,7 +220,9 @@ public class Defacto {
     private static void writeEvidenceTrainingDataFile(String filename) {
 
         BufferedFileWriter writer = new BufferedFileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, Encoding.UTF_8, WRITER_WRITE_MODE.OVERRIDE);
-        writer.write(AbstractEvidenceFeature.provenance.toString());
+        PrintWriter out = new PrintWriter(writer);
+        out.println(AbstractEvidenceFeature.provenance.toString());
+        writer.flush();
         writer.close();
     }
     
@@ -210,7 +233,7 @@ public class Defacto {
 
         try {
             
-            BufferedWriter writer = new BufferedWriter(new FileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, false));
             PrintWriter out = new PrintWriter(writer);
             //out.println(AbstractFactFeatures.factFeatures.toString().substring(0, AbstractFactFeatures.factFeatures.toString().indexOf("@data")));
             //writer.append("\n@data\n");
@@ -291,12 +314,13 @@ public class Defacto {
 //            }
 //            Collections.shuffle(pickedInstances);
             
-            Enumeration<Instance> enumerateInstances = AbstractFactFeatures.factFeatures.enumerateInstances();
+            //Enumeration<Instance> enumerateInstances = AbstractFactFeatures.factFeatures.enumerateInstances();
 //            for (Instance instance : pickedInstances) {
-            while ( enumerateInstances.hasMoreElements() ) {
+            //while ( enumerateInstances.hasMoreElements() ) {
 //            	writer.write(instance.toString() + "\n");
-            	out.println(enumerateInstances.nextElement().toString());
-            }
+            	//out.println(enumerateInstances.nextElement().stringValue(8));
+            	out.println(AbstractFactFeatures.factFeatures.toString());
+            //}
             
             writer.flush();
             writer.close();
@@ -306,6 +330,136 @@ public class Defacto {
             e.printStackTrace();
         }        
     }
+    
+    static void wirteModel(Model m, Model model, String f, String connection, String ontology, float score, boolean freebase) throws IOException
+	{
+		
+		StmtIterator stIter = model.listStatements();
+		while(stIter.hasNext())
+		{
+			Statement st = stIter.next();
+			if(st.getPredicate().toString().contains(connection))
+			{
+				RDFNode node = st.getObject();
+				StmtIterator objectstIt = model.listStatements(node.asResource(), null, (RDFNode)null);
+				while(objectstIt.hasNext())
+				{
+					Statement objectst = objectstIt.next();
+					if(objectst.getPredicate().toString().contains(ontology))
+					{
+						Statement label = null;
+						String labelString = "";
+						StmtIterator lbelit = model.listStatements(st.getSubject(), null, (RDFNode)null);
+						while(lbelit.hasNext())
+						{
+							label = lbelit.next();
+							if(label.getPredicate().toString().contains("http://www.w3.org/2000/01/rdf-schema#label") && label.getLanguage().toString().equals("en"))
+							{
+								labelString = label.getString();
+								break;
+							}
+							
+						}
+						RDFNode objnode = objectst.getObject();
+						RDFNode predicatenode = objectst.getPredicate();
+						String objlabelString = "";
+						Statement oblabel = null;
+						StmtIterator objlbelit = model.listStatements(objnode.asResource(), null, (RDFNode)null);
+						while(objlbelit.hasNext())
+						{
+							oblabel = objlbelit.next();
+							if(oblabel.getPredicate().toString().contains("http://www.w3.org/2000/01/rdf-schema#label") && oblabel.getLanguage().toString().equals("en"))
+							{
+								objlabelString = oblabel.getString();
+								break;
+							}
+							
+						}						
+						
+						//System.out.println(st.getSubject()+"\t"+label.getPredicate()+"\t"+label.getString());
+						//System.out.println(objnode.asResource()+"\t"+oblabel.getPredicate()+"\t"+oblabel.getString());
+						
+						
+						
+						Property typeprop = RDF.type;
+						Property subprop = RDF.subject;
+						Property obprop = RDF.object;
+						Property preprop = RDF.predicate;
+						Property truthprop = ResourceFactory.createProperty("http://swc2017.aksw.org/","hasTruthValue");
+						Resource stmtprop = RDF.Statement;
+						if(freebase)
+						{
+						Resource dbSubject = returnDbpediaresource(st.getSubject(), model);
+						Resource dbObject = returnDbpediaresource(objnode.asResource(), model);
+						if(!(dbSubject.equals(st.getSubject()) || dbObject.equals(objnode.asResource()) || dbSubject.toString().length()<=28 || dbObject.toString().length()<=28))
+						{
+						//m.add(r, subprop, st.getSubject());
+						int factid = (st.getSubject().toString()+objnode.asResource().toString()).hashCode();
+						factid = (objectst.getPredicate().toString().length()+Integer.toString(factid).substring(1, 6)+f).hashCode();
+						String uniqueID = objectst.getPredicate().toString().length()+Integer.toString(factid).substring(1,6);
+						Resource r = ResourceFactory.createProperty("http://swc2017.aksw.org/task2/dataset/",uniqueID+"HHH");
+						if(m.containsResource(r))
+						{
+							//dupstream.write("Same id found for "+r.toString());
+						}
+						m.add(r, subprop, dbSubject);
+						m.add(r, preprop, objectst.getPredicate());
+						//m.add(r, obprop, objnode.asResource());
+						m.add(r, obprop, dbObject);
+						m.addLiteral(r, truthprop, score);
+						
+						
+						m.add(r, typeprop, stmtprop);
+						/*m.add(st.getSubject(), label.getPredicate(), label.getString());						
+						m.add(objnode.asResource(), label.getPredicate(), oblabel.getString());*/
+						m.add(dbSubject, label.getPredicate(), label.getString());						
+						m.add(dbObject, label.getPredicate(), oblabel.getString());
+						
+						}
+						
+						}
+						else
+						{
+							int factid = (st.getSubject().toString()+objnode.asResource().toString()).hashCode();
+							factid = (objectst.getPredicate().getLocalName().toString().substring(0, 2)+Integer.toString(factid).substring(1, 6)+f).hashCode();
+							String uniqueID = objectst.getPredicate().toString().length()+Integer.toString(factid).substring(1,6);
+						Resource r = ResourceFactory.createProperty("http://swc2017.aksw.org/task2/dataset/", uniqueID+"HHH");
+						
+						
+						m.add(r, subprop, st.getSubject());
+						//m.add(r, subprop, dbSubject);
+						m.add(r, preprop, objectst.getPredicate());
+						m.add(r, obprop, objnode.asResource());
+						//m.add(r, obprop, dbObject);
+						m.addLiteral(r, truthprop, score);
+						
+						m.add(r, typeprop, stmtprop);
+						m.add(st.getSubject(), label.getPredicate(), label.getString());						
+						m.add(objnode.asResource(), label.getPredicate(), oblabel.getString());
+						//m.add(dbSubject, label.getPredicate(), label.getString());						
+						//m.add(dbObject, label.getPredicate(), oblabel.getString());					
+						
+					}
+					}
+
+				}
+			}
+		}
+	}
+	
+	static Resource returnDbpediaresource(Resource r, Model m)
+	{
+		StmtIterator statementIt = m.listStatements(r, null, (RDFNode)null);
+		while(statementIt.hasNext())
+		{
+			Statement st = statementIt.next();
+			if(st.getPredicate().toString().contains("http://www.w3.org/2002/07/owl#sameAs") && st.getObject().toString().contains("http://dbpedia.org/resource/"))
+			{
+				return st.getObject().asResource();
+			}
+		}
+		return r;
+	}
     
     public static void main(String[] args) {
 		
