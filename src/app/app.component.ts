@@ -21,7 +21,6 @@ export class AppComponent {
   fileData: MSBaseReader;
   text = 'sample';
   onClick() {
-    document.getElementById('error').innerHTML = null;
     let obj;
     if (this.isFile) {
       if (this.validateFileInput()) {
