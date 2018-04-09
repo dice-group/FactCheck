@@ -14,53 +14,39 @@ export class AppComponent {
   subject = '';
   predicate = '';
   object = '';
-  selection = '';
   isFile = false;
   file;
   fileName = 'testName';
   result = '';
-  success = false;
   fileData: MSBaseReader;
   text = 'sample';
   onClick() {
-    this.success = false;
-    console.log('on click called');
+    document.getElementById('error').innerHTML = null;
     let obj;
-    if (this.selection === 'file') {
+    if (this.isFile) {
       if (this.validateFileInput()) {
-        // console.log('file= ' + this.file);
-        // obj = {'file': this.file } ;
-          obj = { 'taskid': 1112, 'filedata' : this.text };
-          this.success = true;
-        this.success = true;
-      }
-    } else if (this.selection === 'text') {
-        if (this.validateTextInput()) {
-          obj = { 'taskid': 22323, 'filedata' : 'text ' };
-          this.success = true;
-      }
+        obj = { 'taskid': 1112, 'filedata': this.text };
+      } else { return false; }
     } else {
-      console.log('Please select file or text before sending');
-      alert('Please select file or text before sending');
-      this.success = false;
+      if (this.validateTextInput()) {
+        obj = { 'taskid': 22323, 'filedata': 'text ' };
+      } else { return false; }
     }
-
-    if (this.success) {
-      /* Use the JavaScript function JSON.stringify() to convert it into a string. */
-      const myJSON = JSON.stringify(obj);
-      /* Using the XMLHttpRequest to get data from the server: */
-      const xmlhttp = new XMLHttpRequest();
-      this.result = 'awaiting result';
-      xmlhttp.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-          const myObj = JSON.parse(this.responseText);
-          document.getElementById('result').innerHTML = myObj.defactoScore;
-        }
-      };
-      xmlhttp.open('POST', 'http://localhost:8080/api/execTask/', true);
-      xmlhttp.setRequestHeader('Content-Type', 'application/json');
-      xmlhttp.send(myJSON);
-    }
+    // document.getElementById('result').innerHTML = 'Please wait while result is being displayed ';
+    /* Use the JavaScript function JSON.stringify() to convert it into a string. */
+    const myJSON = JSON.stringify(obj);
+    /* Using the XMLHttpRequest to get data from the server: */
+    const xmlhttp = new XMLHttpRequest();
+    this.result = 'awaiting result';
+    xmlhttp.onreadystatechange = function () {
+      if (this.readyState === 4 && this.status === 200) {
+        const myObj = JSON.parse(this.responseText);
+        document.getElementById('result').innerHTML = 'Defecto Score is: ' + myObj.defactoScore;
+      }
+    };
+    xmlhttp.open('POST', 'http://localhost:8080/api/execTask/', true);
+    xmlhttp.setRequestHeader('Content-Type', 'application/json');
+    xmlhttp.send(myJSON);
   }
 
   /*
@@ -69,16 +55,12 @@ export class AppComponent {
   uploadFile(e) {
     this.file = e.target.files[0];
     this.fileName = this.file.name;
-    console.log('uploadFile: ' + this.file);
-    console.log('file name after: ' + this.fileName);
     // Read file contents
     const reader = new FileReader();
     reader.onload = x => {
       console.log('onLoad is called...');
       // const text = reader.result;
-     this.text = reader.result;
-      console.log(this.text);
-      // var output = document.getElementById('output');
+      this.text = reader.result;
     };
     reader.readAsText(this.file);
   }
@@ -90,8 +72,6 @@ export class AppComponent {
   textSelection() {
     document.getElementById('fileInput').removeAttribute('type');
     document.getElementById('fileInput').setAttribute('type', 'file');
-
-    this.selection = 'text';
     this.isFile = false;
     this.file = '';
     this.fileName = '';
@@ -103,7 +83,6 @@ export class AppComponent {
   */
   fileSelection() {
     this.isFile = true;
-    this.selection = 'file';
     this.subject = '';
     this.predicate = '';
     this.object = '';

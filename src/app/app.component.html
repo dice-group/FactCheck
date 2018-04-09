@@ -13,38 +13,39 @@
     <form>
       <div class="form-group">
         <label for subject>Subject:</label>
-        <input type="text" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" />
+        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" />
         <small class="form-text text-muted">Enter the subject</small>
       </div>
 
       <div class="form-group">
         <label for predicate> Predicate: </label>
-        <input type="text" class="form-control" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" />
+        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" />
         <small class="form-text text-muted">Enter predicate, Nubers are not allowed...</small>
       </div>
       <div class="form-group">
         <label for project>Object: </label>
-        <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" />
+        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" />
         <small class="form-text text-muted">Enter Object</small>
       </div>
       <div class="form-group">
-        
+
         <div class="form-group">
-          <input id="fileInput" type="file" accept=".ttl" (change)="uploadFile($event)" />
+          <input id="fileInput" [disabled]="!isFile" type="file" accept=".ttl" (change)="uploadFile($event)" />
         </div>
 
         <div class="form-group">
           <label for selection>Please choose your selection:</label>
-          <input [(ngModel)]="selection" type="radio" name="selection" value="file" (click)="fileSelection()" /> File
-          <input [(ngModel)]="selection" type="radio" name="selection" value="text" (click)="textSelection()" /> Text
+          <input type="radio" name="selection" value="file" (click)="fileSelection()" /> File
+          <input type="radio" name="selection" value="text" (click)="textSelection()" checked /> Text
         </div>
       </div>
-
-      <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" />
-      
+      <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" />
+      </div>     
     </form>
-    <label id="result"></label>
-
+    <br>    
+    <span id="result" class="badge badge-success"></span>
+    
   </div>
 
 </body>
