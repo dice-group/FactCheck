@@ -1,4 +1,4 @@
-*.idea
+.idea
 /src/main/resources/training/arff/evidence/.gitignore
 /src/main/java/org/aksw/defacto/defacto.ini
 defacto.ini
@@ -6,6 +6,7 @@ defacto.ini
 .project
 .settings
 .directory
+FactCheck.iml
 
 /src/main/resources/training/arff/evidence/40%_false_all.arff
 /src/main/resources/training/arff/evidence/50-50_random_defacto_evidence.arff
