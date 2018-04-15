@@ -1,3 +1,7 @@
+*.idea
+/src/main/resources/training/arff/evidence/.gitignore
+/src/main/java/org/aksw/defacto/defacto.ini
+defacto.ini
 .classpath
 .project
 .settings

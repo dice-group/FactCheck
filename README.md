@@ -13,3 +13,4 @@ To use FactCheck do the following:
       (Unfortunately, the dictionary provided (WordNet 3.0) does not support Windows. Windows users can download [WordNet 2.1](https://wordnet.princeton.edu/wordnet/download/current-version/). Make sure to set the above entry to map to `dict` folder)
     - set the entry [mysql] : PASSWORD to the password for root user you chose during installation in **step 3**.
 5. Run the file `DefactoDemo.java`
+6. Clone the data in folders 'data' and 'data_for_installation' of (https://github.com/dice-group/FactCheck) into respective folders 'data' and 'data_for_installation' in the local.

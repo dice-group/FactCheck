@@ -21,5 +21,5 @@ Class-Path: iri-0.8-sources.jar stax-api-1.0.1.jar servlet-api-2.3.jar
  .jar lucene-core-3.5.0.jar naivebayes-classifier-1.2.jar arq-2.8.5.ja
  r lucene-analyzers-3.5.0.jar jena-2.6.3-test-sources.jar jackson-mapp
  er-asl-1.8.5.jar ant-1.5.jar log4j-1.2.14.jar
-Main-Class: 
+Main-Class: org.aksw.defacto.DefactoDemo
 
