@@ -1,9 +1,8 @@
 
 # Created by https://www.gitignore.io/api/java,intellij
 
-.idea/
-src/resources/lib/
-target/
+
+/target/
 /FactCheckRestApi.iml
 /FactCheckApi.iml
 /gs-rest-service.iml

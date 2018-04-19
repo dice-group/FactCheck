@@ -19,7 +19,7 @@ public class Application {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                System.out.println("***********allow cross origins");
+                System.out.println("allow cross origins");
                 registry.addMapping("/**").allowedOrigins("http://localhost:4200");
             }
         };
