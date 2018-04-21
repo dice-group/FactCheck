@@ -11,7 +11,6 @@ import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.fact.impl.BoaFeature;
 import org.aksw.defacto.ml.feature.fact.impl.ClassFeature;
-import org.aksw.defacto.ml.feature.fact.impl.DependencyParseFeature;
 import org.aksw.defacto.ml.feature.fact.impl.EndOfSentenceCharacterFeature;
 import org.aksw.defacto.ml.feature.fact.impl.NameFeature;
 import org.aksw.defacto.ml.feature.fact.impl.PageTitleFeature;
@@ -20,7 +19,7 @@ import org.aksw.defacto.ml.feature.fact.impl.SubjectObjectSimilarityFeature;
 import org.aksw.defacto.ml.feature.fact.impl.TokenDistanceFeature;
 import org.aksw.defacto.ml.feature.fact.impl.TotalOccurrenceFeature;
 import org.aksw.defacto.ml.feature.fact.impl.WordnetExpensionFeature;
-import org.dice.factcheck.ml.feature.fact.impl.PattyPatternFeature;
+import org.dice.factcheck.ml.feature.fact.impl.DependencyParseFeature;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>

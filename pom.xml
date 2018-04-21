@@ -76,10 +76,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>repo</id>
-            <url>file://${project.basedir}/repo</url>
-        </repository>
     </repositories>
 	<dependencies>
 		<dependency>
@@ -291,15 +287,11 @@
 			<groupId>org.dllearner</groupId>
 			<artifactId>components-core</artifactId>
 			<version>1.0-SNAPSHOT</version>
-<!-- 			<systemPath>${basedir}/lib/components-core-1.0-SNAPSHOT.jar</systemPath>
-			<scope>system</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.aksw</groupId>
 			<artifactId>sparql-metrics</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-<!-- 			<systemPath>${basedir}/lib/sparql-metrics-0.0.1-SNAPSHOT.jar</systemPath>
-			<scope>system</scope> -->
 		</dependency>
 
 		<dependency>
