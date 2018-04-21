@@ -36,11 +36,11 @@ public class DefactoDemo {
      */
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
 
-        org.apache.log4j.PropertyConfigurator.configure("log/log4j.properties");
+        org.apache.log4j.PropertyConfigurator.configure(DefactoDemo.class.getClassLoader().getResource("properties/log4j.properties"));
 
         List<DefactoModel> models = new ArrayList<>();
-        //models.add(getEinsteinModel());
-        models = getRDFModels();
+        models.add(getEinsteinModel());
+        //models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
 
@@ -57,7 +57,7 @@ public class DefactoDemo {
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException
     {
     	List<DefactoModel> models = new ArrayList<>();
-    	File dir = new File("E:\\RDFModels");
+    	File dir = new File("/home/data");
     	  File[] directoryListing = dir.listFiles();
     	  if (directoryListing != null) {
     	    for (File child : directoryListing) {

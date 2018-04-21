@@ -3,11 +3,8 @@
  */
 package org.aksw.defacto.ml.feature.evidence.impl;
 
-import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
-import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
-import org.aksw.defacto.ml.feature.fact.FactFeature;
 import org.aksw.sparql.metrics.DatabaseBackedSPARQLEndpointMetrics;
 import org.dllearner.core.owl.Individual;
 import org.dllearner.core.owl.ObjectProperty;
