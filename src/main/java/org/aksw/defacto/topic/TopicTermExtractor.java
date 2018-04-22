@@ -61,7 +61,6 @@ public class TopicTermExtractor {
     	Defacto.init();
     	cache = new TopicTermSolr4Cache();
         //for ( Word w : getPotentialTopicTerms("Amazon", "Jeff Bezos"))  System.out.println(w + " " + w.getFrequency());;
-    	getTerms("Albert Einstein");
     }
     
     /**
@@ -299,62 +298,5 @@ public class TopicTermExtractor {
         return potentialTopicTerms;
     }
     
-    public static List<Word> getTerms(String label)
-    {
-    	ArrayList<Word> wordList = new ArrayList<Word>();
-    	
-    	try {
-
-			RestClient restClientobj = RestClient.builder(new HttpHost("131.234.28.255" , 6060, "http")).build();
-			HttpEntity entity1 = new NStringEntity(
-					 "{\n" +
-							"	\"size\" : 20 ,\n" +
-							"    \"query\" : {\n" +
-							"    \"match_phrase\" : {\n"+
-							"	  \"Topic\" : {\n" +
-							"	\"query\" : \""+label+"\"\n"+
-							"} \n"+
-							"} \n"+
-							"} ,\n"+
-							"  \"sort\": [\n"+
-							"{\n"+
-							"    \"Coherence_UCI\" : {\n" +
-							"  \"order\" : \"desc\""+
-							"}\n"+
-							"}]\n"+
-					"}", ContentType.APPLICATION_JSON);
-			//System.out.println(entity1.toString());
-			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
-			String json = EntityUtils.toString(response.getEntity());
-			//System.out.println(json);
-			ObjectMapper mapper = new ObjectMapper();
-			@SuppressWarnings("unchecked")
-			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
-			JsonNode hits = rootNode.get("hits");
-			JsonNode hitCount = hits.get("total");
-			int docCount = Integer.parseInt(hitCount.asText());
-			if(!(docCount<20))
-				docCount = 20;
-			//System.out.println(docCount);
-			for(int i=0; i<docCount; i++)
-			{				
-				JsonNode Term = hits.get("hits").get(i).get("_source").get("Term");
-				JsonNode UCI = hits.get("hits").get(i).get("_source").get("Coherence_UCI");
-				String topicTerm = Term.asText();
-				float uciScore = Float.parseFloat(UCI.asText());
-				//System.out.println("Term : "+topicTerm+" , "+"UCI Score : "+uciScore);
-				Word word = new Word(topicTerm, uciScore);
-				wordList.add(word);
-			}
-    	}
-    	
-    	catch (Exception e) {
-
-			e.printStackTrace();
-    	}
-    	//System.out.println(wordList.get(12).getWord().toString());
-		return wordList;
-    	
-    }
     
 }

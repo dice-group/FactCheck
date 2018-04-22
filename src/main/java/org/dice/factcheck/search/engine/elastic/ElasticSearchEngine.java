@@ -43,6 +43,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 
 			ELASTIC_SERVER = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "SERVER_ADDRESS");
 			ELASTIC_PORT = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "PORT_NUMBER");
+			NUMBER_OF_SEARCH_RESULTS = Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "NUMBER_OF_SEARCH_RESULTS");
 		}
 	}
 
@@ -87,8 +88,9 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
-			if(!(docCount<10))
-				docCount = 10;
+			int number_of_search_results = Integer.parseInt(NUMBER_OF_SEARCH_RESULTS);
+			if(!(docCount<number_of_search_results))
+				docCount = number_of_search_results;
 			//System.out.println(docCount);
 			for(int i=0; i<docCount; i++)
 			{

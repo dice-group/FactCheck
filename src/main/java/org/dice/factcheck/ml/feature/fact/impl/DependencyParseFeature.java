@@ -94,20 +94,14 @@ public class DependencyParseFeature implements FactFeature {
 							score = (float) (score + 0.5);
 						if((subLabels.contains(td.dep().originalText()) && (objLabels.contains(td.gov().originalText().toLowerCase())))
 								|| (subLabels.contains(td.dep().originalText()) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
-							score = (float) (score + 0.25);
+							score = (float) (score + 0.5);
 						if((td.gov().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.dep().originalText().toLowerCase())))
 								|| (td.dep().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
-							score = (float) (score + 0.25);				
-
-					}
-					if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(proof.getSubject().toLowerCase()))
-						score = (float) (score + 0.25);			
+							score = (float) (score + 0.5);
+					}							
 				}
 			}
 		}
-
-		if(score > (float)1.0)
-			score = (float) 1.0;
 		proof.getFeatures().setValue(AbstractFactFeatures.DEPENDENCY_SUBJECT_OBJECT, score);
 
 	}   

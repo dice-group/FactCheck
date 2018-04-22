@@ -92,7 +92,7 @@ public class FactScorer {
                 }
                 newInstance.setDataset(instancesWithStringVector);
                 instancesWithStringVector.add(newInstance);*/
-                System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
+                //System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
                 proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
 //                System.out.println(proof.getScore() + " -> " + this.classifier.classifyInstance(newInstance) + " -> " + proof.getTinyContext());
                 

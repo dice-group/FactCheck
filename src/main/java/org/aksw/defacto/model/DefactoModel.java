@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.aksw.defacto.Constants;
@@ -46,6 +47,10 @@ public class DefactoModel {
     public List<String> languages = new ArrayList<String>();
     public StanfordCoreNLPClient pipeline;
     public StanfordCoreNLPClient pipeline1;
+    private static String CORENLP_SERVER1;
+    private static String CORENLP_PORT1;
+    private static String CORENLP_SERVER2;
+    private static String CORENLP_PORT2;
     
     /**
      * Creates a new Defacto Model. This is a wrapper around a jena model. But with
@@ -62,8 +67,12 @@ public class DefactoModel {
         this.name       = name;
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
-        
+        Defacto.init();
         init(model);
+        CORENLP_SERVER1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS1");
+        CORENLP_SERVER2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS2");
+        CORENLP_PORT1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER1");
+        CORENLP_PORT2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER2");
     }
     
     /**

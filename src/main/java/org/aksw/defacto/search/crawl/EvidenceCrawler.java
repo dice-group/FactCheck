@@ -32,7 +32,7 @@ import org.aksw.defacto.search.concurrent.WebSiteScoreCallable;
 import org.aksw.defacto.search.query.MetaQuery;
 import org.aksw.defacto.search.result.SearchResult;
 import org.aksw.defacto.topic.TopicTermExtractor;
-import org.aksw.defacto.topic.frequency.Word;
+import org.dice.factcheck.topicterms.Word;
 import org.aksw.defacto.util.Frequency;
 import org.aksw.defacto.util.TimeUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -119,7 +119,7 @@ public class EvidenceCrawler {
     	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
     	    this.model.pipeline1 = new StanfordCoreNLPClient(props1, "http://"+CORENLP_SERVER2, Integer.parseInt(CORENLP_PORT2), 8);
     	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
-            scoreSearchResults(searchResults, model, evidence);
+    	    scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache
             //cacheSearchResults(searchResults);
                     
@@ -132,7 +132,7 @@ public class EvidenceCrawler {
     	evidence = evidenceCache.get(model);
     	
         // get the time frame or point
-        evidence.calculateDefactoTimePeriod();
+        // evidence.calculateDefactoTimePeriod();
         
         long start = System.currentTimeMillis();
         // save all the time we can get

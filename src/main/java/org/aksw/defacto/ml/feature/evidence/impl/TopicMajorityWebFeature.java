@@ -9,8 +9,8 @@ import java.util.List;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
-import org.aksw.defacto.topic.TopicTermExtractor;
-import org.aksw.defacto.topic.frequency.Word;
+import org.dice.factcheck.topicterms.TopicTermsCoherence;
+import org.dice.factcheck.topicterms.Word;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
@@ -40,7 +40,7 @@ public class TopicMajorityWebFeature extends AbstractEvidenceFeature {
             int topicMajority = 0;
             
             List<Word> topicTerms = website.getOccurringTopicTerms();
-            Collections.sort(topicTerms, new TopicTermExtractor.WordComparator());
+            Collections.sort(topicTerms, new TopicTermsCoherence.WordComparator());
             
             // we want this only for the first three websites
             for ( int i = 0 ; i < 3 && i < topicTerms.size() ; i++) {

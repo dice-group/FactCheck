@@ -6,7 +6,7 @@ import java.util.List;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
-import org.aksw.defacto.topic.frequency.Word;
+import org.dice.factcheck.topicterms.Word;
 
 /**
  * 

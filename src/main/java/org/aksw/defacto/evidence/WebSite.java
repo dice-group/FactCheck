@@ -9,7 +9,7 @@ import java.util.Map;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.search.cache.solr.TopicTermSolr4Cache;
 import org.aksw.defacto.search.query.MetaQuery;
-import org.aksw.defacto.topic.frequency.Word;
+import org.dice.factcheck.topicterms.Word;
 import org.apache.commons.lang.StringUtils;
 
 

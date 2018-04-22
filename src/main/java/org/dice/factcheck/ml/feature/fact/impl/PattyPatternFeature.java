@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
@@ -35,12 +37,16 @@ public class PattyPatternFeature implements FactFeature {
 	QGramsDistance qgrams		= new QGramsDistance();
 	Levenshtein lev				= new Levenshtein();
 	BoaPatternSearcher searcher = new BoaPatternSearcher();
+	Response response;
+	String json;
+	JsonNode rootNode;
+	ObjectMapper mapper = new ObjectMapper();
 
 	@Override
 	public void extractFeature(ComplexProof proof, Evidence evidence) {
 
 		RestClient restClientobj = RestClient.builder(new HttpHost("131.234.28.255" , 6060, "http")).build();
-		//System.out.println(evidence.getModel().getPredicate().getLocalName());
+		//Set all distances to zero
 		proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, 0);
 		proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN, 0);
 
@@ -54,9 +60,6 @@ public class PattyPatternFeature implements FactFeature {
 		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, 0);
 
 		if ( proof.getProofPhrase().trim().isEmpty() ) return; 
-
-		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-
 		float smithWatermanSimilarity = 0f;
 		float qgramsSimilarity = 0f;
 		float levSimilarity = 0f;
@@ -67,6 +70,7 @@ public class PattyPatternFeature implements FactFeature {
 		String patternString = "";
 		boolean subjectObject = false;
 
+		// Get all the patterns and scores for input relation
 		HttpEntity entity1 = new NStringEntity(
 				"{\n" +
 						"	\"size\" : 20 ,\n" +
@@ -82,120 +86,105 @@ public class PattyPatternFeature implements FactFeature {
 						"} \n"+
 						"} \n"+
 						"}", ContentType.APPLICATION_JSON);
-		Response response=null;
-		String json=null;
-		JsonNode rootNode=null;
-		ObjectMapper mapper = new ObjectMapper();
 		try {
-			response = restClientobj.performRequest("GET", "/clueweb/pattyPatterns/_search",Collections.singletonMap("pretty", "true"),entity1);
-			json = EntityUtils.toString(response.getEntity());
-			rootNode = mapper.readValue(json, JsonNode.class);
-		} 
-
-		catch (IOException e) {
-
-		}
-
-		JsonNode hits = rootNode.get("hits");
-		JsonNode hitCount = hits.get("total");
-		int docCount = Integer.parseInt(hitCount.asText());
-		for(int i=0; i<docCount; i++)
-		{
-			JsonNode document = hits.get(i).get("_source");
-			JsonNode pattern = document.get("pattern");
-			JsonNode patternStrings = document.get("patternStrings");
-			if(proof.getProofPhrase().contains(pattern.asText()))
+			this.response = restClientobj.performRequest("GET", "/clueweb/pattyPatterns/_search",Collections.singletonMap("pretty", "true"),entity1);
+			this.json = EntityUtils.toString(response.getEntity());
+			this.rootNode = mapper.readValue(json, JsonNode.class);
+			JsonNode hits = rootNode.get("hits");
+			JsonNode hitCount = hits.get("total");
+			int docCount = Integer.parseInt(hitCount.asText());
+			for(int i=0; i<docCount; i++)
 			{
-				for (final JsonNode patternMatch : patternStrings) {
-					String match = patternMatch.get("normalizedPattern").asText();
-					double patternScore = Double.parseDouble(patternMatch.get("patternScore").asText());
-					float swSimilarity = smithWaterman.getSimilarity(match, proof.getNormalizedProofPhrase());
-					if ( swSimilarity > smithWatermanSimilarity ) {
+				JsonNode document = hits.get(i).get("_source");
+				JsonNode pattern = document.get("pattern");
+				JsonNode patternStrings = document.get("patternStrings");
+				if(proof.getProofPhrase().contains(pattern.asText()))
+				{
+					for (final JsonNode patternMatch : patternStrings) {
+						String match = patternMatch.get("normalizedPattern").asText();
+						double patternScore = Double.parseDouble(patternMatch.get("patternScore").asText());
+						float swSimilarity = smithWaterman.getSimilarity(match, proof.getNormalizedProofPhrase());
+						if ( swSimilarity > smithWatermanSimilarity ) {
 
-						smithWatermanSimilarity = swSimilarity;
-						smithWatermanScore = patternScore;
-					}
-
-					float qgramsSimil = qgrams.getSimilarity(match, proof.getNormalizedProofPhrase());
-					if ( qgramsSimil > qgramsSimilarity ) {
-
-						qgramsSimilarity = qgramsSimil; 
-						qgramsSimilarityScore = patternScore;
-					}
-
-					float levSimil = lev.getSimilarity(match, proof.getNormalizedProofPhrase());
-					if ( levSimil > levSimilarity ) {
-
-						levSimilarity = levSimil; 
-						levSimilarityScore = patternScore;
-					}
-
-					if ( proof.getProofPhrase().contains(match) ) patternCounter++; 
-					if ( proof.getNormalizedProofPhrase().toLowerCase().contains(match) ) patternNormalizedCounter++;
-
-					if(!(org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase())==null))
-					{
-						patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
-						subjectObject = true;
-					}
-
-					else
-					{
-						patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
-						subjectObject = false;
-					}
-
-					while(patternString!=null)
-					{
-
-						float swSim = smithWaterman.getSimilarity(match, patternString.trim());
-						if ( swSim > smithWatermanSimilarity ) {
-
-							smithWatermanSimilarity = swSim;
+							smithWatermanSimilarity = swSimilarity;
 							smithWatermanScore = patternScore;
 						}
 
-						float qgramsSim = qgrams.getSimilarity(match, patternString.trim());
-						if ( qgramsSim > qgramsSimilarity ) {
+						float qgramsSimil = qgrams.getSimilarity(match, proof.getNormalizedProofPhrase());
+						if ( qgramsSimil > qgramsSimilarity ) {
 
-							qgramsSimilarity = qgramsSim; 
+							qgramsSimilarity = qgramsSimil; 
 							qgramsSimilarityScore = patternScore;
 						}
 
-						float levSim = lev.getSimilarity(match, patternString.trim());
-						if ( levSim > levSimilarity ) {
+						float levSimil = lev.getSimilarity(match, proof.getNormalizedProofPhrase());
+						if ( levSimil > levSimilarity ) {
 
-							levSimilarity = levSim; 
+							levSimilarity = levSimil; 
 							levSimilarityScore = patternScore;
-						}			
-						if(subjectObject)
-							patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getObject().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+						}
+
+						if ( proof.getProofPhrase().contains(match) ) patternCounter++; 
+						if ( proof.getNormalizedProofPhrase().toLowerCase().contains(match) ) patternNormalizedCounter++;
+
+						if(!(org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase())==null))
+						{
+							patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+							subjectObject = true;
+						}
+
 						else
-							patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getSubject().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+						{
+							patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+							subjectObject = false;
+						}
 
+						// see if we can reduce the distance when we have subject and object label more than once
+						while(patternString!=null)
+						{
+							float swSim = smithWaterman.getSimilarity(match, patternString.trim());
+							if ( swSim > smithWatermanSimilarity ) {
+								smithWatermanSimilarity = swSim;
+								smithWatermanScore = patternScore;
+							}
+
+							float qgramsSim = qgrams.getSimilarity(match, patternString.trim());
+							if ( qgramsSim > qgramsSimilarity ) {
+								qgramsSimilarity = qgramsSim; 
+								qgramsSimilarityScore = patternScore;
+							}
+
+							float levSim = lev.getSimilarity(match, patternString.trim());
+							if ( levSim > levSimilarity ) {
+								levSimilarity = levSim; 
+								levSimilarityScore = patternScore;
+							}			
+							if(subjectObject)
+								patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getObject().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+							else
+								patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getSubject().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+						}
 					}
+				}			
 
-				}
+				proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);
+				proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, patternNormalizedCounter);
 
+				proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN, levSimilarity);
+				proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN_BOA_SCORE, levSimilarityScore);
 
+				proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS, qgramsSimilarity);
+				proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS_BOA_SCORE, qgramsSimilarityScore);
+
+				proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN, smithWatermanSimilarity);
+				proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, smithWatermanScore);
 			}
-			try {
-				restClientobj.close();
-			} catch (IOException e) {
-				
-			}
+			restClientobj.close();
+		}
 
-			proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);
-			proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, patternNormalizedCounter);
-
-			proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN, levSimilarity);
-			proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN_BOA_SCORE, levSimilarityScore);
-
-			proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS, qgramsSimilarity);
-			proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS_BOA_SCORE, qgramsSimilarityScore);
-
-			proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN, smithWatermanSimilarity);
-			proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, smithWatermanScore);
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 

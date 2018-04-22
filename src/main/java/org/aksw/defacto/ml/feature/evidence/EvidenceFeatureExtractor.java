@@ -15,6 +15,7 @@ import org.aksw.defacto.ml.feature.evidence.impl.TopicMajoritySearchFeature;
 import org.aksw.defacto.ml.feature.evidence.impl.TopicMajorityWebFeature;
 import org.aksw.defacto.ml.feature.evidence.impl.TotalHitCountFeature;
 import org.aksw.defacto.ml.feature.fact.FactFeatureExtraction;
+import org.aksw.defacto.util.TimeUtil;
 
 /**
  * 
