@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as $ from 'jquery';
+import { ListService } from './list.service';
+import { Item } from './item';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,6 +12,14 @@ import * as $ from 'jquery';
 
 
 export class AppComponent {
+  // items: Item[] = [];
+  // items = ['just', 'some',    'cool',    'tags'  ];
+  constructor(public list: ListService) {
+    const newItem = { value: 'Sample Subject ' };
+    this.list.addSubject(newItem);
+    this.list.addObject({ value: 'Sample Object' });
+  }
+
   title = 'FactCheck';
   btnText = 'Submit';
   subject = '';
@@ -20,6 +31,8 @@ export class AppComponent {
   result = '';
   fileData: MSBaseReader;
   text = 'sample';
+  isUri = false;
+
   onClick() {
     let obj;
     if (this.isFile) {
@@ -31,6 +44,7 @@ export class AppComponent {
         obj = { 'taskid': 22323, 'filedata': 'text ' };
       } else { return false; }
     }
+
     // document.getElementById('result').innerHTML = 'Please wait while result is being displayed ';
     /* Use the JavaScript function JSON.stringify() to convert it into a string. */
     const myJSON = JSON.stringify(obj);
@@ -47,7 +61,14 @@ export class AppComponent {
     xmlhttp.setRequestHeader('Content-Type', 'application/json');
     xmlhttp.send(myJSON);
   }
+  // addItem(item) {
+  //   this.items.push(item);
+  // }
 
+  // deleteItem(index: number) {
+  //   console.log('deleteing item number: ' + index);
+  //   this.items.splice(index, 1);
+  // }
   /*
     Sets the file when user selects a file to upload.
   */
@@ -76,6 +97,37 @@ export class AppComponent {
     this.fileName = '';
   }
 
+  addSubject() {
+    if (!this.isUri) {
+      const temp = '<http://example.org/' + this.subject + '>';
+      const subject = {
+        // value: encodeURI(temp)
+        value: temp
+      };
+      this.list.addSubject(subject);
+    } else {
+      const subject = {
+        value: this.subject
+      };
+    }
+    this.subject = '';
+  }
+
+  addObject() {
+    if (!this.isUri) {
+      const temp = '<http://example.org/' + this.object + '>';
+      const object = {
+        // value: encodeURI(this.object)
+        value: temp
+      };
+      this.list.addObject(object);
+    } else {
+      const object = {
+        value: this.object
+      };
+    }
+    this.object = '';
+  }
   /*
     Resets the value of subject, predicate and object text fields when
     file is selected.

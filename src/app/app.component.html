@@ -6,27 +6,79 @@
 </head>
 
 <body>
+
   <div class="container">
     <h1>
       Welcome to {{ title }}!
     </h1>
     <form>
-      <div class="form-group">
-        <label for subject>Subject:</label>
-        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" />
-        <small class="form-text text-muted">Enter the subject</small>
+
+      <!-- <div class="form-group">
+        <span class="form-control" *ngFor="let item of list.subjects; let i = index">
+          <small id="wrap-word">{{item.value}}</small>
+          <button type="button" class="badge" (click)="list.removeSubject(i)">&times;</button>
+        </span>
+      </div> -->
+
+      <div class="form-group" [hidden]="isFile">        
+        <span *ngFor="let item of list.subjects; let i = index">
+          <small class="wrap-word">{{item.value}}
+          <span class="button" (click)="list.removeSubject(i)">&times;</span>
+          </small>
+        </span>      
       </div>
 
       <div class="form-group">
-        <label for predicate> Predicate: </label>
-        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" />
+        <label for subject>Subject:</label>        
+        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject"
+          (keyup)="$event.keyCode == 13 && addSubject()" />
+        <small class="form-text text-muted">
+            <label class="checkbox-inline">
+                <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" />
+                Select if you are entering uri
+            </label>
+          </small>
+      </div>
+      
+      <div class="form-group">
+        <label for="predicate"> Predicate: </label>
+        <select class="form-control" id="predicate" [disabled]="isFile" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate">
+          <option>award</option>
+          <option>birth</option>
+          <option>death</option>
+          <option>foundationPlace</option>
+          <option>leader</option>
+          <option>nbateam</option>
+          <option>publicationDate</option>
+          <option>spouse</option>
+          <option>starring</option>
+          <option>subsidiary</option>
+        </select>
+        <!-- <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" /> -->
         <small class="form-text text-muted">Enter predicate, Nubers are not allowed...</small>
       </div>
-      <div class="form-group">
-        <label for project>Object: </label>
-        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" />
-        <small class="form-text text-muted">Enter Object</small>
+      <div class="form-group" [hidden]="isFile">        
+        <span *ngFor="let item of list.objects; let i = index">
+          <small class="wrap-word">{{item.value}}
+          <span class="button" (click)="list.removeObject(i)">&times;</span>
+          </small>
+        </span>
+      
       </div>
+      
+      <div class="form-group">
+        <label for="object">Object: </label>
+        
+        <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input"
+          (keyup)="$event.keyCode == 13 && addObject()" />
+        <small class="form-text text-muted">
+          <label class="checkbox-inline">
+              <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" />
+              Select if you are entering uri
+          </label>
+        </small>
+      </div>
+      
       <div class="form-group">
 
         <div class="form-group">
@@ -34,17 +86,19 @@
         </div>
 
         <div class="form-group">
-          <label for selection>Please choose your selection:</label>
+          <label for="selection">Please choose your selection:</label>
           <input type="radio" name="selection" value="file" (click)="fileSelection()" /> File
           <input type="radio" name="selection" value="text" (click)="textSelection()" checked /> Text
         </div>
       </div>
-      <div class="form-group">
-        <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" />
-      </div>     
+
     </form>
-    <br>    
-    <span id="result" class="badge badge-success"></span>    
+    <div class="form-group">
+      <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" />
+    </div>
+    <br>
+    <span id="result" class="badge badge-success"></span>
   </div>
 </body>
+
 </html>

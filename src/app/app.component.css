@@ -1,0 +1,43 @@
+/* body{background: black;
+    background-color: black
+} */
+.wrap-word {    
+    
+    word-wrap: break-word;
+    margin-right: 2px;
+    color: white;
+    background-color: #5bc0de;
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    border-radius: 8px;
+}
+.button {
+    /* font-size: 10px;
+    
+    position: absolute;
+    top: 0px;
+    right: 0px; */
+    margin-left: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+   
+    padding: 0px 2px;
+    font-size: 75%;
+    font-weight: 700;
+    
+    color: white;
+   
+   }
+   .cont{
+    position:relative;
+    margin-right:3px;
+    padding-top:13px;
+   }
