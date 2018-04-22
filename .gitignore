@@ -3,9 +3,7 @@
 
 
 /target/
-/FactCheckRestApi.iml
-/FactCheckApi.iml
-/gs-rest-service.iml
+
 
 
 ### Intellij ###
@@ -65,7 +63,7 @@ fabric.properties
 *.rar
 
 #FactCheck lib
-src/main/resources/lib/*
+
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -74,3 +72,6 @@ hs_err_pid*
 
 # End of https://www.gitignore.io/api/java,intellij
 
+
+factcheck-api.iml
+src/main/main.iml
