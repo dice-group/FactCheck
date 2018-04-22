@@ -23,9 +23,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * 
- * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
- * @author Mohamed Morsey <morsey@informatik.uni-leipzig.de>
+ * @author Zafar Syed <zsyed@mail.uni-paderborn.de>
+ *
  */
 public class TopicTermsCoherence {
 	
@@ -50,7 +49,7 @@ public class TopicTermsCoherence {
 		}
 
 		try {
-
+			// Query the topic terms for the input label (terms scored using Palmetto) 
 			RestClient restClientobj = RestClient.builder(new HttpHost(ELASTIC_SERVER , Integer.parseInt(ELASTIC_PORT), "http")).build();
 			HttpEntity entity1 = new NStringEntity(
 					"{\n" +
@@ -78,6 +77,7 @@ public class TopicTermsCoherence {
 			JsonNode hitCount = hits.get("total");
 			int docCount = Integer.parseInt(hitCount.asText());
 			int numberOfTerms = Integer.parseInt(NUMBER_OF_TERMS);
+			// we might want to limit number of terms used
 			if(!(docCount<numberOfTerms))
 				docCount = numberOfTerms;
 			for(int i=0; i<docCount; i++)
