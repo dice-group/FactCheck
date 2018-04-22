@@ -5,9 +5,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import Wrapper.FactCheckBytes;
+import Wrapper.ModelTransform;
+import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
 import org.springframework.web.bind.annotation.*;
+import preprocessing.FCpreprocessor;
 
 
 @RestController
@@ -42,7 +45,15 @@ public class Controller {
         factcheckResponse.setDefactoScore(defactoScore);
 
         return factcheckResponse;
+    }
 
+    @PostMapping("/hobbitTask/")
+    public void execHobbitTask(@RequestBody FCpreprocessor fCpreprocessor, String taskId) {
+        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
+        Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
+        double defactoScore = factEvidence.getDeFactoScore();
+
+        FactCheckHobbitResponse FCHobbitResponse = new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
     }
 
 }
