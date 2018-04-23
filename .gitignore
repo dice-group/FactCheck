@@ -59,7 +59,7 @@ fabric.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.ear
 *.zip
@@ -67,7 +67,8 @@ fabric.properties
 *.rar
 
 #FactCheck lib
-
+factcheck*.jar
+FactCheck*.jar
 
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
