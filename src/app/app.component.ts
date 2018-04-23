@@ -15,9 +15,9 @@ export class AppComponent {
   // items: Item[] = [];
   // items = ['just', 'some',    'cool',    'tags'  ];
   constructor(public list: ListService) {
-    const newItem = { value: 'Sample Subject ' };
-    this.list.addSubject(newItem);
-    this.list.addObject({ value: 'Sample Object' });
+    // const newItem = { value: 'Sample Subject ' };
+    // this.list.addSubject(newItem);
+    // this.list.addObject({ value: 'Sample Object' });
   }
 
   title = 'FactCheck';
@@ -29,7 +29,8 @@ export class AppComponent {
   file;
   fileName = 'testName';
   result = '';
-  fileData: MSBaseReader;
+  // fileData: MSBaseReader;
+  fileData: string;
   text = 'sample';
   isUri = false;
 
@@ -109,6 +110,7 @@ export class AppComponent {
       const subject = {
         value: this.subject
       };
+      this.list.addSubject(subject);
     }
     this.subject = '';
   }
@@ -125,6 +127,7 @@ export class AppComponent {
       const object = {
         value: this.object
       };
+      this.list.addObject(object);
     }
     this.object = '';
   }

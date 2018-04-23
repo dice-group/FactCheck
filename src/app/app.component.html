@@ -34,7 +34,7 @@
           (keyup)="$event.keyCode == 13 && addSubject()" />
         <small class="form-text text-muted">
             <label class="checkbox-inline">
-                <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" />
+                <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" [disabled]="isFile"/>
                 Select if you are entering uri
             </label>
           </small>
@@ -73,7 +73,7 @@
           (keyup)="$event.keyCode == 13 && addObject()" />
         <small class="form-text text-muted">
           <label class="checkbox-inline">
-              <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" />
+              <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" [disabled]="isFile"/>
               Select if you are entering uri
           </label>
         </small>
