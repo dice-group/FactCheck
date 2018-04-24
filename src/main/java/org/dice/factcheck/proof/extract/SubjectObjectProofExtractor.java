@@ -32,6 +32,7 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.util.CoreMap;
 
@@ -47,8 +48,6 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 	private static final java.util.regex.Pattern SQUARED_BRACKETS   = java.util.regex.Pattern.compile("\\[.+?\\]");
 	private static final java.util.regex.Pattern TRASH              = java.util.regex.Pattern.compile("[^\\p{L}\\p{N}.?!' ]");
 	private static final java.util.regex.Pattern WHITESPACES        = java.util.regex.Pattern.compile("\\n");
-	private StanfordCoreNLPClient pipeline;
-	private StanfordCoreNLPClient pipeline1;
 
 	/**
 	 * 
@@ -66,8 +65,6 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 		try
 		{
-			this.pipeline = model.pipeline;
-			this.pipeline1 = model.pipeline1;
 			Set<String> subjectLabels = new HashSet<String>();
 			Set<String> objectLabels = new HashSet<String>();
 
@@ -114,10 +111,8 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 			/**** Annotate the website text and normalized website text using SNLP sentence split "ssplit" ****/
 
-			Annotation docNormalized = new Annotation(normalizedText);
-			Annotation docOriginal = new Annotation(website.getText());
-			this.pipeline.annotate(docNormalized);
-			this.pipeline.annotate(docOriginal);
+			Annotation docNormalized = model.corenlpClient.sentenceAnnotation(normalizedText);
+			Annotation docOriginal = model.corenlpClient.sentenceAnnotation(website.getText());
 
 			/**** Find proof phrases in both direction i.e., subject followed by object and vice-versa ****/
 
@@ -182,23 +177,22 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 			String tinyContext = "";
 			String sublabel ="";
 			String objlabel ="";
-			String occurrence = entry.getKey();
+			String proofPhrase = entry.getKey();
 			// it makes no sense to look at longer strings 
-			if ( occurrence.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
+			if ( proofPhrase.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
 
 				try
 				{						
-					String resolvedStr = applyCorefResolution(occurrence);
+					String resolvedStr = applyCorefResolution(proofPhrase, evidence.getModel());
 
 					// If the proof contain multiple sentences shorten after performing corefernce on
 					// it because small proofs are easier to confirm 					
 					if(entry.getValue()>1)
 					{
-						Annotation occdoc = new Annotation(resolvedStr);
-						this.pipeline.annotate(occdoc);
+						Annotation annotatedDoc = evidence.getModel().corenlpClient.sentenceAnnotation(resolvedStr);
 
-						List<CoreMap> occsentences = occdoc.get(CoreAnnotations.SentencesAnnotation.class);
-						for (CoreMap sentence : occsentences) {
+						List<CoreMap> sentences = annotatedDoc.get(CoreAnnotations.SentencesAnnotation.class);
+						for (CoreMap sentence : sentences) {
 							String sentenceString = sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase();
 							boolean subfound = false;
 							boolean objfound = false;
@@ -221,18 +215,18 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 							if(subfound && objfound)
 							{
-								occurrence = sentence.get(CoreAnnotations.TextAnnotation.class);
-								if(!(StringUtils.substringBetween(occurrence.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase())==null))
-									tinyContext = breakString(occurrence.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase());
+								proofPhrase = sentence.get(CoreAnnotations.TextAnnotation.class);
+								if(!(StringUtils.substringBetween(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase())==null))
+									tinyContext = breakString(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase());
 								else
-									tinyContext = breakString(occurrence.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
+									tinyContext = breakString(proofPhrase.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
 								break;
 							}
 
 							else if ((subfound || objfound) && sentence.toString().contains(site.getPredicate()))
 							{
 								tinyContext = sentence.get(CoreAnnotations.TextAnnotation.class);
-								occurrence = resolvedStr;
+								proofPhrase = resolvedStr;
 								break;
 							}
 
@@ -240,30 +234,30 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 					}
 					else
 					{
-						occurrence = resolvedStr;
+						proofPhrase = resolvedStr;
 						for (String string : subjectlabels) {
-							if(StringUtils.containsIgnoreCase(occurrence, string))
+							if(StringUtils.containsIgnoreCase(proofPhrase, string))
 							{
 								sublabel = string;
 								//break;
 							}
 						}
 						for (String string : objectlabels) {
-							if(StringUtils.containsIgnoreCase(occurrence, string))
+							if(StringUtils.containsIgnoreCase(proofPhrase, string))
 							{
 								objlabel = string;
 								//break;
 							}
 						}
-						if(!(StringUtils.substringBetween(occurrence.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase())==null))
-							tinyContext = breakString(occurrence.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase());
+						if(!(StringUtils.substringBetween(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase())==null))
+							tinyContext = breakString(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase());
 						else
-							tinyContext = breakString(occurrence.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
+							tinyContext = breakString(proofPhrase.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
 					}
 
 					if(sublabel.isEmpty()) sublabel = evidence.getModel().getSubjectLabel("en");
 					if(objlabel.isEmpty()) objlabel = evidence.getModel().getObjectLabel("en");
-					ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, occurrence, normalizeOccurrence(occurrence,surfaceForms), site);
+					ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, proofPhrase, normalizeOccurrence(proofPhrase,surfaceForms), site);
 					proof.setTinyContext(tinyContext);
 
 					evidence.addComplexProof(proof);
@@ -282,10 +276,9 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 	 *  in a sentence or sequence of sentences.
 	 */
 
-	private String applyCorefResolution(String sentencesString)
+	private String applyCorefResolution(String sentencesString, DefactoModel model)
 	{
-		Annotation doc = new Annotation(sentencesString);
-		this.pipeline1.annotate(doc);
+		Annotation doc = model.corenlpClient.corefAnnotation(sentencesString);
 		Map<Integer, CorefChain> corefs = doc.get(CorefChainAnnotation.class);
 		List<CoreMap> sentences = doc.get(CoreAnnotations.SentencesAnnotation.class);
 

@@ -39,6 +39,7 @@ public class DefactoDemo {
         org.apache.log4j.PropertyConfigurator.configure(DefactoDemo.class.getClassLoader().getResource("properties/log4j.properties"));
 
         List<DefactoModel> models = new ArrayList<>();
+        Defacto.init();
         models.add(getEinsteinModel());
         //models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
@@ -51,7 +52,7 @@ public class DefactoDemo {
         final Model model = ModelFactory.createDefaultModel();
         model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
                 "TURTLE");
-        return new DefactoModel(model, "Einstein Model", false, Arrays.asList("en"));
+        return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
     }
     
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException

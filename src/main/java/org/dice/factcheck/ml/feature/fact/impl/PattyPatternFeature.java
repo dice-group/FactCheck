@@ -1,12 +1,9 @@
 package org.dice.factcheck.ml.feature.fact.impl;
 
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
-
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
@@ -17,6 +14,8 @@ import org.apache.http.HttpHost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 
@@ -33,14 +32,24 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.SmithWaterman;
  */
 public class PattyPatternFeature implements FactFeature {
 
-	SmithWaterman smithWaterman = new SmithWaterman();
-	QGramsDistance qgrams		= new QGramsDistance();
-	Levenshtein lev				= new Levenshtein();
-	BoaPatternSearcher searcher = new BoaPatternSearcher();
-	Response response;
-	String json;
-	JsonNode rootNode;
-	ObjectMapper mapper = new ObjectMapper();
+	private static SmithWaterman smithWaterman = new SmithWaterman();
+	private static QGramsDistance qgrams		= new QGramsDistance();
+	private static Levenshtein lev				= new Levenshtein();
+	private static BoaPatternSearcher searcher = new BoaPatternSearcher();
+	private static float smithWatermanSimilarity = 0f;
+	private static float qgramsSimilarity = 0f;
+	private static float levSimilarity = 0f;
+	private static double smithWatermanScore = 0.00;
+	private static double qgramsSimilarityScore = 0.00;
+	private static double levSimilarityScore = 0.00;
+	private static int patternCounter = 0, patternNormalizedCounter = 0;
+	private static String proofSubString = "";
+	private static boolean subjectObject = false;
+	private Response response;
+	private String json;
+	private JsonNode rootNode;
+	private ObjectMapper mapper = new ObjectMapper();
+	private static Logger logger =  Logger.getLogger(PattyPatternFeature.class);
 
 	@Override
 	public void extractFeature(ComplexProof proof, Evidence evidence) {
@@ -60,15 +69,6 @@ public class PattyPatternFeature implements FactFeature {
 		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, 0);
 
 		if ( proof.getProofPhrase().trim().isEmpty() ) return; 
-		float smithWatermanSimilarity = 0f;
-		float qgramsSimilarity = 0f;
-		float levSimilarity = 0f;
-		double smithWatermanScore = 0.00;
-		double qgramsSimilarityScore = 0.00;
-		double levSimilarityScore = 0.00;
-		int patternCounter = 0, patternNormalizedCounter = 0;
-		String patternString = "";
-		boolean subjectObject = false;
 
 		// Get all the patterns and scores for input relation
 		HttpEntity entity1 = new NStringEntity(
@@ -101,91 +101,97 @@ public class PattyPatternFeature implements FactFeature {
 				if(proof.getProofPhrase().contains(pattern.asText()))
 				{
 					for (final JsonNode patternMatch : patternStrings) {
-						String match = patternMatch.get("normalizedPattern").asText();
+						String normalizedPattern = patternMatch.get("normalizedPattern").asText();
 						double patternScore = Double.parseDouble(patternMatch.get("patternScore").asText());
-						float swSimilarity = smithWaterman.getSimilarity(match, proof.getNormalizedProofPhrase());
+						float swSimilarity = smithWaterman.getSimilarity(normalizedPattern, proof.getNormalizedProofPhrase());
 						if ( swSimilarity > smithWatermanSimilarity ) {
 
 							smithWatermanSimilarity = swSimilarity;
 							smithWatermanScore = patternScore;
 						}
 
-						float qgramsSimil = qgrams.getSimilarity(match, proof.getNormalizedProofPhrase());
+						float qgramsSimil = qgrams.getSimilarity(normalizedPattern, proof.getNormalizedProofPhrase());
 						if ( qgramsSimil > qgramsSimilarity ) {
 
 							qgramsSimilarity = qgramsSimil; 
 							qgramsSimilarityScore = patternScore;
 						}
 
-						float levSimil = lev.getSimilarity(match, proof.getNormalizedProofPhrase());
+						float levSimil = lev.getSimilarity(normalizedPattern, proof.getNormalizedProofPhrase());
 						if ( levSimil > levSimilarity ) {
 
 							levSimilarity = levSimil; 
 							levSimilarityScore = patternScore;
 						}
 
-						if ( proof.getProofPhrase().contains(match) ) patternCounter++; 
-						if ( proof.getNormalizedProofPhrase().toLowerCase().contains(match) ) patternNormalizedCounter++;
+						if ( proof.getProofPhrase().contains(normalizedPattern) ) patternCounter++; 
+						if ( proof.getNormalizedProofPhrase().toLowerCase().contains(normalizedPattern) ) patternNormalizedCounter++;
 
 						if(!(org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase())==null))
 						{
-							patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+							proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
 							subjectObject = true;
+							// see if we can reduce the distance when we have subject and object label more than once
+							calculateDistanceSimiliarities(proof, normalizedPattern, patternScore);
 						}
 
 						else
 						{
-							patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+							proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
 							subjectObject = false;
-						}
-
-						// see if we can reduce the distance when we have subject and object label more than once
-						while(patternString!=null)
-						{
-							float swSim = smithWaterman.getSimilarity(match, patternString.trim());
-							if ( swSim > smithWatermanSimilarity ) {
-								smithWatermanSimilarity = swSim;
-								smithWatermanScore = patternScore;
-							}
-
-							float qgramsSim = qgrams.getSimilarity(match, patternString.trim());
-							if ( qgramsSim > qgramsSimilarity ) {
-								qgramsSimilarity = qgramsSim; 
-								qgramsSimilarityScore = patternScore;
-							}
-
-							float levSim = lev.getSimilarity(match, patternString.trim());
-							if ( levSim > levSimilarity ) {
-								levSimilarity = levSim; 
-								levSimilarityScore = patternScore;
-							}			
-							if(subjectObject)
-								patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getObject().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
-							else
-								patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getSubject().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
-						}
+							// see if we can reduce the distance when we have subject and object label more than once
+							calculateDistanceSimiliarities(proof, normalizedPattern, patternScore);
+						}						
 					}
 				}			
-
-				proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);
-				proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, patternNormalizedCounter);
-
-				proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN, levSimilarity);
-				proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN_BOA_SCORE, levSimilarityScore);
-
-				proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS, qgramsSimilarity);
-				proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS_BOA_SCORE, qgramsSimilarityScore);
-
-				proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN, smithWatermanSimilarity);
-				proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, smithWatermanScore);
 			}
 			restClientobj.close();
 		}
 
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			logger.info("Issue with the running Elastic search instance. Please check if the instance is running!");
 		}
+	}
+	
+	private static void calculateDistanceSimiliarities(ComplexProof proof, String match, double patternScore)
+	{
+		while(proofSubString!=null)
+		{
+			float swSim = smithWaterman.getSimilarity(match, proofSubString.trim());
+			if ( swSim > smithWatermanSimilarity ) {
+				smithWatermanSimilarity = swSim;
+				smithWatermanScore = patternScore;
+			}
+
+			float qgramsSim = qgrams.getSimilarity(match, proofSubString.trim());
+			if ( qgramsSim > qgramsSimilarity ) {
+				qgramsSimilarity = qgramsSim; 
+				qgramsSimilarityScore = patternScore;
+			}
+
+			float levSim = lev.getSimilarity(match, proofSubString.trim());
+			if ( levSim > levSimilarity ) {
+				levSimilarity = levSim; 
+				levSimilarityScore = patternScore;
+			}			
+			if(subjectObject)
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proofSubString+proof.getObject().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+			else
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proofSubString+proof.getSubject().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+		}
+		
+		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);
+		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, patternNormalizedCounter);
+
+		proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN, levSimilarity);
+		proof.getFeatures().setValue(AbstractFactFeatures.LEVENSHTEIN_BOA_SCORE, levSimilarityScore);
+
+		proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS, qgramsSimilarity);
+		proof.getFeatures().setValue(AbstractFactFeatures.QGRAMS_BOA_SCORE, qgramsSimilarityScore);
+
+		proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN, smithWatermanSimilarity);
+		proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, smithWatermanScore);
 	}
 
 

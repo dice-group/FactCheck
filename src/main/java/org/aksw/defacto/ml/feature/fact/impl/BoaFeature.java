@@ -32,13 +32,27 @@ import uk.ac.shef.wit.simmetrics.similaritymetrics.SmithWaterman;
  */
 public class BoaFeature implements FactFeature {
 
-	SmithWaterman smithWaterman = new SmithWaterman();
-	QGramsDistance qgrams		= new QGramsDistance();
-	Levenshtein lev				= new Levenshtein();
-	BoaPatternSearcher searcher = new BoaPatternSearcher();
+	private static SmithWaterman smithWaterman = new SmithWaterman();
+	private static QGramsDistance qgrams		= new QGramsDistance();
+	private static Levenshtein lev				= new Levenshtein();
+	private static BoaPatternSearcher searcher = new BoaPatternSearcher();
+
+	private static float smithWatermanSimilarity = 0f;
+	private static float qgramsSimilarity = 0f;
+	private static float levSimilarity = 0f;
+	private static int patternCounter = 0, patternNormalizedCounter = 0;
+	private static Pattern swPattern = null;
+	private static Pattern qgramPattern = null;
+	private static Pattern levPattern = null;
+	private static String proofSubString = "";
+	private static boolean subjectObject = false;
 
 	@Override
 	public void extractFeature(ComplexProof proof, Evidence evidence) {
+
+		String subjectLowerCase = proof.getSubject().toLowerCase();
+		String objectLowerCase = proof.getObject().toLowerCase();
+		String normalizedProofLowerCase = proof.getNormalizedProofPhrase().toLowerCase();
 
 		// we set this to 0 and over write it if we find a pattern
 		proof.getFeatures().setValue(AbstractFactFeatures.SMITH_WATERMAN_BOA_SCORE, 0);
@@ -57,16 +71,6 @@ public class BoaFeature implements FactFeature {
 
 		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
 		List<Pattern> patterns = searcher.getNaturalLanguageRepresentations(evidence.getModel().getPredicate().getURI(), proof.getLanguage());
-		float smithWatermanSimilarity = 0f;
-		float qgramsSimilarity = 0f;
-		float levSimilarity = 0f;
-		int patternCounter = 0, patternNormalizedCounter = 0;
-		Pattern swPattern = null;
-		Pattern qgramPattern = null;
-		Pattern levPattern = null;
-		String patternString = "";
-		boolean subjectObject = false;
-
 
 		for ( Pattern p : patterns ) {
 
@@ -92,55 +96,60 @@ public class BoaFeature implements FactFeature {
 				levSimilarity = levSimil; 
 				levPattern = p;
 			}
-			
+
 			if ( proof.getProofPhrase().contains(p.getNormalized()) ) patternCounter++; 
-			if ( proof.getNormalizedProofPhrase().toLowerCase().contains(p.getNormalized()) ) patternNormalizedCounter++;
-
-			if(!(org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase())==null))
+			if ( normalizedProofLowerCase.contains(p.getNormalized()) ) patternNormalizedCounter++;
+			
+			// Recursively find better distance measures subject and object labels in proof phrase
+			if(!(org.apache.commons.lang3.StringUtils.substringBetween(normalizedProofLowerCase, subjectLowerCase, objectLowerCase)==null))
 			{
-				patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(normalizedProofLowerCase, subjectLowerCase, objectLowerCase);
 				subjectObject = true;
+				calucaletDistanceSimilarities(proof, p);
 			}
-
 			else
 			{
-				patternString = org.apache.commons.lang3.StringUtils.substringBetween(proof.getNormalizedProofPhrase().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(normalizedProofLowerCase, objectLowerCase, subjectLowerCase);
 				subjectObject = false;
+				calucaletDistanceSimilarities(proof, p);
+			}
+		}
+	}
+
+	private static void calucaletDistanceSimilarities(ComplexProof proof, Pattern p)
+	{
+		String subjectLowerCase = proof.getSubject().toLowerCase();
+		String objectLowerCase = proof.getObject().toLowerCase();
+		while(proofSubString!=null)
+		{
+
+			float swSim = smithWaterman.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, proofSubString.trim());
+			if ( swSim > smithWatermanSimilarity ) {
+
+				smithWatermanSimilarity = swSim;
+				swPattern = p;
 			}
 
-			while(patternString!=null)
-			{
+			float qgramsSim = qgrams.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, proofSubString.trim());
+			if ( qgramsSim > qgramsSimilarity ) {
 
-				float swSim = smithWaterman.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, patternString.trim());
-				if ( swSim > smithWatermanSimilarity ) {
-
-					smithWatermanSimilarity = swSim;
-					swPattern = p;
-				}
-
-				float qgramsSim = qgrams.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, patternString.trim());
-				if ( qgramsSim > qgramsSimilarity ) {
-
-					qgramsSimilarity = qgramsSim; 
-					qgramPattern = p;
-				}
-
-				float levSim = lev.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, patternString.trim());
-				if ( levSim > levSimilarity ) {
-
-					levSimilarity = levSim; 
-					levPattern = p;
-				}			
-				if(subjectObject)
-					patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getObject().toLowerCase(), proof.getSubject().toLowerCase(), proof.getObject().toLowerCase());
-				else
-					patternString = org.apache.commons.lang3.StringUtils.substringBetween(patternString+proof.getSubject().toLowerCase(), proof.getObject().toLowerCase(), proof.getSubject().toLowerCase());
-
+				qgramsSimilarity = qgramsSim; 
+				qgramPattern = p;
 			}
 
+			float levSim = lev.getSimilarity(p.naturalLanguageRepresentationWithoutVariables, proofSubString.trim());
+			if ( levSim > levSimilarity ) {
+
+				levSimilarity = levSim; 
+				levPattern = p;
+			}			
+			if(subjectObject)
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proofSubString+objectLowerCase, subjectLowerCase, objectLowerCase);
+			else
+				proofSubString = org.apache.commons.lang3.StringUtils.substringBetween(proofSubString+subjectLowerCase, objectLowerCase, subjectLowerCase);
 
 		}
-
+		
 		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_COUNT, patternCounter);
 		proof.getFeatures().setValue(AbstractFactFeatures.BOA_PATTERN_NORMALIZED_COUNT, patternNormalizedCounter);
 
