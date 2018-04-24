@@ -94,7 +94,8 @@ public class TopicTermsCoherence {
 
 		catch (Exception e) {
 
-			e.printStackTrace();
+			logger.info("Issue with the running Elastic search instance. Please check if the instance is running!");
+			return wordList;
 		}
 		//System.out.println(wordList.get(12).getWord().toString());
 		return wordList;

@@ -17,7 +17,6 @@ import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.trees.GrammaticalStructure;
 import edu.stanford.nlp.trees.GrammaticalStructureFactory;
 import edu.stanford.nlp.trees.PennTreebankLanguagePack;
@@ -32,8 +31,7 @@ import edu.stanford.nlp.util.CoreMap;
 public class DependencyParseFeature implements FactFeature {
 
 	private final static String PCG_MODEL = "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz";
-	private StanfordCoreNLPClient pipeline;
-	public static LexicalizedParser parser;
+	public LexicalizedParser parser;
 	static boolean found = false;
 	BoaPatternSearcher searcher = new BoaPatternSearcher();
 
@@ -59,10 +57,8 @@ public class DependencyParseFeature implements FactFeature {
 
 		if(!(patternString==""))
 		{		
-			this.pipeline = proof.getModel().pipeline;
 			List<TypedDependency> tdl = null;
-			Annotation doc = new Annotation(proof.getProofPhrase());
-			pipeline.annotate(doc);
+			Annotation doc = evidence.getModel().corenlpClient.sentenceAnnotation(proof.getProofPhrase());
 			for(CoreMap sentence: doc.get(SentencesAnnotation.class)) {
 				if(sentence.get(CoreAnnotations.TextAnnotation.class).toLowerCase().contains(patternString) && sentence.get(CoreAnnotations.TextAnnotation.class).split(" ").length<30)
 				{

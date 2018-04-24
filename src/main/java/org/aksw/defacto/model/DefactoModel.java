@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
+import org.aksw.defacto.config.DefactoConfig;
 import org.semanticweb.yars.nx.namespace.SKOS;
 import org.semanticweb.yars.nx.namespace.XSD;
 
@@ -29,6 +30,9 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
+import org.dice.factcheck.nlp.stanford.CoreNLPClient;
+import org.dice.factcheck.nlp.stanford.impl.CoreNLPLocalClient;
+import org.dice.factcheck.nlp.stanford.impl.CoreNLPServerClient;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
@@ -45,12 +49,8 @@ public class DefactoModel {
     public DefactoResource object;
     public DefactoTimePeriod timePeriod = new DefactoTimePeriod("", "");
     public List<String> languages = new ArrayList<String>();
-    public StanfordCoreNLPClient pipeline;
-    public StanfordCoreNLPClient pipeline1;
-    private static String CORENLP_SERVER1;
-    private static String CORENLP_PORT1;
-    private static String CORENLP_SERVER2;
-    private static String CORENLP_PORT2;
+    public CoreNLPClient corenlpClient;
+    
     
     /**
      * Creates a new Defacto Model. This is a wrapper around a jena model. But with
@@ -67,12 +67,16 @@ public class DefactoModel {
         this.name       = name;
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
-        Defacto.init();
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
+        {
+        	this.corenlpClient = new CoreNLPServerClient();
+        }
+        else
+        {
+        	this.corenlpClient = new CoreNLPLocalClient();
+        }
         init(model);
-        CORENLP_SERVER1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS1");
-        CORENLP_SERVER2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS2");
-        CORENLP_PORT1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER1");
-        CORENLP_PORT2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER2");
+        
     }
     
     /**

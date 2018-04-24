@@ -115,7 +115,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 		}
 		catch (Exception e) {
 
-			e.printStackTrace();
+			logger.info("Issue with the running Elastic search instance. Please check if the instance is running!");
 			return new DefaultSearchResult(new ArrayList<WebSite>(), 0L, query, pattern, false);
 		}
 	}
