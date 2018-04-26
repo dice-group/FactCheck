@@ -3,7 +3,6 @@ package org.dice.factcheck.proof.extract;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,8 +31,6 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
 import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import edu.stanford.nlp.util.CoreMap;
 
 
@@ -41,8 +38,6 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SubjectObjectProofExtractor.class);
 	private static final Set<String> stopwords = new HashSet<String>(Arrays.asList("the", "of", "and"));
-
-	private static SubjectObjectProofExtractor INSTANCE;
 
 	private static final java.util.regex.Pattern ROUND_BRACKETS     = java.util.regex.Pattern.compile("\\(.+?\\)");
 	private static final java.util.regex.Pattern SQUARED_BRACKETS   = java.util.regex.Pattern.compile("\\[.+?\\]");
@@ -118,18 +113,16 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 			HashMap<String, Integer> subOjectPhrases = findProofPhrase(docNormalized, docOriginal, "subjectFound", "objectFound");
 			HashMap<String, Integer> objSubjectPhrases = findProofPhrase(docNormalized, docOriginal, "objectFound", "subjectFound");
-			HashMap<String, Integer> proofPhrases = new HashMap<>();
-			proofPhrases.putAll(subOjectPhrases);
-			proofPhrases.putAll(objSubjectPhrases);
+			subOjectPhrases.putAll(objSubjectPhrases);
 
 			Set<String> surfaceForms = new HashSet<String>(subjectLabels);
 			surfaceForms.addAll(objectLabels);
 
 			/**** Now create the proofs ****/
-			createProofsForEvidence(evidence, proofPhrases, website, surfaceForms, subjectLabels, objectLabels);
+			createProofsForEvidence(evidence, subOjectPhrases, website, surfaceForms, subjectLabels, objectLabels);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.info("Exception while extracting proof phrases from web page: "+e.getMessage());
 		}
 
 	}
@@ -154,16 +147,17 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 		strings.addAll(Arrays.asList(stringsArray));
 	}
 
+	// recursively checks to find  shortest string occurrence having subject and object label
 	private String breakString(String input, String leftLabel, String rightLabel)
 	{
-		String temp1="";
-		String temp=input;
+		String temp="";
+		String tempInput=input;
 		do
 		{
-			temp1 = temp;
-			temp = org.apache.commons.lang3.StringUtils.substringBetween(temp1+rightLabel, leftLabel, rightLabel);
-		}while(temp!=null);
-		return temp1;
+			temp = tempInput;
+			tempInput = org.apache.commons.lang3.StringUtils.substringBetween(temp+rightLabel, leftLabel, rightLabel);
+		}while(tempInput!=null);
+		return temp;
 	}
 
 	/**
@@ -264,7 +258,7 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 				}
 				catch (NullPointerException e)
 				{
-					e.printStackTrace();
+					LOGGER.info("Caught Exception while creating Proof Evidence: "+e.getMessage());
 				}
 			}
 		}
@@ -385,7 +379,6 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 		int count = 0;
 		int subjoccur = 0;
 		boolean subjectFound = false;
-		boolean objectFound = false;
 		TreeMap<Integer, Integer> sent = new TreeMap<>();
 		List<CoreMap> sentencesNormalized = docNormalized.get(CoreAnnotations.SentencesAnnotation.class);
 		List<CoreMap> sentencesOriginal = docOriginal.get(CoreAnnotations.SentencesAnnotation.class);
@@ -445,7 +438,7 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 		HashMap<String, Integer> subjectObjectStrOriginal = new HashMap<String, Integer>();
 
-		// we need actual sentences, we know the list of sentences with start and end indexes
+		// we need original sentences, we know the list of sentences with start and end indexes
 		subjectObjectStrOriginal = getOriginalSentences(sentencesOriginal, sent);
 
 		return subjectObjectStrOriginal;

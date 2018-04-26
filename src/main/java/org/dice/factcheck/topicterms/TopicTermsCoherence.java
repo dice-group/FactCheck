@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
 import org.dice.factcheck.topicterms.Word;
 import org.aksw.defacto.Defacto;
 import org.apache.http.HttpEntity;
@@ -71,7 +70,6 @@ public class TopicTermsCoherence {
 			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());
 			ObjectMapper mapper = new ObjectMapper();
-			@SuppressWarnings("unchecked")
 			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
