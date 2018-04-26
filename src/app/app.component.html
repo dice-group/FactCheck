@@ -21,19 +21,18 @@
           <button type="button" class="badge" (click)="list.removeSubject(i)">&times;</button>
         </span>
       </div> -->
-
-          <div class="form-group">
-            <span *ngFor="let item of list.subjects; let i = index">
-              <small class="wrap-word">{{item.value}}
-                <span class="button" (click)="list.removeSubject(i)">&times;</span>
-              </small>
-            </span>
-          </div>
-
+          <br>
           <div class="form-group">
             <label for subject>Subject:</label>
-            <input type="text" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject"
-              (keyup)="$event.keyCode == 13 && addSubject()" required/>
+            <input type="text" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" (keyup)="$event.keyCode == 13 && addSubject()"
+              required/>
+            <span class="form-text text-muted">
+              <span *ngFor="let item of list.subjects; let i = index">
+                <small class="wrap-word">{{item.value}}
+                  <span class="button" (click)="list.removeSubject(i)">&times;</span>
+                </small>
+              </span>
+            </span>
             <!-- <small class="form-text text-muted">
             <label class="checkbox-inline">
                 <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri"/>
@@ -41,6 +40,8 @@
             </label>
           </small> -->
           </div>
+
+
 
           <div class="form-group">
             <label for="predicate"> Predicate: </label>
@@ -60,19 +61,16 @@
             <small class="form-text text-muted">Enter predicate, Nubers are not allowed...</small>
           </div>
           <div class="form-group">
-            <span *ngFor="let item of list.objects; let i = index">
-              <small class="wrap-word">{{item.value}}
-                <span class="button" (click)="list.removeObject(i)">&times;</span>
-              </small>
-            </span>
-
-          </div>
-
-          <div class="form-group">
             <label for="object">Object: </label>
-
-            <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input"
-              (keyup)="$event.keyCode == 13 && addObject()" />
+            <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
+            />
+            <span class="form-text text-muted">
+              <span *ngFor="let item of list.objects; let i = index">
+                <small class="wrap-word">{{item.value}}
+                  <span class="button" (click)="list.removeObject(i)">&times;</span>
+                </small>
+              </span>
+            </span>
             <!-- <small class="form-text text-muted">
           <label class="checkbox-inline">
               <input type="checkbox" [checked]="isUri" (change)="isUri = !isUri" [disabled]="isFile"/>
@@ -83,27 +81,28 @@
         </mat-tab>
 
         <mat-tab label="FILE">
+          <br>
+
           <div class="form-group">
-
-            <div class="form-group">
-              <input id="fileInput" type="file" accept=".ttl" (change)="uploadFile($event)" />
-            </div>
-
-            <!-- <div class="form-group">
+            <label for="file">Please Select .tll file to upload. </label>
+            <input name="file" id="fileInput" type="file" accept=".ttl" (change)="uploadFile($event)" />
+          </div>
+          <!-- <div class="form-group">
               <label for="selection">Please choose your selection:</label>
               <input type="radio" name="selection" value="file" (click)="fileSelection()" /> File
               <input type="radio" name="selection" value="text" (click)="textSelection()" checked /> Text
             </div> -->
-          </div>
+
         </mat-tab>
       </mat-tab-group>
+      <br>
       <div class="form-group">
-          <!-- <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" /> -->
-          <button type="button" value="Submit" class="btn btn-primary" (click)="onClick()" >Submit</button>
-          <button type="reset" value="Reset" class="btn btn-primary" (click)="reset()">Reset</button>
-        </div>
+        <!-- <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" /> -->
+        <button type="button" value="Submit" class="btn btn-primary" (click)="onClick()">Submit</button>
+        <button type="reset" value="Reset" class="btn btn-primary" (click)="reset()">Reset</button>
+      </div>
     </form>
-    
+
     <br>
     <span id="result" class="badge badge-success"></span>
   </div>

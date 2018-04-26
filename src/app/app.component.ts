@@ -158,7 +158,7 @@ export class AppComponent {
     if (input === '') {
       alert('input is empty');
       return false;
-    } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
+    } else if (this.isNumeric(input) || (!input.match(/[a-z]/i))) {
       console.log('Should not have only numeric value');
       // alert('Predicate should not have only numeric value');
       return false;
