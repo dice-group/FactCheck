@@ -4,7 +4,6 @@ package org.dice.factcheck.ml.feature.fact.impl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
@@ -15,7 +14,6 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
-import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 
@@ -35,7 +33,6 @@ public class PattyPatternFeature implements FactFeature {
 	private static SmithWaterman smithWaterman = new SmithWaterman();
 	private static QGramsDistance qgrams		= new QGramsDistance();
 	private static Levenshtein lev				= new Levenshtein();
-	private static BoaPatternSearcher searcher = new BoaPatternSearcher();
 	private static float smithWatermanSimilarity = 0f;
 	private static float qgramsSimilarity = 0f;
 	private static float levSimilarity = 0f;
