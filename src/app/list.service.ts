@@ -7,7 +7,9 @@ export class ListService {
   constructor() {
   }
   addSubject(item: Item) {
-    this.subjects.push(item);
+    if (! (this.subjects.filter(e => e.value === item.value).length > 0)) {
+      this.subjects.push(item);
+    }
   }
 
   removeSubject(index: number) {
@@ -16,7 +18,9 @@ export class ListService {
   }
 
   addObject(item: Item) {
-    this.objects.push(item);
+    if (! (this.objects.filter(e => e.value === item.value).length > 0) ) {
+      this.objects.push(item);
+    }
   }
 
   removeObject(index: number) {

@@ -4,6 +4,7 @@ import * as $ from 'jquery';
 import { ListService } from './list.service';
 import { Item } from './item';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,7 +22,7 @@ export class AppComponent {
   }
 
   title = 'FactCheck';
-  btnText = 'Submit';
+  // btnText = 'Submit';
   subject = '';
   predicate = '';
   object = '';
@@ -32,7 +33,7 @@ export class AppComponent {
   // fileData: MSBaseReader;
   fileData: string;
   text = 'sample';
-  isUri = false;
+  // isUri = false;
 
   onClick() {
     let obj;
@@ -41,9 +42,9 @@ export class AppComponent {
         obj = { 'taskid': 1112, 'filedata': this.text };
       } else { return false; }
     } else {
-      if (this.validateTextInput()) {
-        obj = { 'taskid': 22323, 'filedata': 'text ' };
-      } else { return false; }
+      // if (this.validateTextInput()) {
+         obj = { 'taskid': 22323, 'filedata': 'text ' };
+      // } else { return false; }
     }
 
     // document.getElementById('result').innerHTML = 'Please wait while result is being displayed ';
@@ -99,37 +100,41 @@ export class AppComponent {
   }
 
   addSubject() {
-    if (!this.isUri) {
-      const temp = '<http://example.org/' + this.subject + '>';
-      const subject = {
-        // value: encodeURI(temp)
-        value: temp
-      };
+    // if (!this.isUri) {
+    //   const temp = '<http://example.org/' + this.subject + '>';
+    //   const subject = {
+    //     // value: encodeURI(temp)
+    //     value: temp
+    //   };
+    //   this.list.addSubject(subject);
+    // } else {
+      if (this.validateTextInput(this.subject)) {
+        const subject = {
+          value: this.subject
+        };
       this.list.addSubject(subject);
-    } else {
-      const subject = {
-        value: this.subject
-      };
-      this.list.addSubject(subject);
-    }
+    // }
     this.subject = '';
+    }
   }
 
   addObject() {
-    if (!this.isUri) {
-      const temp = '<http://example.org/' + this.object + '>';
-      const object = {
-        // value: encodeURI(this.object)
-        value: temp
-      };
-      this.list.addObject(object);
-    } else {
+    // if (!this.isUri) {
+    //   const temp = '<http://example.org/' + this.object + '>';
+    //   const object = {
+    //     // value: encodeURI(this.object)
+    //     value: temp
+    //   };
+    //   this.list.addObject(object);
+    // } else {
+      if (this.validateTextInput(this.object)) {
       const object = {
         value: this.object
       };
       this.list.addObject(object);
-    }
+    // }
     this.object = '';
+    }
   }
   /*
     Resets the value of subject, predicate and object text fields when
@@ -149,18 +154,30 @@ export class AppComponent {
   }
 
   /* validates text input */
-  validateTextInput() {
-    if ((this.subject === '') || (this.object === '') || (this.predicate === '')) {
-      console.log('All field are required, please fill subject, predicate and object');
-      alert('All field are required, please fill subject, predicate and object');
+  validateTextInput(input) {
+    if (input === '') {
+      alert('input is empty');
       return false;
     } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
-      console.log('Predicate should not have only numeric value');
-      alert('Predicate should not have only numeric value');
+      console.log('Should not have only numeric value');
+      // alert('Predicate should not have only numeric value');
       return false;
     }
     return true;
   }
+  /* validates text input */
+  // validateTextInput() {
+  //   if ((this.subject === '') || (this.object === '') || (this.predicate === '')) {
+  //     console.log('All field are required, please fill subject, predicate and object');
+  //     alert('All field are required, please fill subject, predicate and object');
+  //     return false;
+  //   } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
+  //     console.log('Predicate should not have only numeric value');
+  //     alert('Predicate should not have only numeric value');
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   /* validates file input */
   validateFileInput() {
