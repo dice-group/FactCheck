@@ -1,4 +1,4 @@
-package Wrapper;
+package wrapper;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;

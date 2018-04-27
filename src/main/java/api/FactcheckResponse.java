@@ -1,7 +1,4 @@
-package Api;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+package api;
 
 import java.io.Serializable;
 

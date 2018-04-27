@@ -1,11 +1,11 @@
-package Api;
+package api;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import Wrapper.FactCheckBytes;
-import Wrapper.ModelTransform;
+import wrapper.FactCheckBytes;
+import wrapper.ModelTransform;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
@@ -48,12 +48,12 @@ public class Controller {
     }
 
     @PostMapping("/hobbitTask/")
-    public void execHobbitTask(@RequestBody FCpreprocessor fCpreprocessor, String taskId) {
+    public FactCheckHobbitResponse execHobbitTask(@RequestBody FCpreprocessor fCpreprocessor, String taskId) {
         DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
         Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
         double defactoScore = factEvidence.getDeFactoScore();
 
-        FactCheckHobbitResponse FCHobbitResponse = new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
+        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
     }
 
 }

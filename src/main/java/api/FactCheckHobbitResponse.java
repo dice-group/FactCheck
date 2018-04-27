@@ -1,4 +1,4 @@
-package Api;
+package api;
 
 /**
  * @author DANISH AHMED on 4/22/2018
@@ -13,9 +13,9 @@ public class FactCheckHobbitResponse {
     private double truthValue = 0.0;
     private String fileTrace;
 
-    public String responseData;
+    private String responseData;
 
-    public FactCheckHobbitResponse(String taskId, double truthValue, String fileTrace) {
+    FactCheckHobbitResponse(String taskId, double truthValue, String fileTrace) {
         this.taskId = taskId;
         this.truthValue = truthValue;
         this.fileTrace = fileTrace;
@@ -32,5 +32,9 @@ public class FactCheckHobbitResponse {
 
     public String getTaskId() {
         return taskId;
+    }
+
+    public String getResponseData() {
+        return responseData;
     }
 }
