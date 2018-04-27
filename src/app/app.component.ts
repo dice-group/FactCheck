@@ -20,12 +20,14 @@ export class AppComponent {
     // this.list.addSubject(newItem);
     // this.list.addObject({ value: 'Sample Object' });
   }
-
+  isURI = require('validate.io-uri');
   title = 'FactCheck';
   // btnText = 'Submit';
   subject = '';
   predicate = '';
   object = '';
+  objectURI = 'test';
+  subjectURI = '';
   isFile = false;
   file;
   fileName = 'testName';
@@ -43,7 +45,7 @@ export class AppComponent {
       } else { return false; }
     } else {
       // if (this.validateTextInput()) {
-         obj = { 'taskid': 22323, 'filedata': 'text ' };
+      obj = { 'taskid': 22323, 'filedata': 'text ' };
       // } else { return false; }
     }
 
@@ -108,13 +110,33 @@ export class AppComponent {
     //   };
     //   this.list.addSubject(subject);
     // } else {
-      if (this.validateTextInput(this.subject)) {
-        const subject = {
-          value: this.subject
-        };
+    if (this.validateTextInput(this.subject)) {
+
+      if (this.isURI(this.subject)) {
+        if (this.subjectURI === '') {
+          this.subjectURI = this.subject;
+          this.subject = '';
+          return;
+        } else {
+          if (confirm('Do you want to replace current URI? ')) {
+            this.subjectURI = this.subject;
+            this.subject = '';
+            return;
+          } else {
+            if (!confirm('Do you want add ' + this.subject + ' as label? ')) {
+              this.subject = '';
+              return;
+            }
+          }
+        }
+      }
+
+      const subject = {
+        value: this.subject
+      };
       this.list.addSubject(subject);
-    // }
-    this.subject = '';
+      // }
+      this.subject = '';
     }
   }
 
@@ -127,13 +149,31 @@ export class AppComponent {
     //   };
     //   this.list.addObject(object);
     // } else {
-      if (this.validateTextInput(this.object)) {
-      const object = {
-        value: this.object
-      };
-      this.list.addObject(object);
-    // }
-    this.object = '';
+    if (this.validateTextInput(this.object)) {
+      if (this.isURI(this.object)) {
+        if (this.objectURI === '') {
+          this.objectURI = this.object;
+          this.object = '';
+          return;
+        } else {
+          if (confirm('Do you want to replace current URI? ')) {
+            this.objectURI = this.object;
+            this.object = '';
+            return;
+          } else {
+            if (!confirm('Do you want add ' + this.object + ' as label? ')) {
+              this.object = '';
+              return;
+            }
+          }
+        }
+      }
+        const object = {
+          value: this.object
+        };
+        this.list.addObject(object);
+        // }
+        this.object = '';
     }
   }
   /*

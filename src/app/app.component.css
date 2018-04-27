@@ -6,13 +6,13 @@
     word-wrap: break-word;
     margin-right: 2px;
     color: white;
-    background-color: #5bc0de;
+    background-color: #b7b8b2;
     display: inline;
     padding: .2em .6em .3em;
-    font-size: 75%;
-    font-weight: 700;
+    /* font-size: 75%; */
+    /* font-weight: 700; */
     line-height: 1;
-    border-radius: 8px;
+    border-radius: 2px;
 }
 .button {
     /* font-size: 10px;
