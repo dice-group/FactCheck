@@ -13,16 +13,9 @@
     </h1>
     <div class="row">
       <div class="col-sm-8">
-
         <form>
-          <mat-tab-group>
+          <mat-tab-group (selectedTabChange)= "onTabChange($event)">
             <mat-tab label="TEXT">
-              <!-- <div class="form-group">
-        <span class="form-control" *ngFor="let item of list.subjects; let i = index">
-          <small id="wrap-word">{{item.value}}</small>
-          <button type="button" class="badge" (click)="list.removeSubject(i)">&times;</button>
-        </span>
-      </div> -->
               <br>
               <div class="form-group">
                 <label for="subject">Subject:</label>
@@ -30,18 +23,18 @@
                   required/>
                 <span class="form-text text-muted mt-2">
                   <label class="badge badge-primary p-2 mr-2">URI: </label>
-                  
+
                   <small class="wrap-word" *ngIf="subjectURI != ''">{{subjectURI}}
-                      <span class="button" (click)="subjectURI = ''">X</span>                     
-                    </small>
-                    <div class="clearfix"></div>
+                    <span class="button" (click)="subjectURI = ''">X</span>
+                  </small>
+                  <div class="clearfix"></div>
                   <label class="badge badge-success p-2">Labels: </label>
                   <span *ngFor="let item of list.subjects; let i = index">
                     <small class="wrap-word">{{item.value}}
                       <span class="button" (click)="list.removeSubject(i)">X</span>
                     </small>
                   </span>
-                </span>                
+                </span>
               </div>
 
               <div class="form-group">
@@ -65,46 +58,36 @@
               <div class="form-group">
                 <label for="object">Object: </label>
                 <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
-                />
-                <!-- ng-pattern="/^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/" -->
-                <span class="form-text text-muted mt-2">                  
+                />                
+                <span class="form-text text-muted mt-2">
                   <label class="badge badge-primary p-2 mr-2">URI: </label>
                   <small class="wrap-word" *ngIf="objectURI != ''">{{objectURI}}
-                      <span class="button" (click)="objectURI = ''">X</span>                      
-                    </small>
-                  
+                    <span class="button" (click)="objectURI = ''">X</span>
+                  </small>
+
                   <div class="clearfix"></div>
                   <label class="badge badge-success p-2">Labels: </label>
-                  <span *ngFor="let item of list.objects; let i = index" >
+                  <span *ngFor="let item of list.objects; let i = index">
                     <small class="wrap-word">{{item.value}}
                       <span class="button" (click)="list.removeObject(i)">X</span>
                     </small>
                   </span>
                 </span>
-               
               </div>
             </mat-tab>
 
             <mat-tab label="FILE">
               <br>
-
               <div class="form-group">
                 <label for="file">Please Select .tll file to upload. </label>
                 <input name="file" id="fileInput" type="file" accept=".ttl" (change)="uploadFile($event)" />
               </div>
-              <!-- <div class="form-group">
-              <label for="selection">Please choose your selection:</label>
-              <input type="radio" name="selection" value="file" (click)="fileSelection()" /> File
-              <input type="radio" name="selection" value="text" (click)="textSelection()" checked /> Text
-            </div> -->
-
             </mat-tab>
           </mat-tab-group>
           <br>
-          <div class="form-group">
-            <!-- <input type="submit" class="btn btn-primary" value="{{btnText}}" (click)="onClick()" /> -->
+          <div class="form-group">            
             <button type="button" value="Submit" class="btn btn-primary" (click)="onClick()">Submit</button>
-            <button type="reset" value="Reset" class="btn btn-primary" (click)="reset()">Reset</button>
+            <button type="button" value="Reset" class="btn btn-primary" (click)="resetEverthing()">Reset</button>
           </div>
         </form>
         <!-- end of "col-sm-8" div -->
@@ -117,13 +100,10 @@
         <blockquote class="blockquote">asdfsdffgfff
           <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
         </blockquote>
-
-
         <span id="result" class="badge badge-success"></span>
 
         <!-- end of "col-sm-4" div -->
       </div>
-
 
       <!-- end of row div -->
     </div>

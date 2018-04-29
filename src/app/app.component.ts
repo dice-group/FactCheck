@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import * as $ from 'jquery';
 import { ListService } from './list.service';
 import { Item } from './item';
+import { MatTabChangeEvent } from '@angular/material';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class AppComponent {
   // isUri = false;
 
   onClick() {
+    console.log('isFile? ' + this.isFile);
     let obj;
     if (this.isFile) {
       if (this.validateFileInput()) {
@@ -89,16 +91,8 @@ export class AppComponent {
     reader.readAsText(this.file);
   }
 
-  /*
-    Resets the value of file selection when
-    chooses text selection.
-  */
-  textSelection() {
-    document.getElementById('fileInput').removeAttribute('type');
-    document.getElementById('fileInput').setAttribute('type', 'file');
-    this.isFile = false;
-    this.file = '';
-    this.fileName = '';
+  onTabChange(event: MatTabChangeEvent) {
+    this.isFile = event.tab.textLabel === 'FILE';
   }
 
   addSubject() {
@@ -114,12 +108,12 @@ export class AppComponent {
 
       if (this.isURI(this.subject)) {
         if (this.subjectURI === '') {
-          this.subjectURI = this.subject;
+          this.subjectURI = '<' + this.subject + '>';
           this.subject = '';
           return;
         } else {
           if (confirm('Do you want to replace current URI? ')) {
-            this.subjectURI = this.subject;
+            this.subjectURI = '<' + this.subject + '>';
             this.subject = '';
             return;
           } else {
@@ -152,12 +146,12 @@ export class AppComponent {
     if (this.validateTextInput(this.object)) {
       if (this.isURI(this.object)) {
         if (this.objectURI === '') {
-          this.objectURI = this.object;
+          this.objectURI = '<' + this.object + '>';
           this.object = '';
           return;
         } else {
           if (confirm('Do you want to replace current URI? ')) {
-            this.objectURI = this.object;
+            this.objectURI = '<' + this.object + '>';
             this.object = '';
             return;
           } else {
@@ -168,23 +162,56 @@ export class AppComponent {
           }
         }
       }
-        const object = {
-          value: this.object
-        };
-        this.list.addObject(object);
-        // }
-        this.object = '';
+      const object = {
+        value: this.object
+      };
+      this.list.addObject(object);
+      // }
+      this.object = '';
     }
   }
   /*
     Resets the value of subject, predicate and object text fields when
     file is selected.
   */
-  fileSelection() {
-    this.isFile = true;
-    this.subject = '';
-    this.predicate = '';
-    this.object = '';
+  // fileSelection() {
+  //   this.isFile = true;
+  //   this.subject = '';
+  //   this.predicate = '';
+  //   this.object = '';
+  // }
+
+  /*
+    Resets the value of file selection when
+    chooses text selection.
+  */
+  // textSelection() {
+  //   document.getElementById('fileInput').removeAttribute('type');
+  //   document.getElementById('fileInput').setAttribute('type', 'file');
+  //   this.isFile = false;
+  //   this.file = '';
+  //   this.fileName = '';
+  // }
+
+  resetEverthing() {
+    if (this.isFile) {
+      document.getElementById('fileInput').removeAttribute('type');
+      document.getElementById('fileInput').setAttribute('type', 'file');
+      this.file = '';
+      this.fileName = '';
+    } else {
+      if (confirm('Please confirm to clear everything? ')) {
+        this.subject = '';
+        this.predicate = '';
+        this.object = '';
+        this.subjectURI = '';
+        this.objectURI = '';
+        this.list.resetEverthing();
+      }
+
+
+
+    }
   }
   /*
     Returns true if given string contains only numbers, false otherwise.

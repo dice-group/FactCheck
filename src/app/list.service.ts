@@ -7,7 +7,7 @@ export class ListService {
   constructor() {
   }
   addSubject(item: Item) {
-    if (! (this.subjects.filter(e => e.value === item.value).length > 0)) {
+    if (!(this.subjects.filter(e => e.value === item.value).length > 0)) {
       this.subjects.push(item);
     }
   }
@@ -18,7 +18,7 @@ export class ListService {
   }
 
   addObject(item: Item) {
-    if (! (this.objects.filter(e => e.value === item.value).length > 0) ) {
+    if (!(this.objects.filter(e => e.value === item.value).length > 0)) {
       this.objects.push(item);
     }
   }
@@ -26,5 +26,11 @@ export class ListService {
   removeObject(index: number) {
     console.log('deleteing item');
     this.objects.splice(index, 1);
+  }
+
+  resetEverthing() {
+    this.subjects = [];
+    this.objects = [];
+    console.log('values has been reset successfully...!');
   }
 }
