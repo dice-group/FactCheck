@@ -21,12 +21,12 @@ public class SubjectObjectSimilarityFeature implements FactFeature {
     @Override
     public void extractFeature(ComplexProof proof, Evidence evidence) {
     	
-    	String subjectLabel = evidence.getModel().getSubjectLabel(proof.getLanguage());
-    	String objectLabel = evidence.getModel().getObjectLabel(proof.getLanguage());
+    	String subjectLabel = evidence.getModel().getSubjectLabel(proof.getLanguage()).toLowerCase();
+    	String objectLabel = evidence.getModel().getObjectLabel(proof.getLanguage()).toLowerCase();
     	
         proof.getFeatures().setValue(AbstractFactFeatures.SUBJECT_SIMILARITY, 
-        		Math.max(lev.getSimilarity(proof.getSubject(), subjectLabel), lev.getSimilarity(proof.getSubject(), objectLabel)));
+        		Math.max(lev.getSimilarity(proof.getSubject().toLowerCase(), subjectLabel), lev.getSimilarity(proof.getSubject().toLowerCase(), objectLabel)));
         proof.getFeatures().setValue(AbstractFactFeatures.OBJECT_SIMILARITY, 
-        		Math.max(lev.getSimilarity(proof.getObject(), objectLabel), lev.getSimilarity(proof.getObject(), subjectLabel)));
+        		Math.max(lev.getSimilarity(proof.getObject().toLowerCase(), objectLabel), lev.getSimilarity(proof.getObject().toLowerCase(), subjectLabel)));
     }
 }
