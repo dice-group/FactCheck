@@ -71,8 +71,8 @@ public class PageTitleFeatureTest extends AbstractFactFeatureTest {
 			}
 			
 			feature.extractFeature(this.proof, this.evidence);
-			Assert.assertEquals(this.expectedPageObjectscore, this.proof.getFeatures().value(AbstractFactFeatures.PAGE_TITLE_OBJECT),0.0009);
-			
+			Assert.assertEquals(this.expectedPageObjectscore, round(this.proof.getFeatures().value(AbstractFactFeatures.PAGE_TITLE_OBJECT),3) ,0.0);
+			Assert.assertEquals(this.expectedPageSubjectscore, round(this.proof.getFeatures().value(AbstractFactFeatures.PAGE_TITLE_SUBJECT),3) ,0.0);
 		}
 
 }

@@ -11,6 +11,7 @@ import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.ml.feature.evidence.impl.PageRankFeature;
 import org.aksw.defacto.model.DefactoModel;
 import org.dice.factcheck.proof.extract.TestWebsite;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,8 +21,8 @@ import org.junit.runners.Parameterized.Parameters;
 public class PageRankFeatureTest extends AbstractEvidenceFeatureTest{
 	
 	private Evidence evidence;
-	private float expectedPageRankMax;
-	private float expectedPageRankSum;
+	private double expectedPageRankMax;
+	private double expectedPageRankSum;
 	private PageRankFeature feature = new PageRankFeature();
 	
 	@Parameters
@@ -40,14 +41,14 @@ public class PageRankFeatureTest extends AbstractEvidenceFeatureTest{
 		Evidence evidence = new Evidence(testModel);
 		evidence.addWebSites(new Pattern("received", "en"), websiteList);
 		
-		testInput.add(new Object[] {evidence, (float)0.0, (float)0.0});
+		testInput.add(new Object[] {evidence, 0.495, 0.832});
 		
-		testInput.add(new Object[] {new Evidence(testModel), (float)0.0, (float)0.0});
+		testInput.add(new Object[] {new Evidence(testModel), 0.0, 0.0});
 		
 		return testInput;
 	}
 	
-	public PageRankFeatureTest(Evidence evidence, float expectedPageObjectscore, float expectedPageSubjectscore) {
+	public PageRankFeatureTest(Evidence evidence, double expectedPageRankMax, double expectedPageRankSum) {
 		
 		this.evidence = evidence;
 		this.expectedPageRankMax = expectedPageRankMax;
@@ -58,7 +59,8 @@ public class PageRankFeatureTest extends AbstractEvidenceFeatureTest{
 	public void test() {		
 
 		feature.extractFeature(this.evidence);
-		//Assert.assertEquals(this.expectedPageObjectscore, this.proof.getFeatures().value(AbstractFactFeatures.PAGE_TITLE_OBJECT),0.0009);
+		Assert.assertEquals(this.expectedPageRankMax, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.PAGE_RANK_MAX),3),0.0);
+		Assert.assertEquals(this.expectedPageRankSum, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.PAGE_RANK_SUM),3),0.0);
 		
 	}
 
