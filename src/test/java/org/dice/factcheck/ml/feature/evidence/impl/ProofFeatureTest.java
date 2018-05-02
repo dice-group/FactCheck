@@ -9,6 +9,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.ml.feature.evidence.impl.ProofFeature;
 import org.dice.factcheck.proof.extract.TestWebsite;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -50,7 +51,7 @@ public class ProofFeatureTest extends AbstractEvidenceFeatureTest {
 		proof.setScore(0.80);
 		evidence.addComplexProof(proof);
 		
-		testInput.add(new Object[] {evidence, 2, 1.27, 1.27});
+		testInput.add(new Object[] {evidence, 2.0, 0.948, 0.35});
 
 		return testInput;
 	}
@@ -67,8 +68,9 @@ public class ProofFeatureTest extends AbstractEvidenceFeatureTest {
 	public void test() {
 
 		feature.extractFeature(this.evidence);
-		/*Assert.assertEquals(this.expectedMajoritysearchSum, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.TOPIC_MAJORITY_SEARCH_RESULT_SUM),2), 0.0);
-		Assert.assertEquals(this.expectedMajoritySearchMax, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.TOPIC_MAJORITY_SEARCH_RESULT_MAX),2), 0.0);*/
+		Assert.assertEquals(this.expectedNumberOfconfirmingProofs, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.NUMBER_OF_CONFIRMING_PROOFS),3), 0.0);
+		Assert.assertEquals(this.expectedPositiveScore, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.TOTAL_POSITIVES_EVIDENCE_SCORE),3), 0.0);
+		Assert.assertEquals(this.expectedNegativeScore, round(this.evidence.getFeatures().value(AbstractEvidenceFeature.TOTAL_NEGATIVES_EVIDENCE_SCORE),3), 0.0);
 
 	}
 

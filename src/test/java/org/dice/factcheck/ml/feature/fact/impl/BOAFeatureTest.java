@@ -10,6 +10,7 @@ import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
 import org.aksw.defacto.ml.feature.fact.impl.BoaFeature;
 import org.aksw.defacto.search.query.MetaQuery;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,10 +21,10 @@ public class BOAFeatureTest extends AbstractFactFeatureTest{
 
 	private ComplexProof proof;
 	private Evidence evidence;
-	private float expectedSmithWatermanScore;
-	private float expectedLevehnsteinScore;
-	private float expectedQgramScore;
-	private BoaFeature feature;;
+	private double expectedSmithWatermanScore;
+	private double expectedLevehnsteinScore;
+	private double expectedQgramScore;
+	private BoaFeature feature = new BoaFeature();
 	
 	@Parameters
 	public static Collection<Object[]> data() {
@@ -34,24 +35,24 @@ public class BOAFeatureTest extends AbstractFactFeatureTest{
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 				+ " physics", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", 
 				new WebSite(new MetaQuery("Einstein", "awarded", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
-				new Evidence(testModel), (float)1.0, (float)0.666, (float)0.666});
+				new Evidence(testModel), 0.928, 0.866, 0.787});
 		
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 				+ " physics", "Einstein is best known by the general public for his mass–energy equivalence formula E = mc2 (which has been dubbed \"the world's most famous equation\"). He recived the Nobel Prize for physics.", 
 				"Einstein is best known by the general public for his mass–energy equivalence formula E = mc2 (which has been dubbed \"the world's most famous equation\"). He received the Nobel prize for physics", 
 				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
-				new Evidence(testModel), (float)1.0, (float)0.666, (float)0.666});
+				new Evidence(testModel), 1.0, 0.094, 0.137});
 		
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 				+ " physics", "Einstein received Nobel Prize for physics.", "Einstein received Nobel Prize for physics.", 
 				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
-				new Evidence(testModel), (float)1.0, (float)0.666, (float)0.666});
+				new Evidence(testModel), 1.0, 0.666, 0.666});
 		
 		return testInput;
 	}
-	public BOAFeatureTest(ComplexProof proof, Evidence evidence, float expectedSmithWatermanScore, float expectedLevehnsteinScore, float expectedQgramScore) {
+	
+	public BOAFeatureTest(ComplexProof proof, Evidence evidence, double expectedSmithWatermanScore, double expectedLevehnsteinScore, double expectedQgramScore) {
 		
-		this.feature = new BoaFeature();
 		this.proof = proof;
 		this.evidence = evidence;
 		this.expectedSmithWatermanScore = expectedSmithWatermanScore;
@@ -63,10 +64,9 @@ public class BOAFeatureTest extends AbstractFactFeatureTest{
 	public void test() {		
 		
 		feature.extractFeature(this.proof, this.evidence);
-		System.out.println(this.proof.getFeatures().value(AbstractFactFeatures.SMITH_WATERMAN));
-		System.out.println(this.proof.getFeatures().value(AbstractFactFeatures.LEVENSHTEIN));
-		System.out.println(this.proof.getFeatures().value(AbstractFactFeatures.QGRAMS));
-		//Assert.assertEquals(this.expectedScore, this.proof.getFeatures().value(AbstractFactFeatures.DEPENDENCY_SUBJECT_OBJECT),0.0);
+		Assert.assertEquals(this.expectedSmithWatermanScore, round(this.proof.getFeatures().value(AbstractFactFeatures.SMITH_WATERMAN),3),0.0);
+		Assert.assertEquals(this.expectedQgramScore, round(this.proof.getFeatures().value(AbstractFactFeatures.QGRAMS),3),0.0);
+		Assert.assertEquals(this.expectedLevehnsteinScore, round(this.proof.getFeatures().value(AbstractFactFeatures.LEVENSHTEIN),3),0.0);
 		
 	}
 
