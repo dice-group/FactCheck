@@ -127,54 +127,5 @@ public class ElasticSearchEngineTest extends AbstractElasticInstance {
 			
 		}	
 	}
-	
-	public static void main(String[] args) throws IOException
-	{
-		documentFields = new HashMap<String, String>();
-		documentFields.put("Title", "text");
-		documentFields.put("Article", "text");
-		documentFields.put("URL", "text");
-		documentFields.put("Pagerank", "float");
-		Defacto.init();
-		startRestClient();
-		createIndex("wikipedia-test", "articles", documentFields);
-		
-		documents = new HashMap<Integer, HashMap<String, String>>();
-		HashMap<String, String> documentContent = new HashMap<String, String>();
-		documentContent.put("Title", "Albert Einstein");
-		documentContent.put("Article", "Einstein was born in Ulm, Germany. He received Nobel prize for physics");
-		documentContent.put("URL", "www.albert-einstein.com");
-		documentContent.put("Pagerank", "0.35");
-		documents.put(1, documentContent);
-		
-		documentContent = new HashMap<String, String>();
-		documentContent.put("Title", "Nobel Prize Leaurates");
-		documentContent.put("Article", "Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics (alongside quantum mechanics). "
-				+ "His work is also known for its influence on the philosophy of science. "
-				+ "He is best known by the general public for his mass–energy equivalence formula E = mc2 (which has been dubbed \"the world's most famous equation\"). "
-				+ "He received the 1921 Nobel Prize for Physics \"for his services to theoretical physics, and especially for his discovery of the law of the photoelectric effect\", a pivotal step in the evolution of quantum theory.");
-		documentContent.put("URL", "www.nobel-prize-physics.com");
-		documentContent.put("Pagerank", "0.50");
-		documents.put(2, documentContent);
-		
-		documentContent = new HashMap<String, String>();
-		documentContent.put("Title", "Henry Dunant");
-		documentContent.put("Article", "Henry Dunant was born in France. He received Nobel peace prize");
-		documentContent.put("URL", "www.henry-dunant.com");
-		documentContent.put("Pagerank", "0.15");
-		documents.put(3, documentContent);
-		
-		documentContent = new HashMap<String, String>();
-		documentContent.put("Title", "Max Planck");
-		documentContent.put("Article", "Max Planck was born in Geramny. He received Nobel prize for physics");
-		documentContent.put("URL", "www.henry-dunant.com");
-		documentContent.put("Pagerank", "0.55");
-		documents.put(4, documentContent);
-		
-		indexDocuments(documents, "wikipedia-test", "articles");
-		
-		ElasticSearchEngine serachEngine = new ElasticSearchEngine(); 
-		SearchResult result = serachEngine.query(new MetaQuery("Einstein", "received", "Nobel peace prize", "en", null), new Pattern("received", "en"));
-	}
 
 }
