@@ -22,8 +22,8 @@ public class EndOfSentenceCharacterFeature implements FactFeature {
     @Override
     public void extractFeature(ComplexProof proof, Evidence evidence) {
 
-        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_DOT, StringUtils.countMatches(proof.getTinyContext(), ".") );
-        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_EXCLAMATION_MARK, StringUtils.countMatches(proof.getTinyContext(), "!"));
-        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_QUESTION_MARK, StringUtils.countMatches(proof.getTinyContext(), "?"));
+        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_DOT, StringUtils.countMatches(proof.getProofPhrase(), ".") );
+        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_EXCLAMATION_MARK, StringUtils.countMatches(proof.getProofPhrase(), "!"));
+        proof.getFeatures().setValue(AbstractFactFeatures.END_OF_SENTENCE_QUESTION_MARK, StringUtils.countMatches(proof.getProofPhrase(), "?"));
     }
 }

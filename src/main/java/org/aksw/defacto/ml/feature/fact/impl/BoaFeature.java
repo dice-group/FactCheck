@@ -37,15 +37,15 @@ public class BoaFeature implements FactFeature {
 	private static Levenshtein lev				= new Levenshtein();
 	private static BoaPatternSearcher searcher = new BoaPatternSearcher();
 
-	private static float smithWatermanSimilarity = 0f;
-	private static float qgramsSimilarity = 0f;
-	private static float levSimilarity = 0f;
-	private static int patternCounter = 0, patternNormalizedCounter = 0;
-	private static Pattern swPattern = null;
-	private static Pattern qgramPattern = null;
-	private static Pattern levPattern = null;
-	private static String proofSubString = "";
-	private static boolean subjectObject = false;
+	private float smithWatermanSimilarity = 0f;
+	private float qgramsSimilarity = 0f;
+	private float levSimilarity = 0f;
+	private int patternCounter = 0, patternNormalizedCounter = 0;
+	private Pattern swPattern = null;
+	private Pattern qgramPattern = null;
+	private Pattern levPattern = null;
+	private String proofSubString = "";
+	private boolean subjectObject = false;
 
 	@Override
 	public void extractFeature(ComplexProof proof, Evidence evidence) {
@@ -116,7 +116,7 @@ public class BoaFeature implements FactFeature {
 		}
 	}
 
-	private static void calucaletDistanceSimilarities(ComplexProof proof, Pattern p)
+	private void calucaletDistanceSimilarities(ComplexProof proof, Pattern p)
 	{
 		String subjectLowerCase = proof.getSubject().toLowerCase();
 		String objectLowerCase = proof.getObject().toLowerCase();

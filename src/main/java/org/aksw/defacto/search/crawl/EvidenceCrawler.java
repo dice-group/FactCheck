@@ -104,21 +104,7 @@ public class EvidenceCrawler {
             // basically downloads all websites in parallel
             //crawlSearchResults(searchResults, model, evidence);
             // tries to find proofs and possible proofs and scores those
-            /*Properties props = new Properties();
-    	    props.put("annotators", "tokenize, ssplit");
-    	    this.model.pipeline = new StanfordCoreNLPClient(props, "http://"+CORENLP_SERVER1, Integer.parseInt(CORENLP_PORT1), 8);
-            Properties props1 = new Properties();
-            props1.put("tokenize.language", "English");
-    	    props1.put("pos.model", "edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger");
-    	    props1.put("ner.model","edu/stanford/nlp/models/ner/english.all.3class.distsim.crf.ser.gz");
-    	    props1.put("ner.applyNumericClassifiers", "false");
-    	    props1.put("ner.useSUTime", "false");
-    	    props1.put("parse.model", "edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
-    	    props1.put("coref.algorithm", "statistical");
-    	    props1.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
-    	    props1.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
-    	    this.model.pipeline1 = new StanfordCoreNLPClient(props1, "http://"+CORENLP_SERVER2, Integer.parseInt(CORENLP_PORT2), 8);*/
-    	    //System.out.println("Finished Loading two pipilines. "+Long.toString(finishmodel-startmodel));
+
     	    scoreSearchResults(searchResults, model, evidence);
             // put it in solr cache
             //cacheSearchResults(searchResults);

@@ -251,8 +251,8 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 					if(sublabel.isEmpty()) sublabel = evidence.getModel().getSubjectLabel("en");
 					if(objlabel.isEmpty()) objlabel = evidence.getModel().getObjectLabel("en");
-					ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, proofPhrase, normalizeOccurrence(proofPhrase,surfaceForms), site);
-					proof.setTinyContext(tinyContext);
+					ComplexProof proof = new ComplexProof(evidence.getModel(), sublabel, objlabel, proofPhrase.trim(), normalizeOccurrence(proofPhrase.trim(),surfaceForms), site);
+					//proof.setTinyContext(tinyContext.trim());
 
 					evidence.addComplexProof(proof);
 				}

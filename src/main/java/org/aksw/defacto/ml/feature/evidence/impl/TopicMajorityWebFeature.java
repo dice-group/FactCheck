@@ -43,15 +43,15 @@ public class TopicMajorityWebFeature extends AbstractEvidenceFeature {
             Collections.sort(topicTerms, new TopicTermsCoherence.WordComparator());
             
             // we want this only for the first three websites
-            for ( int i = 0 ; i < 3 && i < topicTerms.size() ; i++) {
+            for ( int i = 0 ; i < topicTerms.size() ; i++) {
                 
                 // we need to compare each website with each website
                 for ( WebSite allWebSite : evidence.getAllWebSites() ) {
                 
                     // exclude the identity comparison
                     if ( !allWebSite.equals(website) ) {
-                        
-                        if ( allWebSite.getText().contains(topicTerms.get(i).getWord()) ) topicMajority++;
+
+                        if ( allWebSite.getText().toLowerCase().contains(topicTerms.get(i).getWord().toLowerCase()) ) topicMajority++;
                     }
                 }
             }

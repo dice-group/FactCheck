@@ -248,6 +248,7 @@ public class ComplexProof {
 		int result = 1;
 		result = prime * result + ((tinyContext == null) ? 0 : tinyContext.hashCode());
 		result = prime * result + ((website == null) ? 0 : website.hashCode());
+		result = prime * result + ((website == null) ? 0 : proofPhrase.hashCode());
 		return result;
 	}
 

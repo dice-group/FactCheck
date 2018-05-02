@@ -82,9 +82,9 @@ public class TopicTermsCoherence {
 			{				
 				JsonNode document = hits.get("hits").get(i).get("_source");
 				JsonNode Term = document.get("Term");
-				JsonNode UCI = document.get("Coherence_NPMI");
+				JsonNode NPMI = document.get("Coherence_NPMI");
 				String topicTerm = Term.asText();
-				float uciScore = Float.parseFloat(UCI.asText());
+				float uciScore = Float.parseFloat(NPMI.asText());
 				Word word = new Word(topicTerm, uciScore);
 				wordList.add(word);
 			}
