@@ -1,0 +1,17 @@
+.classpath
+.project
+.settings
+.directory
+
+/src/main/resources/training/
+/src/main/resources/cache
+/src/main/resources/defacto.ini
+/.idea/
+/data/
+/data_for_installation/
+/.settings/
+/cache/
+/target
+/log/info.log
+/log/factConfirmation.html
+/repo/
