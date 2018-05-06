@@ -1,11 +1,11 @@
 # factcheck-api
-[FactCheck](https://github.com/dice-group/FactCheck) is algorithm used for validation of fact based on the muliple evidences found on the web and results a confidence score.
+[FactCheck](https://github.com/dice-group/FactCheck) is an algorithm that validates facts by finding evidences on the web to approve or deny a query.
 
-[factcheck-api](https://github.com/danishahmed92/factcheck-api) is a RESTful web service which can be used to query the facts and obtain results.
+[factcheck-api](https://github.com/danishahmed92/factcheck-api) is a Spring RESTful web service for Factcheck which requires an object, predicate and subject to be specified in the JSON request.
 
-The JSON requests containing Turtle format query along with TaskID can be posted to http://localhost:8080/api/execTask/ .
-
-For posting requests [factcheck-demo](https://github.com/Fahad-Anwar/factcheck-demo) can be used.
+ A task ID - a number that identifies the request is also required. 
+ 
+ The API returns the total score as well as proof sentences and their corresponding scores.
 
 
 # Usage Instructions
