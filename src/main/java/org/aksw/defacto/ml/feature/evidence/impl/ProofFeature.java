@@ -34,7 +34,7 @@ public class ProofFeature extends AbstractEvidenceFeature {
         Set<String> proofWebsites = new HashSet<String>();
         for ( ComplexProof p : evidence.getComplexProofs() ) {
             
-            if ( p.getScore() > Defacto.DEFACTO_CONFIG.getDoubleSetting("evidence", "CONFIRMATION_THRESHOLD") ) {
+            if ( p.getScore() >= Defacto.DEFACTO_CONFIG.getDoubleSetting("evidence", "CONFIRMATION_THRESHOLD") ) {
                 
                 proofWebsites.add(p.getWebSite().getUrl());
                 scorePositives *= ( 1D - p.getScore() ); 
