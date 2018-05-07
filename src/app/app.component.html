@@ -59,7 +59,9 @@
               </div>
 
               <div class="form-group">
-                <label for="object">Object: </label>               
+                <label for="object">Object: </label>
+                <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
+                />               
                 <span class="form-text text-muted mt-2">
                   <label class="badge badge-primary p-2 mr-2" *ngIf="objectURI !== ''">URI: </label>
                   <small class="wrap-word" *ngIf="objectURI !== ''">{{objectURI}}
