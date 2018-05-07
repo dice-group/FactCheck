@@ -41,3 +41,25 @@
     margin-right:3px;
     padding-top:13px;
    }
+
+   .word-wrap {
+    -ms-word-break: break-all;
+    word-break: break-all;
+  
+    /* Non standard for webkit */
+    word-break: break-word;
+  
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+  }
+  .example-tooltip-host {
+    display: inline-flex;
+    align-items: center;
+    margin: 50px;
+  }
+  
+  .example-select {
+    margin: 0 10px;
+  }
+  

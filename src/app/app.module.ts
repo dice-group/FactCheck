@@ -5,6 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { ListService } from './list.service';
 import {MatTabsModule, MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+// import {LocalStorageModule} from 'angular-local-storage.min.js';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import {
+  HttpModule
+} from '@angular/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -13,7 +19,10 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserModule,
     FormsModule,
     MatTabsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpModule,
+    NgxSpinnerModule
+    // LocalStorageModule
   ],
   providers: [ListService],
   bootstrap: [AppComponent],

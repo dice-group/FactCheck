@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-sm-8">
         <form>
-          <mat-tab-group (selectedTabChange)= "onTabChange($event)">
+          <mat-tab-group (selectedTabChange)="onTabChange($event)">
             <mat-tab label="TEXT">
               <br>
               <div class="form-group">
@@ -22,19 +22,22 @@
                 <input type="text" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" (keyup)="$event.keyCode == 13 && addSubject()"
                   required/>
                 <span class="form-text text-muted mt-2">
-                  <label class="badge badge-primary p-2 mr-2">URI: </label>
+                  <label class="badge badge-primary p-2 mr-2" *ngIf="subjectURI !== ''">URI: </label>
 
-                  <small class="wrap-word" *ngIf="subjectURI != ''">{{subjectURI}}
-                    <span class="button" (click)="subjectURI = ''">X</span>
+                  <small class="wrap-word" *ngIf="subjectURI !== ''">{{subjectURI}}
+                    <span class="button" (click)="removeSubjectURI()">X</span>
                   </small>
                   <div class="clearfix"></div>
-                  <label class="badge badge-success p-2">Labels: </label>
-                  <span *ngFor="let item of list.subjects; let i = index">
-                    <small class="wrap-word">{{item.value}}
-                      <span class="button" (click)="list.removeSubject(i)">X</span>
-                    </small>
-                  </span>
+                  <div *ngIf="list.hasSubjects()">
+                    <label class="badge badge-success p-2">Labels: </label>
+                    <span *ngFor="let item of list.subjects; let i = index">
+                      <small class="wrap-word">{{item}}
+                        <span class="button" (click)="list.removeSubject(i)">X</span>
+                      </small>
+                    </span>
+                  </div>
                 </span>
+
               </div>
 
               <div class="form-group">
@@ -56,22 +59,22 @@
               </div>
 
               <div class="form-group">
-                <label for="object">Object: </label>
-                <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
-                />                
+                <label for="object">Object: </label>               
                 <span class="form-text text-muted mt-2">
-                  <label class="badge badge-primary p-2 mr-2">URI: </label>
-                  <small class="wrap-word" *ngIf="objectURI != ''">{{objectURI}}
-                    <span class="button" (click)="objectURI = ''">X</span>
+                  <label class="badge badge-primary p-2 mr-2" *ngIf="objectURI !== ''">URI: </label>
+                  <small class="wrap-word" *ngIf="objectURI !== ''">{{objectURI}}
+                    <span class="button" (click)="removeObjectURI()">X</span>
                   </small>
 
                   <div class="clearfix"></div>
-                  <label class="badge badge-success p-2">Labels: </label>
-                  <span *ngFor="let item of list.objects; let i = index">
-                    <small class="wrap-word">{{item.value}}
-                      <span class="button" (click)="list.removeObject(i)">X</span>
-                    </small>
-                  </span>
+                  <div *ngIf="list.hasOjbects()">
+                    <label class="badge badge-success p-2">Labels: </label>
+                    <span *ngFor="let item of list.objects; let i = index">
+                      <small class="wrap-word">{{item}}
+                        <span class="button" (click)="list.removeObject(i)">X</span>
+                      </small>
+                    </span>
+                  </div>
                 </span>
               </div>
             </mat-tab>
@@ -85,8 +88,8 @@
             </mat-tab>
           </mat-tab-group>
           <br>
-          <div class="form-group">            
-            <button type="button" value="Submit" class="btn btn-primary" (click)="onClick()">Submit</button>
+          <div class="form-group">
+            <button type="button" value="Submit" class="btn btn-primary" (click)="submitData()">Submit</button>
             <button type="button" value="Reset" class="btn btn-primary" (click)="resetEverthing()">Reset</button>
           </div>
         </form>
@@ -96,11 +99,26 @@
       <br>
       <div class="col-sm-4">
         <h2 class="text-center">Results: </h2>
-        <hr>
-        <blockquote class="blockquote">asdfsdffgfff
-          <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        <hr/>
+        <!-- <li *ngFor="let items of results">
+          {{items.defactoScore}}
+        </li> -->
+        <ngx-spinner></ngx-spinner>
+
+        <blockquote class="blockquote word-wrap">
+          <div class="text-center">
+            <p class="lead" *ngIf="loading">{{loadingText}}</p>
+          </div>
+          <!-- fgdgdf -->
+          <!-- <p class="mb-0">{{result}} </p>-->
+          <!-- <ul class="list-group word-wrap"> -->
+          <ul class="list-group word-wrap" *ngIf="result !== ''">
+            <li clss="list-group-item">{{result}}</li>
+          </ul>
+          <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante. -->
+
         </blockquote>
-        <span id="result" class="badge badge-success"></span>
+        <!-- <span class="badge-success word-wrap">{{result}}</span> -->
 
         <!-- end of "col-sm-4" div -->
       </div>

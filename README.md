@@ -3,6 +3,20 @@
 FactCheckDemo was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3, 
 Nodejs v8.9.4 and Npm v5.8.0  .
 
+## Change Log
+- Implemented Waiting (loading) UI, when user sends request to server.  
+- Added Clear button with full functionality.
+- Fixed duplication of labels for subject and object.
+- URI label and Labels are now hidden when there are no labels for subject and object.  
+- Replaced and implemented http request code with Angular http. 
+- Added error handling for server requests. (Eg; if clint-end gets status code of error in reponse to request to server). 
+- Also implemented request error handling using Promisses.
+- Creation of ttl file (NLP) is 100% done (NLP is done). 
+Now ttl file is being created when user inputs Text(S.P.O). 
+Now ttl formated JSON object is being sent on both cases.
+I have created ttl format from natural language input (Subject, Predicate, Object and subject/object labels). 
+- Implemented local storage for front-end. Works even page is refreshed or browser is closed and reopened. Tested on (Chrome, MS Edge and Firefox). 
+
 ## Prerequisites
 Before you can use Angular CLI, you must have Node.js v8.9.4 and npm 5.8.0 or higher installed on your system.
 You can download the latest version of Node.js for your operating system and consult the latest installation instructions on the official Node.js [website](https://nodejs.org/en/) or You can install nodejs and npm combined from [https://www.npmjs.com/get-npm](https://www.npmjs.com/get-npm)  .

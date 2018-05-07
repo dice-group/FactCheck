@@ -1,9 +1,20 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as $ from 'jquery';
+// import * as $ from 'jquery';
 import { ListService } from './list.service';
 import { Item } from './item';
 import { MatTabChangeEvent } from '@angular/material';
+import { String, StringBuilder } from 'typescript-string-operations';
+import {
+  Http,
+  Response,
+  RequestOptions,
+  Headers,
+  HttpModule
+} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 @Component({
@@ -14,67 +25,142 @@ import { MatTabChangeEvent } from '@angular/material';
 
 
 export class AppComponent {
-  // items: Item[] = [];
-  // items = ['just', 'some',    'cool',    'tags'  ];
-  constructor(public list: ListService) {
-    // const newItem = { value: 'Sample Subject ' };
-    // this.list.addSubject(newItem);
-    // this.list.addObject({ value: 'Sample Object' });
-  }
-  isURI = require('validate.io-uri');
-  title = 'FactCheck';
-  // btnText = 'Submit';
-  subject = '';
-  predicate = '';
-  object = '';
-  objectURI = 'test';
-  subjectURI = '';
-  isFile = false;
-  file;
-  fileName = 'testName';
-  result = '';
-  // fileData: MSBaseReader;
-  fileData: string;
-  text = 'sample';
-  // isUri = false;
+  position = 'before';
+  private apiRoot: String = 'http://localhost:8080';
+  results: Object[];
+  private loading: boolean;
+  private headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+  private options = new RequestOptions({ headers: this.headers });
+  private isURI = require('validate.io-uri');
+  private title = 'FactCheck';
+  private url = `${this.apiRoot}/api/execTask/`;
+  private subject = '';
+  private predicate = '';
+  private object = '';
+  private objectURI = '';
+  private subjectURI = '';
+  private isFile = false;
+  private file;
+  private fileName = 'testName';
+  private result = '';
+  private fileData: string;
+  private text = 'sample';
+  private taskId = 1;
+  private loadingText = 'Loading...';
 
-  onClick() {
-    console.log('isFile? ' + this.isFile);
+  constructor(public list: ListService, private http: Http, private spinner: NgxSpinnerService) {
+    this.results = [];
+    this.loading = false;
+    const subUri = JSON.parse(localStorage.getItem('subjectURI'));
+    this.subjectURI = subUri === null ? '' : subUri.subjectURI;
+    const oUri = JSON.parse(localStorage.getItem('objectURI'));
+    this.objectURI = oUri === null ? '' : oUri.objectURI;
+  }
+  submitData() {
     let obj;
     if (this.isFile) {
       if (this.validateFileInput()) {
-        obj = { 'taskid': 1112, 'filedata': this.text };
+        obj = { 'taskid': this.taskId, 'filedata': this.text };
       } else { return false; }
     } else {
-      // if (this.validateTextInput()) {
-      obj = { 'taskid': 22323, 'filedata': 'text ' };
-      // } else { return false; }
+      if (!this.validate()) { return; } // return if validation fails
+      const builder = new StringBuilder();
+      builder.Append(this.createTtlFile());
+      obj = { 'taskid': this.taskId, 'filedata': builder.ToString() };
+      console.log(builder.ToString());
     }
-
-    // document.getElementById('result').innerHTML = 'Please wait while result is being displayed ';
-    /* Use the JavaScript function JSON.stringify() to convert it into a string. */
     const myJSON = JSON.stringify(obj);
-    /* Using the XMLHttpRequest to get data from the server: */
-    const xmlhttp = new XMLHttpRequest();
-    this.result = 'awaiting result';
-    xmlhttp.onreadystatechange = function () {
-      if (this.readyState === 4 && this.status === 200) {
-        const myObj = JSON.parse(this.responseText);
-        document.getElementById('result').innerHTML = 'Defecto Score is: ' + myObj.defactoScore;
-      }
-    };
-    xmlhttp.open('POST', 'http://localhost:8080/api/execTask/', true);
-    xmlhttp.setRequestHeader('Content-Type', 'application/json');
-    xmlhttp.send(myJSON);
+    this.loading = true;
+    this.spinner.show();
+    this.loadingText = 'Loading...';
+    this.spinner.show();
+    this.sendToApi(myJSON)
+      .then(() => {
+        this.loading = false;
+        this.spinner.hide();
+      })
+      .catch((e) => {
+        this.loadingText = 'error' + e;
+        this.spinner.hide();
+      });
   }
-  // addItem(item) {
-  //   this.items.push(item);
-  // }
+  createTtlFile() {
+    const builder = new StringBuilder();
+    builder.Append(this.getPrefixes());
+    builder.Append(this.createContents());
+    return builder.ToString();
+  }
 
-  // deleteItem(index: number) {
-  //   console.log('deleteing item number: ' + index);
-  //   this.items.splice(index, 1);
-  // }
+  // Create rest of the contents of ttl
+  createContents() {
+    const builder = new StringBuilder();
+    builder.Append(this.subjectURI + '\n');
+    builder.Append('\tdbo:' + this.predicate + '\t' + this.objectURI + ' .\n\n');
+    if (this.list.getObjectLabels().length > 0) {
+      builder.Append(this.objectURI);
+      const lables = String.Join(' , ', this.list.getObjectLabels());
+      console.log('object labels: ' + lables);
+      builder.Append('\trdfs:label\t' + this.list.getObjectLabels() + ' .\n\n');
+    }
+    if (this.list.getSubjectLabels().length > 0) {
+      builder.Append(this.subjectURI + '\n');
+      const lables = String.Join(' , ', this.list.getSubjectLabels());
+      builder.Append('\trdfs:label\t' + this.list.getSubjectLabels() + ' .\n');
+    }
+    return builder.ToString();
+  }
+
+  // Create prefixes
+  getPrefixes() {
+    return new StringBuilder(
+      '@prefix fbase: <http://rdf.freebase.com/ns> .\n' +
+      '@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n' +
+      '@prefix dbo:   <http://dbpedia.org/ontology/> .\n' +
+      '@prefix owl:   <http://www.w3.org/2002/07/owl#> .\n' +
+      '@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n' +
+      '@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\n\n'
+    ).ToString();
+  }
+  validate() {
+    if (this.predicate === '') {
+      console.log('No Predicate is selected, please select atleast one predicate from the list');
+      alert('No Predicate is selected, please select atleast one predicate from the list');
+      return false;
+    }
+    if (this.subjectURI === '') {
+      this.subjectURI = '<https://www.example.com/subject>';
+    }
+    if (this.objectURI === '') {
+      this.objectURI = '<https://www.example.com/object>';
+    }
+    return true;
+  }
+
+  multipleURis(input: string) {
+    return input.lastIndexOf(',,') !== -1;
+  }
+
+  sendToApi(myJSON: string) {
+    this.result = '';
+    const promise = new Promise((resolve, reject) => {
+      this.http.post(this.url, myJSON, this.options)
+        .toPromise()
+        .then(
+          res => {
+            console.log(res.json());
+            this.result = res.json().defactoScore;
+            // this.results = res.json().results;
+            this.taskId++;
+            this.loading = false;
+            resolve();
+          },
+          msg => {
+            reject(msg);
+          }
+        );
+    });
+    return promise;
+  }
   /*
     Sets the file when user selects a file to upload.
   */
@@ -84,9 +170,8 @@ export class AppComponent {
     // Read file contents
     const reader = new FileReader();
     reader.onload = x => {
-      console.log('onLoad is called...');
-      // const text = reader.result;
       this.text = reader.result;
+      // console.log(this.text);
     };
     reader.readAsText(this.file);
   }
@@ -96,24 +181,17 @@ export class AppComponent {
   }
 
   addSubject() {
-    // if (!this.isUri) {
-    //   const temp = '<http://example.org/' + this.subject + '>';
-    //   const subject = {
-    //     // value: encodeURI(temp)
-    //     value: temp
-    //   };
-    //   this.list.addSubject(subject);
-    // } else {
     if (this.validateTextInput(this.subject)) {
-
       if (this.isURI(this.subject)) {
         if (this.subjectURI === '') {
           this.subjectURI = '<' + this.subject + '>';
+          this.storeSUri();
           this.subject = '';
           return;
         } else {
           if (confirm('Do you want to replace current URI? ')) {
             this.subjectURI = '<' + this.subject + '>';
+            this.storeSUri();
             this.subject = '';
             return;
           } else {
@@ -123,35 +201,46 @@ export class AppComponent {
             }
           }
         }
+      } else if (this.multipleURis(this.subject)) {
+        const array = this.subject.split(',,')
+        .filter(function (n) { return n !== undefined && n.trim() !== ''; });
+        array.forEach(element => {
+          this.list.addSubject(element);
+        });
+      } else {
+        this.list.addSubject(this.subject);
       }
-
-      const subject = {
-        value: this.subject
-      };
-      this.list.addSubject(subject);
-      // }
       this.subject = '';
     }
   }
 
+  storeSUri(): void {
+    localStorage.setItem('subjectURI', JSON.stringify({subjectURI: this.subjectURI}));
+  }
+
+  storeOUri(): void {
+    localStorage.setItem('objectURI', JSON.stringify({objectURI: this.objectURI}));
+  }
+  removeObjectURI() {
+    this.objectURI = '';
+    this.storeOUri();
+  }
+  removeSubjectURI() {
+    this.subjectURI = '';
+    this.storeSUri();
+  }
   addObject() {
-    // if (!this.isUri) {
-    //   const temp = '<http://example.org/' + this.object + '>';
-    //   const object = {
-    //     // value: encodeURI(this.object)
-    //     value: temp
-    //   };
-    //   this.list.addObject(object);
-    // } else {
     if (this.validateTextInput(this.object)) {
       if (this.isURI(this.object)) {
         if (this.objectURI === '') {
           this.objectURI = '<' + this.object + '>';
+          this.storeOUri();
           this.object = '';
           return;
         } else {
           if (confirm('Do you want to replace current URI? ')) {
             this.objectURI = '<' + this.object + '>';
+            this.storeOUri();
             this.object = '';
             return;
           } else {
@@ -161,37 +250,18 @@ export class AppComponent {
             }
           }
         }
+      } else if (this.multipleURis(this.object)) {
+        const array = this.object.split(',,')
+        .filter(function (n) { return n !== undefined && n.trim() !== ''; });
+        array.forEach(element => {
+          this.list.addObject(element);
+        });
+      } else {
+        this.list.addObject(this.object);
       }
-      const object = {
-        value: this.object
-      };
-      this.list.addObject(object);
-      // }
       this.object = '';
     }
   }
-  /*
-    Resets the value of subject, predicate and object text fields when
-    file is selected.
-  */
-  // fileSelection() {
-  //   this.isFile = true;
-  //   this.subject = '';
-  //   this.predicate = '';
-  //   this.object = '';
-  // }
-
-  /*
-    Resets the value of file selection when
-    chooses text selection.
-  */
-  // textSelection() {
-  //   document.getElementById('fileInput').removeAttribute('type');
-  //   document.getElementById('fileInput').setAttribute('type', 'file');
-  //   this.isFile = false;
-  //   this.file = '';
-  //   this.fileName = '';
-  // }
 
   resetEverthing() {
     if (this.isFile) {
@@ -208,9 +278,6 @@ export class AppComponent {
         this.objectURI = '';
         this.list.resetEverthing();
       }
-
-
-
     }
   }
   /*
@@ -226,25 +293,12 @@ export class AppComponent {
       alert('input is empty');
       return false;
     } else if (this.isNumeric(input) || (!input.match(/[a-z]/i))) {
-      console.log('Should not have only numeric value');
-      // alert('Predicate should not have only numeric value');
+      console.log('Invalid input value');
+      alert('Invalid input');
       return false;
     }
     return true;
   }
-  /* validates text input */
-  // validateTextInput() {
-  //   if ((this.subject === '') || (this.object === '') || (this.predicate === '')) {
-  //     console.log('All field are required, please fill subject, predicate and object');
-  //     alert('All field are required, please fill subject, predicate and object');
-  //     return false;
-  //   } else if (this.isNumeric(this.predicate) || (!this.predicate.match(/[a-z]/i))) {
-  //     console.log('Predicate should not have only numeric value');
-  //     alert('Predicate should not have only numeric value');
-  //     return false;
-  //   }
-  //   return true;
-  // }
 
   /* validates file input */
   validateFileInput() {
