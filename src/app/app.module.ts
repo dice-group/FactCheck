@@ -10,6 +10,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import {
   HttpModule
 } from '@angular/http';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {
     MatTabsModule,
     BrowserAnimationsModule,
     HttpModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatTooltipModule
     // LocalStorageModule
   ],
   providers: [ListService],

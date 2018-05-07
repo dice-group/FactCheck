@@ -15,7 +15,7 @@ import {
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +25,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 
 export class AppComponent {
-  position = 'before';
+  position = 'below';
   private apiRoot: String = 'http://localhost:8080';
   results: Object[];
   private loading: boolean;
