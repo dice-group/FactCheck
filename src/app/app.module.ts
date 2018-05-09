@@ -11,10 +11,13 @@ import {
   HttpModule
 } from '@angular/http';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatDialogModule} from '@angular/material';
+import { DialogComponent } from './dialog/dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,9 +26,12 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     BrowserAnimationsModule,
     HttpModule,
     NgxSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule,
+    MatButtonModule
     // LocalStorageModule
   ],
+  entryComponents: [DialogComponent],
   providers: [ListService],
   bootstrap: [AppComponent],
 })

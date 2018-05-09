@@ -4,6 +4,11 @@ FactCheckDemo was generated with [Angular CLI](https://github.com/angular/angula
 Nodejs v8.9.4 and Npm v5.8.0  .
 
 ## Change Log
+- Implemented Model dialog (Message dialog box) for subject
+- Improved UI (Changed Buttons look)
+- Added Multiple Label support for Subject labels & Object labels. 
+  Now user can add multiple labels at once. Just copy and paste labels in the subject or 
+  object input box . Note: Multiple labels should be comma (,) seperated. 
 - Implemented Waiting (loading) UI, when user sends request to server.  
 - Added Clear button with full functionality.
 - Fixed duplication of labels for subject and object.

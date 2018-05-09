@@ -15,7 +15,11 @@ import {
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -47,8 +51,14 @@ export class AppComponent {
   private text = 'sample';
   private taskId = 1;
   private loadingText = 'Loading...';
-
-  constructor(public list: ListService, private http: Http, private spinner: NgxSpinnerService) {
+  private boxTitle = '';
+  private boxMessage = '';
+  private retValue = false;
+  private yesNo = false;
+  constructor(public list: ListService,
+    private http: Http,
+    private spinner: NgxSpinnerService,
+    public dialog: MatDialog) {
     this.results = [];
     this.loading = false;
     const subUri = JSON.parse(localStorage.getItem('subjectURI'));
@@ -56,6 +66,30 @@ export class AppComponent {
     const oUri = JSON.parse(localStorage.getItem('objectURI'));
     this.objectURI = oUri === null ? '' : oUri.objectURI;
   }
+
+  openDialog(): any {
+    const promise = new Promise((resolve, reject) => {
+      const dialogRef = this.dialog.open(DialogComponent, {
+        disableClose: true,
+        closeOnNavigation: false,
+        width: '350px',
+        data: { title: this.boxTitle, message: this.boxMessage, yesNo: this.yesNo }
+      }).afterClosed()
+        .toPromise()
+        .then(
+          result => {
+            this.retValue = result;
+            this.yesNo = false;
+            resolve();
+          },
+          msg => {
+            reject(msg);
+          }
+        );
+    });
+    return promise;
+  }
+
   submitData() {
     let obj;
     if (this.isFile) {
@@ -123,8 +157,9 @@ export class AppComponent {
   }
   validate() {
     if (this.predicate === '') {
-      console.log('No Predicate is selected, please select atleast one predicate from the list');
-      alert('No Predicate is selected, please select atleast one predicate from the list');
+      this.boxMessage = 'No Predicate is selected, please select atleast one predicate from the list';
+      this.boxTitle = 'Error';
+      this.openDialog();
       return false;
     }
     if (this.subjectURI === '') {
@@ -136,7 +171,7 @@ export class AppComponent {
     return true;
   }
 
-  multipleURis(input: string) {
+  multipleLables(input: string) {
     return input.lastIndexOf(',,') !== -1;
   }
 
@@ -189,37 +224,69 @@ export class AppComponent {
           this.subject = '';
           return;
         } else {
-          if (confirm('Do you want to replace current URI? ')) {
-            this.subjectURI = '<' + this.subject + '>';
-            this.storeSUri();
-            this.subject = '';
-            return;
-          } else {
-            if (!confirm('Do you want add ' + this.subject + ' as label? ')) {
-              this.subject = '';
-              return;
-            }
-          }
+          const temp = '<' + this.subject + '>';
+          ((this.subjectURI !== temp) ? this.askURIReplacement() : this.askLabelReplacement());
         }
-      } else if (this.multipleURis(this.subject)) {
-        const array = this.subject.split(',,')
-        .filter(function (n) { return n !== undefined && n.trim() !== ''; });
+      } else if (this.multipleLables(this.subject)) {
+        const array = this.subject.split(',')
+          .filter(function (n) { return n !== undefined && n.trim() !== ''; });
         array.forEach(element => {
           this.list.addSubject(element);
+          this.subject = '';
         });
       } else {
         this.list.addSubject(this.subject);
+        this.subject = '';
       }
+    }
+  }
+  askLabelReplacement() {
+    const temp = '"' + this.subject + '"';
+    if (this.list.getSubjectLabels().indexOf(temp) === -1) {
+      this.boxTitle = 'Confirm';
+      this.boxMessage = 'Do you want add ' + this.subject + ' as label? ';
+      this.yesNo = true;
+      this.openDialog().then(() => {
+        if (!this.retValue) {
+          this.subject = '';
+          return;
+        } else {
+          this.list.addSubject(this.subject);
+          this.subject = '';
+        }
+      }).catch((e) => {
+        console.log('error: ' + e);
+      });
+    } else {
       this.subject = '';
     }
   }
+  askURIReplacement() {
+    this.boxTitle = 'Confirm';
+    this.boxMessage = 'Current URI will be relaced with the new URI. Are you sure ' +
+      'you want to replace current URI? ';
+    this.yesNo = true;
+    this.openDialog().then(() => {
+      if (this.retValue) {
+        this.subjectURI = '<' + this.subject + '>';
+        this.storeSUri();
+        this.subject = '';
+        return;
+      } else {
+        this.askLabelReplacement();
+      }
+    }).catch((e) => {
+      console.log('error: ' + e);
+    });
+
+  }
 
   storeSUri(): void {
-    localStorage.setItem('subjectURI', JSON.stringify({subjectURI: this.subjectURI}));
+    localStorage.setItem('subjectURI', JSON.stringify({ subjectURI: this.subjectURI }));
   }
 
   storeOUri(): void {
-    localStorage.setItem('objectURI', JSON.stringify({objectURI: this.objectURI}));
+    localStorage.setItem('objectURI', JSON.stringify({ objectURI: this.objectURI }));
   }
   removeObjectURI() {
     this.objectURI = '';
@@ -250,9 +317,9 @@ export class AppComponent {
             }
           }
         }
-      } else if (this.multipleURis(this.object)) {
-        const array = this.object.split(',,')
-        .filter(function (n) { return n !== undefined && n.trim() !== ''; });
+      } else if (this.multipleLables(this.object)) {
+        const array = this.object.split(',')
+          .filter(function (n) { return n !== undefined && n.trim() !== ''; });
         array.forEach(element => {
           this.list.addObject(element);
         });
@@ -263,6 +330,9 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Resets all the variables value to default when user hits Reset button.
+   */
   resetEverthing() {
     if (this.isFile) {
       document.getElementById('fileInput').removeAttribute('type');
@@ -280,6 +350,8 @@ export class AppComponent {
       }
     }
   }
+
+
   /*
     Returns true if given string contains only numbers, false otherwise.
   */
@@ -287,32 +359,37 @@ export class AppComponent {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
-  /* validates text input */
+  /* Validates text input */
   validateTextInput(input) {
     if (input === '') {
-      alert('input is empty');
+      this.boxMessage = 'Input is empty..!';
+      this.boxTitle = 'Error';
+      this.openDialog();
       return false;
     } else if (this.isNumeric(input) || (!input.match(/[a-z]/i))) {
-      console.log('Invalid input value');
-      alert('Invalid input');
+      this.boxMessage = 'Invalid input value..!';
+      this.boxTitle = 'Error';
+      this.openDialog();
       return false;
     }
     return true;
   }
 
-  /* validates file input */
+  /* Validates file input */
   validateFileInput() {
     if (this.file !== undefined && this.file != null && this.file !== '') {
       if (this.file.name.endsWith('.ttl')) {
         return true;
       } else {
-        console.log('Input file is not valid, please select ttl File...! ');
-        alert('Input file is not valid, please select ttl File...! ');
+        this.boxMessage = 'Input file is not valid, please select ttl File...!';
+        this.boxTitle = 'Error';
+        this.openDialog();
         return false;
       }
     } else {
-      alert('No file is selected, Please select ttl File...! ');
-      console.log('No file is selected, Please select ttl File...! ');
+      this.boxMessage = 'No file is selected, Please select ttl File...! ';
+      this.boxTitle = 'Error';
+      this.openDialog();
       return false;
     }
   }
