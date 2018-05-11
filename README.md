@@ -1,26 +1,14 @@
 # FactCheckDemo
 
-FactCheckDemo was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3, 
+[FactCheck](https://github.com/dice-group/FactCheck) is an algorithm that validates facts by finding evidences on the web to approve or deny a query.
+
+[FactCheckDemo](https://github.com/Fahad-Anwar/factcheck-demo) is Front-end which lets users to enter **subject**, **predicate** and **object** or a (ttl) **file** and submit to [factcheck-api](https://github.com/danishahmed92/factcheck-api) for fact checking. 
+
+This demo is created with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3, 
 Nodejs v8.9.4 and Npm v5.8.0  .
 
-## Change Log
-- Implemented Model dialog (Message dialog box) for subject
-- Improved UI (Changed Buttons look)
-- Added Multiple Label support for Subject labels & Object labels. 
-  Now user can add multiple labels at once. Just copy and paste labels in the subject or 
-  object input box . Note: Multiple labels should be comma (,) seperated. 
-- Implemented Waiting (loading) UI, when user sends request to server.  
-- Added Clear button with full functionality.
-- Fixed duplication of labels for subject and object.
-- URI label and Labels are now hidden when there are no labels for subject and object.  
-- Replaced and implemented http request code with Angular http. 
-- Added error handling for server requests. (Eg; if clint-end gets status code of error in reponse to request to server). 
-- Also implemented request error handling using Promisses.
-- Creation of ttl file (NLP) is 100% done (NLP is done). 
-Now ttl file is being created when user inputs Text(S.P.O). 
-Now ttl formated JSON object is being sent on both cases.
-I have created ttl format from natural language input (Subject, Predicate, Object and subject/object labels). 
-- Implemented local storage for front-end. Works even page is refreshed or browser is closed and reopened. Tested on (Chrome, MS Edge and Firefox). 
+<!-- ## Change Log
+- Updated Readme.  -->
 
 ## Prerequisites
 Before you can use Angular CLI, you must have Node.js v8.9.4 and npm 5.8.0 or higher installed on your system.
@@ -34,16 +22,16 @@ $ npm -v # => displays your npm version
 ```
 
 
-## Usage
+## Usage Instructions
 
 1. Clone this repository in Visual Studio Code or any other IDE of your choice.
 2. Locate to the root directory of the project using command prompt.
 3. run command ' ng serve '
-4. localhost is up on port 4200. Now open internet browser and type [localhost://4200](localhost://4200) .
+4. localhost is up on port 4200. Now open internet browser and type [http://localhost://4200](http://localhost://4200) .
  
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a dev server. Navigate to [http://localhost://4200](http://localhost://4200). The app will automatically reload if you change any of the source files.
 
 ## Build
 
