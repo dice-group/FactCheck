@@ -31,7 +31,7 @@ import { DialogComponent } from './dialog/dialog.component';
 export class AppComponent {
   position = 'below';
   private apiRoot: String = 'http://localhost:8080';
-  results: Object[];
+  private results: any;
   private loading: boolean;
   private headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
   private options = new RequestOptions({ headers: this.headers });
@@ -53,16 +53,27 @@ export class AppComponent {
   private loadingText = 'Loading...';
   private boxTitle = '';
   private boxMessage = '';
+
+  /* Return value that is return from model dialog */
   private retValue = false;
+
+  /* Set it to true when calling this.openDialog() to
+  show confirm buttons (yes/no),  false otherwise. */
   private yesNo = false;
+
   constructor(public list: ListService,
     private http: Http,
     private spinner: NgxSpinnerService,
     public dialog: MatDialog) {
-    this.results = [];
+    this.results = ['sample result1', 'sample result2'];
     this.loading = false;
+
     const subUri = JSON.parse(localStorage.getItem('subjectURI'));
     this.subjectURI = subUri === null ? '' : subUri.subjectURI;
+
+    const predicate = JSON.parse(localStorage.getItem('predicate'));
+    this.predicate = predicate === null ? '' : predicate.predicate;
+
     const oUri = JSON.parse(localStorage.getItem('objectURI'));
     this.objectURI = oUri === null ? '' : oUri.objectURI;
   }
@@ -172,7 +183,7 @@ export class AppComponent {
   }
 
   multipleLables(input: string) {
-    return input.lastIndexOf(',,') !== -1;
+    return input.lastIndexOf(',') !== -1;
   }
 
   sendToApi(myJSON: string) {
@@ -184,7 +195,7 @@ export class AppComponent {
           res => {
             console.log(res.json());
             this.result = res.json().defactoScore;
-            // this.results = res.json().results;
+            this.results = res.json().results;
             this.taskId++;
             this.loading = false;
             resolve();
@@ -225,7 +236,7 @@ export class AppComponent {
           return;
         } else {
           const temp = '<' + this.subject + '>';
-          ((this.subjectURI !== temp) ? this.askURIReplacement() : this.askLabelReplacement());
+          ((this.subjectURI !== temp) ? this.replaceSubURI() : this.replaceSubLabels());
         }
       } else if (this.multipleLables(this.subject)) {
         const array = this.subject.split(',')
@@ -240,7 +251,7 @@ export class AppComponent {
       }
     }
   }
-  askLabelReplacement() {
+  replaceSubLabels() {
     const temp = '"' + this.subject + '"';
     if (this.list.getSubjectLabels().indexOf(temp) === -1) {
       this.boxTitle = 'Confirm';
@@ -261,7 +272,7 @@ export class AppComponent {
       this.subject = '';
     }
   }
-  askURIReplacement() {
+  replaceSubURI() {
     this.boxTitle = 'Confirm';
     this.boxMessage = 'Current URI will be relaced with the new URI. Are you sure ' +
       'you want to replace current URI? ';
@@ -273,7 +284,7 @@ export class AppComponent {
         this.subject = '';
         return;
       } else {
-        this.askLabelReplacement();
+        this.replaceSubLabels();
       }
     }).catch((e) => {
       console.log('error: ' + e);
@@ -285,6 +296,9 @@ export class AppComponent {
     localStorage.setItem('subjectURI', JSON.stringify({ subjectURI: this.subjectURI }));
   }
 
+  storePredicate(): void {
+    localStorage.setItem('predicate', JSON.stringify({ predicate: this.predicate }));
+  }
   storeOUri(): void {
     localStorage.setItem('objectURI', JSON.stringify({ objectURI: this.objectURI }));
   }
@@ -305,31 +319,63 @@ export class AppComponent {
           this.object = '';
           return;
         } else {
-          if (confirm('Do you want to replace current URI? ')) {
-            this.objectURI = '<' + this.object + '>';
-            this.storeOUri();
-            this.object = '';
-            return;
-          } else {
-            if (!confirm('Do you want add ' + this.object + ' as label? ')) {
-              this.object = '';
-              return;
-            }
-          }
+          const temp = '<' + this.object + '>';
+          ((this.objectURI !== temp) ? this.replaceObjURI() : this.replaceObjLabels());
         }
       } else if (this.multipleLables(this.object)) {
         const array = this.object.split(',')
           .filter(function (n) { return n !== undefined && n.trim() !== ''; });
         array.forEach(element => {
           this.list.addObject(element);
+          this.object = '';
         });
       } else {
         this.list.addObject(this.object);
+        this.object = '';
       }
-      this.object = '';
     }
   }
 
+  replaceObjURI() {
+    this.boxTitle = 'Confirm';
+    this.boxMessage = 'Current URI will be relaced with the new URI. Are you sure ' +
+      'you want to replace current URI? ';
+    this.yesNo = true;
+    this.openDialog().then(() => {
+      if (this.retValue) {
+        this.objectURI = '<' + this.object + '>';
+        this.storeOUri();
+        this.object = '';
+        return;
+      } else {
+        this.replaceObjLabels();
+      }
+    }).catch((e) => {
+      console.log('error: ' + e);
+    });
+  }
+
+  replaceObjLabels() {
+    const temp = '"' + this.object + '"';
+    if (this.list.getObjectLabels().indexOf(temp) === -1) {
+      this.boxTitle = 'Confirm';
+      this.boxMessage = 'Do you want add ' + this.object + ' as label? ';
+      this.yesNo = true;
+      this.openDialog().then(() => {
+        if (!this.retValue) {
+          this.object = '';
+          return;
+        } else {
+          this.list.addObject(this.object);
+          this.object = '';
+        }
+      }).catch((e) => {
+        console.log('error: ' + e);
+      });
+    } else {
+      this.object = '';
+    }
+  }
   /**
    * Resets all the variables value to default when user hits Reset button.
    */
@@ -340,14 +386,23 @@ export class AppComponent {
       this.file = '';
       this.fileName = '';
     } else {
-      if (confirm('Please confirm to clear everything? ')) {
-        this.subject = '';
-        this.predicate = '';
-        this.object = '';
-        this.subjectURI = '';
-        this.objectURI = '';
-        this.list.resetEverthing();
-      }
+
+      this.boxTitle = 'Confirm';
+      this.boxMessage = 'Everything will be reset. Are you sure? ';
+      this.yesNo = true;
+      this.openDialog().then(() => {
+        if (this.retValue) {
+          this.subject = '';
+          this.predicate = '';
+          this.storePredicate();
+          this.object = '';
+          this.subjectURI = '';
+          this.objectURI = '';
+          this.list.resetEverthing();
+        }
+      }).catch((e) => {
+        console.log('error: ' + e);
+      });
     }
   }
 

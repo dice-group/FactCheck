@@ -19,7 +19,7 @@
               <br>
               <div class="form-group">
                 <label for="subject">Subject:
-                    <!-- [matTooltipPosition]="position" -->
+                  <!-- [matTooltipPosition]="position" -->
                   <small class="badge badge-secondary" matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Subjects cannot contain only numeric values.&#13;
                   A Subject URI can be entered in this input box but it must meet URI standard  eg: should start with http://&#13;
                   Single or Multiple Labels for a subject can be entered. 
@@ -50,10 +50,11 @@
 
               <div class="form-group">
                 <label for="predicate"> Predicate:
-                    <small class="badge badge-secondary" matTooltipHideDelay="2000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Must select a predicate before submitting the request.">?
-                    </small>
+                  <small class="badge badge-secondary" matTooltipHideDelay="2000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Must select a predicate before submitting the request.">?
+                  </small>
                 </label>
-                <select class="form-control" id="predicate" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate">
+                <select class="form-control" id="predicate" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" (click)="storePredicate()">
+                  <option></option>
                   <option>award</option>
                   <option>birth</option>
                   <option>death</option>
@@ -71,12 +72,12 @@
 
               <div class="form-group">
                 <label for="object">Object:
-                    <small class="badge badge-secondary" matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Object cannot contain only numeric values.&#13;
+                  <small class="badge badge-secondary" matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Object cannot contain only numeric values.&#13;
                     A Object URI can be entered in this input box but it must meet URI standard  eg: should start with http://&#13;
                     Single or Multiple Labels for a object can be entered. 
                     - To enter multiple label at once, just seperate all the labels with the , (a comma) &#13;
                     Note: If no URI or Labels are input, dummy URI is created for subject when user clicks submit button.">?
-                    </small>
+                  </small>
                 </label>
                 <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
                 />
@@ -133,12 +134,12 @@
           <!-- <p class="mb-0">{{result}} </p>-->
           <!-- <ul class="list-group word-wrap"> -->
           <ul class="list-group word-wrap" *ngIf="result !== ''">
-            <li clss="list-group-item">{{result}}</li>
+            <li class="list-group-item">{{result}}</li>
           </ul>
-          <!-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante. -->
-
+          <ul class="list-group word-wrap">
+            <li *ngFor="let item of results" class="list-group-item">{{item}}</li>
+          </ul>
         </blockquote>
-        <!-- <span class="badge-success word-wrap">{{result}}</span> -->
 
         <!-- end of "col-sm-4" div -->
       </div>
