@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
-import org.apache.commons.lang3.SerializationUtils;
 import wrapper.FactCheckBytes;
 import wrapper.ModelTransform;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
 import org.springframework.web.bind.annotation.*;
-import preprocessing.FCpreprocessor;
+import wrapper.preprocessing.FCpreprocessor;
 
 
 @RestController
@@ -48,71 +47,18 @@ public class Controller {
         return factcheckResponse;
     }
 
-    /*@PostMapping("/hobbitTask/")
-    public FactCheckHobbitResponse execHobbitTask(
-            @RequestBody FCpreprocessor fCpreprocessor,
-            @RequestBody String taskId) {
-        System.out.println("Inside hobbit task");
-        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
-        Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
-        double defactoScore = factEvidence.getDeFactoScore();
+    @RequestMapping(value="/hobbitTask/{taskId}", method= RequestMethod.POST)
+    public FactCheckHobbitResponse execT(@PathVariable(value = "taskId") String taskId,
+                                         @RequestParam(value = "dataISWC", required = true) String dataISWC,
+                                         @RequestParam(value = "fileTrace", required = true) String fileTrace) {
 
-        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
-    }*/
+        System.out.println("called by hobbit");
 
-    @PostMapping("/hobbitTask/")
-    public FactCheckHobbitResponse execHobbitTask(
-            @RequestParam("fCpreprocessor") FCpreprocessor fCpreprocessor,
-            @RequestParam("taskId") String taskId) {
-//        FCpreprocessor fCpreprocessor = SerializationUtils.deserialize(data);
-        System.out.println("Inside hobbit task");
+        FCpreprocessor fCpreprocessor = new FCpreprocessor(dataISWC, taskId, fileTrace);
         DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
         Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
         double defactoScore = factEvidence.getDeFactoScore();
 
         return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
     }
-
-    @PostMapping("/hobbitTask/{taskId}")
-    public FactCheckHobbitResponse execHobbitTask(
-            @PathVariable(value = "taskId") String taskId,
-            @RequestParam("data") byte[] data) {
-        FCpreprocessor fCpreprocessor = SerializationUtils.deserialize(data);
-        System.out.println("Inside hobbit task");
-        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
-        Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
-        double defactoScore = factEvidence.getDeFactoScore();
-
-        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
-    }
-
-    @RequestMapping(value = "/benchmarkTask/{taskId}", method = RequestMethod.POST)
-    @ResponseBody
-    public FactCheckHobbitResponse benchmarkTask(
-            @PathVariable("taskId") String taskId,
-            @RequestBody FCpreprocessor fCpreprocessor) {
-        System.out.println("Inside hobbit task");
-        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
-        Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
-        double defactoScore = factEvidence.getDeFactoScore();
-
-        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
-    }
-
-    @RequestMapping(value="/execTask/{taskId}", method= RequestMethod.POST)
-    public FactcheckResponse execT(@PathVariable(value = "taskId") String taskId,
-                                   @RequestParam(value = "data", required = true) byte[] data) {
-        System.out.println("inside api function");
-        Map<DefactoModel, Evidence> defactoModelEvidenceMap = FactCheckBytes.FactCheckFromBytes(taskId, data);
-
-        Map.Entry<DefactoModel, Evidence> entryIterator = defactoModelEvidenceMap.entrySet().iterator().next();
-        Evidence evidence = entryIterator.getValue();
-        double defactoScore = evidence.getDeFactoScore();
-
-        FactcheckResponse fcApi = new FactcheckResponse(taskId, new String(data));
-        fcApi.setDefactoScore(defactoScore);
-
-        return fcApi;
-    }
-
 }

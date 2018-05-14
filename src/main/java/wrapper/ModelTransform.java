@@ -1,11 +1,8 @@
 package wrapper;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
 import org.aksw.defacto.model.DefactoModel;
 import org.aksw.defacto.model.DefactoResource;
-import preprocessing.FCpreprocessor;
+import wrapper.preprocessing.FCpreprocessor;
 
 /**
  * @author DANISH AHMED on 4/20/2018
@@ -17,17 +14,17 @@ public class ModelTransform {
     }
 
     private DefactoModel setDefactoModel(FCpreprocessor fCpreprocessor, String taskId) {
-        preprocessing.DefactoModel preProcessingDM = fCpreprocessor.getDefactoModel();
+        wrapper.preprocessing.DefactoModel preProcessingDM = fCpreprocessor.getDefactoModel();
 
-        DefactoResource defactoResourceSubject = new DefactoResource((Resource) preProcessingDM.getSubjectResource(), (Model) fCpreprocessor.getModelFC());
+        DefactoResource defactoResourceSubject = new DefactoResource(preProcessingDM.getSubjectResource(), fCpreprocessor.getModelFC());
         defactoResourceSubject.labels = preProcessingDM.getSubjectLabels();
-        DefactoResource defactoResourceObject = new DefactoResource((Resource) preProcessingDM.getObjectResource(), (Model) fCpreprocessor.getModelFC());
+        DefactoResource defactoResourceObject = new DefactoResource(preProcessingDM.getObjectResource(), fCpreprocessor.getModelFC());
         defactoResourceObject.labels = preProcessingDM.getObjectLabels();
 
-        DefactoModel defactoModel = new DefactoModel((Model) fCpreprocessor.getModelFC(), taskId, true, preProcessingDM.languages);
+        DefactoModel defactoModel = new DefactoModel(fCpreprocessor.getModelFC(), taskId, true, preProcessingDM.languages);
         defactoModel.object = defactoResourceObject;
         defactoModel.subject = defactoResourceSubject;
-        defactoModel.predicate = (Property) preProcessingDM.predicate;
+        defactoModel.predicate = preProcessingDM.predicate;
 
         return defactoModel;
     }
