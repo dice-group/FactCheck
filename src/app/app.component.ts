@@ -30,42 +30,42 @@ import { DialogComponent } from './dialog/dialog.component';
 
 export class AppComponent {
   position = 'below';
-  private apiRoot: String = 'http://localhost:8080';
-  private results: any;
-  private loading: boolean;
-  private headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
-  private options = new RequestOptions({ headers: this.headers });
-  private isURI = require('validate.io-uri');
-  private title = 'FactCheck';
-  private url = `${this.apiRoot}/api/execTask/`;
-  private subject = '';
-  private predicate = '';
-  private object = '';
-  private objectURI = '';
-  private subjectURI = '';
-  private isFile = false;
-  private file;
-  private fileName = 'testName';
-  private result = '';
-  private fileData: string;
-  private text = 'sample';
-  private taskId = 1;
-  private loadingText = 'Loading...';
-  private boxTitle = '';
-  private boxMessage = '';
+  apiRoot: String = 'http://localhost:8080';
+  results: any;
+  loading: boolean;
+  headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
+  options = new RequestOptions({ headers: this.headers });
+  isURI = require('validate.io-uri');
+  title = 'FactCheck';
+  url = `${this.apiRoot}/api/execTask/`;
+  subject = '';
+  predicate = '';
+  object = '';
+  objectURI = '';
+  subjectURI = '';
+  isFile = false;
+  file;
+  fileName = 'testName';
+  result = '';
+  fileData: string;
+  text = 'sample';
+  taskId = 1;
+  loadingText = 'Loading...';
+  boxTitle = '';
+  boxMessage = '';
 
   /* Return value that is return from model dialog */
-  private retValue = false;
+  retValue = false;
 
   /* Set it to true when calling this.openDialog() to
   show confirm buttons (yes/no),  false otherwise. */
-  private yesNo = false;
+  yesNo = false;
 
   constructor(public list: ListService,
-    private http: Http,
-    private spinner: NgxSpinnerService,
+    public http: Http,
+    public spinner: NgxSpinnerService,
     public dialog: MatDialog) {
-    this.results = ['sample result1', 'sample result2'];
+    this.results = [];
     this.loading = false;
 
     const subUri = JSON.parse(localStorage.getItem('subjectURI'));
