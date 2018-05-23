@@ -80,7 +80,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"} \n"+
 							"}", ContentType.APPLICATION_JSON);
 
-			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
+			Response response = restClientobj.performRequest("GET", "/wikipedia/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());			
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
