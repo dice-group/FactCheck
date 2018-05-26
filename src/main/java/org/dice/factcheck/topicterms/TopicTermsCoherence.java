@@ -62,7 +62,7 @@ public class TopicTermsCoherence {
 							"} ,\n"+
 							"  \"sort\": [\n"+
 							"{\n"+
-							"    \"C_NPMI\" : {\n" +
+							"    \"C_UCI\" : {\n" +
 							"  \"order\" : \"desc\""+
 							"}\n"+
 							"}]\n"+
@@ -82,7 +82,7 @@ public class TopicTermsCoherence {
 			{				
 				JsonNode document = hits.get("hits").get(i).get("_source");
 				JsonNode Term = document.get("Term");
-				JsonNode NPMI = document.get("Coherence_NPMI");
+				JsonNode NPMI = document.get("C_UCI");
 				String topicTerm = Term.asText();
 				float uciScore = Float.parseFloat(NPMI.asText());
 				Word word = new Word(topicTerm, uciScore);
