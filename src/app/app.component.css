@@ -56,3 +56,14 @@
   ::ng-deep .mat-tooltip  {
     white-space: pre-line    !important;
 }
+.list-group.word-wrap .list-group-item .url-img {    
+    padding-top: 3px;
+    margin-right: 3px;
+    float: left;
+}
+
+.list-group.word-wrap .list-group-item .proof-img {    
+    padding-top: 10px;
+    margin-right: 3px;
+    float: left;
+}

@@ -131,13 +131,13 @@
             <p class="lead">{{loadingText}}</p>
           </div>
           <ul class="list-group word-wrap" *ngIf="defactoScore !== ''">
-            <li class="list-group-item">Defacto Score: &nbsp;&nbsp; {{defactoScore}}
+            <li class="list-group-item"><span class="badge badge-light">Defacto Score: </span>&nbsp;&nbsp; {{defactoScore}}
             </li>
           </ul>
           <ul class="list-group word-wrap">
             <li *ngFor="let item of results" class="list-group-item">
-              <h6><img src="../assets/webicon.png" /> {{item.website}}</h6>
-              <small><img src="../assets/prooficon.png" /> {{item.proofPhrase}}</small>
+             <h6><img class="url-img" src="../assets/webicon.png" /> <a href="{{item.website}}">{{item.website}}</a></h6>
+              <small><img class="proof-img" src="../assets/prooficon.png" /> {{item.proofPhrase}}</small>
             </li>
           </ul>
         </blockquote>

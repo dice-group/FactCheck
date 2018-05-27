@@ -66,7 +66,7 @@ export class AppComponent {
     public http: Http,
     public spinner: NgxSpinnerService,
     public dialog: MatDialog) {
-    this.results = [];
+      this.results = [];
     this.loading = false;
 
     const subUri = JSON.parse(localStorage.getItem('subjectURI'));
@@ -77,6 +77,7 @@ export class AppComponent {
 
     const oUri = JSON.parse(localStorage.getItem('objectURI'));
     this.objectURI = oUri === null ? '' : oUri.objectURI;
+    // this.testEnvironment();
   }
 
   openDialog(): any {
@@ -388,7 +389,6 @@ export class AppComponent {
    * Resets all the variables value to default when user hits Reset button.
    */
   resetEverthing() {
-    this.clearResults();
     if (this.isFile) {
       document.getElementById('fileInput').removeAttribute('type');
       document.getElementById('fileInput').setAttribute('type', 'file');
@@ -408,6 +408,7 @@ export class AppComponent {
           this.subjectURI = '';
           this.objectURI = '';
           this.list.resetEverthing();
+          this.clearResults();
         }
       }).catch((e) => {
         console.log('error: ' + e);
@@ -416,14 +417,16 @@ export class AppComponent {
   }
 
 
-  /*
-    Returns true if given string contains only numbers, false otherwise.
+  /**
+  * Returns true if given string contains only numbers, false otherwise.
   */
   isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
   }
 
-  /* Validates text input */
+  /**
+   *  Validates text input
+   */
   validateTextInput(input) {
     if (input === '') {
       this.boxMessage = 'Input is empty..!';
@@ -439,7 +442,9 @@ export class AppComponent {
     return true;
   }
 
-  /* Validates file input */
+  /**
+   *  Validates file input
+   */
   validateFileInput() {
     if (this.file !== undefined && this.file != null && this.file !== '') {
       if (this.file.name.endsWith('.ttl')) {
@@ -456,5 +461,23 @@ export class AppComponent {
       this.openDialog();
       return false;
     }
+  }
+
+  /**
+   * Temporary function to test 
+   * should be removed when development is finished.
+   */
+  testEnvironment() {
+    this.defactoScore = '0.156748798798798';
+    this.results = [
+      {
+        website: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
+        proofPhrase: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
+      },
+      {
+        website: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
+        proofPhrase: 'Red'
+      }
+    ];
   }
 }
