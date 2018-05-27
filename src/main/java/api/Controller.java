@@ -2,6 +2,7 @@ package api;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Map;
 
 import wrapper.FactCheckBytes;
@@ -29,23 +30,29 @@ public class Controller {
 
        System.out.println(factcheckResponse.getTaskid());
         String taskid =factcheckResponse.getTaskid();
-        System.out.println(factcheckResponse.getFile());
+        //System.out.println(factcheckResponse.getFile());
 
         String filedata =factcheckResponse.getFile();
         // Conversion of data in string format to byte array
         byte[] databyte = filedata.getBytes(StandardCharsets.UTF_8);
-
         Map<DefactoModel, Evidence> defactoModelEvidenceMap = FactCheckBytes.FactCheckFromBytes(taskid, databyte);
 
         Map.Entry<DefactoModel, Evidence> entryIterator = defactoModelEvidenceMap.entrySet().iterator().next();
         Evidence evidence = entryIterator.getValue();
         double defactoScore = evidence.getDeFactoScore();
 
+        ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
+
+        factcheckResponse.setComplexProofs(complexProofs);
+        factcheckResponse.setComplexProofs(setProofSentences(evidence));
+
         // Setting defacto score received from response
         factcheckResponse.setDefactoScore(defactoScore);
 
         return factcheckResponse;
     }
+
+
 
     @RequestMapping(value="/hobbitTask/{taskId}", method= RequestMethod.POST)
     public FactCheckHobbitResponse execT(@PathVariable(value = "taskId") String taskId,
@@ -59,6 +66,16 @@ public class Controller {
         Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
         double defactoScore = factEvidence.getDeFactoScore();
 
-        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
+        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace(), setProofSentences(factEvidence));
+    }
+
+
+
+    private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
+        ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
+        evidence.getComplexProofs().forEach( p -> {
+            complexProofs.add(new ComplexProofs(p.getWebSite().toString(), p.getProofPhrase()));
+        });
+        return complexProofs;
     }
 }
