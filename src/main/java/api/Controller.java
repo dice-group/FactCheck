@@ -5,11 +5,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 
-import wrapper.FactCheckBytes;
-import wrapper.ModelTransform;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
+import wrapper.FactCheckBytes;
+import wrapper.ModelTransform;
 import org.springframework.web.bind.annotation.*;
 import wrapper.preprocessing.FCpreprocessor;
 
@@ -41,9 +41,7 @@ public class Controller {
         Evidence evidence = entryIterator.getValue();
         double defactoScore = evidence.getDeFactoScore();
 
-        ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
-
-        factcheckResponse.setComplexProofs(complexProofs);
+        //Setting proof sentences
         factcheckResponse.setComplexProofs(setProofSentences(evidence));
 
         // Setting defacto score received from response
@@ -74,7 +72,7 @@ public class Controller {
     private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
         ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
         evidence.getComplexProofs().forEach( p -> {
-            complexProofs.add(new ComplexProofs(p.getWebSite().toString(), p.getProofPhrase()));
+            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
         });
         return complexProofs;
     }
