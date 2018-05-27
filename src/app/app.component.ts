@@ -37,8 +37,8 @@ export class AppComponent {
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
   title = 'FactCheck';
-  url = `${this.apiRoot}/api/execTask/`;
-  // url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
+  // url = `${this.apiRoot}/api/execTask/`;
+  url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
   subject = '';
   predicate = '';
   object = '';
