@@ -30,7 +30,7 @@ public class Controller {
 
        System.out.println(factcheckResponse.getTaskid());
         String taskid =factcheckResponse.getTaskid();
-        //System.out.println(factcheckResponse.getFile());
+        System.out.println(factcheckResponse.getFile());
 
         String filedata =factcheckResponse.getFile();
         // Conversion of data in string format to byte array
