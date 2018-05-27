@@ -127,17 +127,18 @@
         <ngx-spinner></ngx-spinner>
 
         <blockquote class="blockquote word-wrap">
-          <div class="text-center">
-            <p class="lead" *ngIf="loading">{{loadingText}}</p>
+          <div class="text-center" *ngIf="loading">
+            <p class="lead">{{loadingText}}</p>
           </div>
-          <!-- fgdgdf -->
-          <!-- <p class="mb-0">{{result}} </p>-->
-          <!-- <ul class="list-group word-wrap"> -->
-          <ul class="list-group word-wrap" *ngIf="result !== ''">
-            <li class="list-group-item">{{result}}</li>
+          <ul class="list-group word-wrap" *ngIf="defactoScore !== ''">
+            <li class="list-group-item">Defacto Score: &nbsp;&nbsp; {{defactoScore}}
+            </li>
           </ul>
           <ul class="list-group word-wrap">
-            <li *ngFor="let item of results" class="list-group-item">{{item}}</li>
+            <li *ngFor="let item of results" class="list-group-item">
+              <h6><img src="../assets/webicon.png" /> {{item.website}}</h6>
+              <small><img src="../assets/prooficon.png" /> {{item.proofPhrase}}</small>
+            </li>
           </ul>
         </blockquote>
 

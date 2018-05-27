@@ -37,8 +37,8 @@ export class AppComponent {
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
   title = 'FactCheck';
-  // url = `${this.apiRoot}/api/execTask/`;
-  url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
+  url = `${this.apiRoot}/api/execTask/`;
+  // url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
   subject = '';
   predicate = '';
   object = '';
@@ -47,7 +47,7 @@ export class AppComponent {
   isFile = false;
   file;
   fileName = 'testName';
-  result = '';
+  defactoScore = '';
   fileData: string;
   text = 'sample';
   taskId = 1;
@@ -113,7 +113,6 @@ export class AppComponent {
       const builder = new StringBuilder();
       builder.Append(this.createTtlFile());
       obj = { 'taskid': this.taskId, 'filedata': builder.ToString() };
-      console.log(builder.ToString());
     }
     const myJSON = JSON.stringify(obj);
     this.loading = true;
@@ -145,7 +144,6 @@ export class AppComponent {
     if (this.list.getObjectLabels().length > 0) {
       builder.Append(this.objectURI);
       const lables = String.Join(' , ', this.list.getObjectLabels());
-      console.log('object labels: ' + lables);
       builder.Append('\trdfs:label\t' + this.list.getObjectLabels() + ' .\n\n');
     }
     if (this.list.getSubjectLabels().length > 0) {
@@ -188,18 +186,23 @@ export class AppComponent {
   }
 
   sendToApi(myJSON: string) {
-    this.result = '';
+    this.defactoScore = '';
     const promise = new Promise((resolve, reject) => {
       this.http.post(this.url, myJSON, this.options)
         .toPromise()
         .then(
           res => {
-            console.log(res.json());
-            this.result = res.json().defactoScore;
-            this.results = res.json().results;
-            this.taskId++;
-            this.loading = false;
-            resolve();
+            try {
+              this.defactoScore = res.json().defactoScore;
+              this.results = res.json().complexProofs;
+              this.taskId++;
+              this.loading = false;
+              resolve();
+            } catch (e) {
+              console.log('Exception: ' + e);
+              this.loading = false;
+              this.spinner.hide();
+            }
           },
           msg => {
             reject(msg);
@@ -207,6 +210,7 @@ export class AppComponent {
         );
     });
     return promise;
+
   }
   /*
     Sets the file when user selects a file to upload.
@@ -218,7 +222,6 @@ export class AppComponent {
     const reader = new FileReader();
     reader.onload = x => {
       this.text = reader.result;
-      // console.log(this.text);
     };
     reader.readAsText(this.file);
   }

@@ -12,8 +12,6 @@ export class ListService {
 
     const localStorageItem2 = JSON.parse(localStorage.getItem('sLabels'));
     this.subjects = localStorageItem2 === null ? [] : localStorageItem2.sLabels;
-    console.log('subjects ' + this.subjects);
-    console.log('objects ' + this.objects);
   }
   addSubject(item: string) {
     if (this.subjects.indexOf('"' + item + '"') === -1) {
@@ -47,13 +45,10 @@ export class ListService {
   }
 
   getSubjectLabels() {
-    // localStorage.getItem('sLabels') === null ? [] : localStorage.getItem('sLabels');
     return  String.Join(' , ', this.subjects);
   }
 
   getObjectLabels() {
-    // const localStorageItem = JSON.parse(localStorage.getItem('oLabels'));
-    // return localStorageItem === null ? [] : localStorageItem.oLabels;
     return  String.Join(' , ', this.objects);
   }
 
