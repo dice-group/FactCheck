@@ -185,8 +185,12 @@ export class AppComponent {
     return input.lastIndexOf(',') !== -1;
   }
 
-  sendToApi(myJSON: string) {
+  clearResults() {
     this.defactoScore = '';
+    this.results = [];
+  }
+  sendToApi(myJSON: string) {
+    this.clearResults();
     const promise = new Promise((resolve, reject) => {
       this.http.post(this.url, myJSON, this.options)
         .toPromise()
@@ -384,6 +388,7 @@ export class AppComponent {
    * Resets all the variables value to default when user hits Reset button.
    */
   resetEverthing() {
+    this.clearResults();
     if (this.isFile) {
       document.getElementById('fileInput').removeAttribute('type');
       document.getElementById('fileInput').setAttribute('type', 'file');
