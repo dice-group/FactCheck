@@ -8,6 +8,7 @@ import java.util.Map;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
+import rdf.TripleExtractor;
 import wrapper.FactCheckBytes;
 import wrapper.ModelTransform;
 import org.springframework.web.bind.annotation.*;
@@ -29,16 +30,24 @@ public class Controller {
     public FactcheckResponse execT(@RequestBody FactcheckResponse factcheckResponse) throws IOException {
 
        System.out.println(factcheckResponse.getTaskid());
-        String taskid =factcheckResponse.getTaskid();
+        String taskId =factcheckResponse.getTaskid();
         System.out.println(factcheckResponse.getFile());
 
-        String filedata =factcheckResponse.getFile();
-        // Conversion of data in string format to byte array
-        byte[] databyte = filedata.getBytes(StandardCharsets.UTF_8);
-        Map<DefactoModel, Evidence> defactoModelEvidenceMap = FactCheckBytes.FactCheckFromBytes(taskid, databyte);
+        String fileData =factcheckResponse.getFile();
+
+        TripleExtractor tripleExtractor = new TripleExtractor(fileData, false);
+        FCpreprocessor fCpreprocessor = new FCpreprocessor(tripleExtractor.getSimplifiedData(), taskId, "");
+        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
+        Evidence evidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
+
+
+        /*// Conversion of data in string format to byte array
+        byte[] databyte = fileData.getBytes(StandardCharsets.UTF_8);
+        Map<DefactoModel, Evidence> defactoModelEvidenceMap = FactCheckBytes.FactCheckFromBytes(taskId, databyte);
 
         Map.Entry<DefactoModel, Evidence> entryIterator = defactoModelEvidenceMap.entrySet().iterator().next();
-        Evidence evidence = entryIterator.getValue();
+        Evidence evidence = entryIterator.getValue();*/
+
         double defactoScore = evidence.getDeFactoScore();
 
         //Setting proof sentences
