@@ -56,6 +56,7 @@ public class SubjectObjectProofExtractorTest extends AbstractEvidenceFeatureTest
 						+ "law of the photoelectric effect '' , a pivotal step in the evolution of quantum theory .", "", inputWebsite)
 		};
 		
+		// when the proof phrase spans across more sentences
 		testInput.add(new Object[] { new Evidence(testModel), inputWebsite, testModel, new Pattern("received", "en"), TestWebsite.getEvidence(testModel, proofs)});
 		
 		inputWebsite = TestWebsite.getWebsite("Einstein won Nobel Prize for physics. He was born in Ulm, Germany. Albert Einstein was awarded Nobel prize in physics.", "Einstein", "received", "Nobel prize in physics", "en");
@@ -66,7 +67,8 @@ public class SubjectObjectProofExtractorTest extends AbstractEvidenceFeatureTest
 				new ComplexProof(testModel, "Einstein", "Nobel Prize in physics", "Albert Einstein was awarded Nobel prize in physics .", "", inputWebsite)
 		};
 		
-		testInput.add(new Object[] { new Evidence(testModel), inputWebsite, testModel, new Pattern("received", "en"), TestWebsite.getEvidence(testModel, proofs)});		
+		// when we have multiple potential proof phrases in a website
+		testInput.add(new Object[] { new Evidence(testModel), inputWebsite, testModel, new Pattern("received", "en"), TestWebsite.getEvidence(testModel, proofs)});
 		
 		return testInput;
 	}
