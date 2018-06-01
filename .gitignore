@@ -5,7 +5,7 @@
 
 /src/main/resources/training/
 /src/main/resources/cache
-/src/main/resources/defacto.ini
+/defacto.ini
 /.idea/
 /data/
 /data_for_installation/
