@@ -39,6 +39,14 @@ public class PageTitleFeatureTest extends AbstractFactFeatureTest {
 					+ " physics", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", 
 					inputWebsite), new Evidence(testModel), 1.0, 0.333, null});
 			
+			// when the page title is empty
+			inputWebsite = TestWebsite.getWebsite("Einstein was born in Ulm. He received Nobel prize in physics.", "Einstein", "received", "Nobel prize in physics", "en", "");
+			testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
+					+ " physics", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", 
+					inputWebsite),	new Evidence(testModel), 1.0, 1.0, null});
+			
+			
+			// check for exception
 			inputWebsite = TestWebsite.getWebsite("Einstein was born in Ulm. He received Nobel prize in physics.", "Einstein", "received", "Nobel prize in physics", "en", null);
 			testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 					+ " physics", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", "The 1921 Nobel prize for physics was awarded to Einstein in 1922.", 

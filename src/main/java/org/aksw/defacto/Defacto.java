@@ -162,7 +162,7 @@ public class Defacto {
 		try {
 
 			if ( Defacto.DEFACTO_CONFIG  == null )
-				Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("/defacto.ini").getFile())));
+				Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File("defacto.ini")));
 
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
