@@ -142,7 +142,9 @@ public class DefactoResource {
 	public String getLabel(String language) {
 		
 		String label = this.labels.get(language);
-		return label != null && !label.isEmpty() ? label : this.labels.get("en");
+		if (label == null || label.isEmpty())
+			label = this.labels.get("en");
+		return label != null && !label.isEmpty() ? label : this.labels.get("");
 	}
 	
 	public String getLabelNoFallBack(String language) {
