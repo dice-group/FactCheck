@@ -37,8 +37,8 @@ export class AppComponent {
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
   title = 'FactCheck';
-  // url = `${this.apiRoot}/api/execTask/`;
-  url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
+  url = `${this.apiRoot}/api/execTask/`;
+  // url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
   subject = '';
   predicate = '';
   object = '';
@@ -54,6 +54,7 @@ export class AppComponent {
   loadingText = 'Loading...';
   boxTitle = '';
   boxMessage = '';
+  noEvidence = '';
 
   /* Return value that is return from model dialog */
   retValue = false;
@@ -126,7 +127,7 @@ export class AppComponent {
         this.spinner.hide();
       })
       .catch((e) => {
-        this.loadingText = 'error' + e;
+        this.loadingText = e;
         this.spinner.hide();
       });
   }
@@ -189,6 +190,7 @@ export class AppComponent {
   clearResults() {
     this.defactoScore = '';
     this.results = [];
+    this.noEvidence = '';
   }
   sendToApi(myJSON: string) {
     this.clearResults();
@@ -200,6 +202,10 @@ export class AppComponent {
             try {
               this.defactoScore = res.json().defactoScore;
               this.results = res.json().complexProofs;
+              if (this.results.length === 0 ) {
+                this.defactoScore = '';
+                this.noEvidence = 'No Evedences where found.';
+              }
               this.taskId++;
               this.loading = false;
               resolve();
@@ -464,7 +470,7 @@ export class AppComponent {
   }
 
   /**
-   * Temporary function to test 
+   * Temporary function to test
    * should be removed when development is finished.
    */
   testEnvironment() {

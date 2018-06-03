@@ -130,6 +130,11 @@
           <div class="text-center" *ngIf="loading">
             <p class="lead">{{loadingText}}</p>
           </div>
+          <ul class="list-group word-wrap" *ngIf="noEvidence !== ''">
+            <li class="list-group-item">
+              {{noEvidence}}
+            </li>
+          </ul>
           <ul class="list-group word-wrap" *ngIf="defactoScore !== ''">
             <li class="list-group-item"><span class="badge badge-light">Defacto Score: </span>&nbsp;&nbsp; {{defactoScore}}
             </li>
