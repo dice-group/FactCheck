@@ -454,6 +454,13 @@ export class AppComponent {
   validateFileInput() {
     if (this.file !== undefined && this.file != null && this.file !== '') {
       if (this.file.name.endsWith('.ttl')) {
+        if (this.text.length === 0) {
+          this.boxMessage = 'File is empty...!';
+          this.boxTitle = 'Error';
+          this.openDialog();
+          return false;
+          // text
+        }
         return true;
       } else {
         this.boxMessage = 'Input file is not valid, please select ttl File...!';
