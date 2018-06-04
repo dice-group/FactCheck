@@ -13,6 +13,7 @@ import {
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
+import { StatuscodesService } from './statuscodes.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,7 @@ import { DialogComponent } from './dialog/dialog.component';
     // LocalStorageModule
   ],
   entryComponents: [DialogComponent],
-  providers: [ListService],
+  providers: [ListService, StatuscodesService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

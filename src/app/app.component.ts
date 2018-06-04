@@ -16,7 +16,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/operator/catch';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
+import { StatuscodesService } from './statuscodes.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
@@ -66,7 +66,9 @@ export class AppComponent {
   constructor(public list: ListService,
     public http: Http,
     public spinner: NgxSpinnerService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public map: StatuscodesService) {
+
       this.results = [];
     this.loading = false;
 
@@ -127,8 +129,14 @@ export class AppComponent {
         this.spinner.hide();
       })
       .catch((e) => {
-        this.loadingText = e;
         this.spinner.hide();
+          const code = this.map.get(e.status);
+        if (code !== undefined) {
+          this.loadingText = code;
+          console.log(this.loadingText);
+        } else {
+          this.loadingText = e;
+        }
       });
   }
   createTtlFile() {
@@ -191,6 +199,7 @@ export class AppComponent {
     this.defactoScore = '';
     this.results = [];
     this.noEvidence = '';
+    this.loadingText = '';
   }
   sendToApi(myJSON: string) {
     this.clearResults();
@@ -392,7 +401,7 @@ export class AppComponent {
     }
   }
   /**
-   * Resets all the variables value to default when user hits Reset button.
+   * Resets all the variables value to default.
    */
   resetEverthing() {
     if (this.isFile) {
