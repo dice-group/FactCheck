@@ -58,7 +58,7 @@ export class StatuscodesService {
     this.statusCodes.set(505, 'HTTP Version Not Supported');
   }
 
-  get(item: string) {
+  get(item: any) {
     return this.statusCodes.get(item);
   }
 }
