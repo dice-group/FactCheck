@@ -25,16 +25,13 @@ public class ApplicationStartup
     @Override
     public void onApplicationEvent(final ApplicationReadyEvent event) {
 
-        Defacto.init();
+            Defacto.init();
 
-        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
-        {
-            corenlpClient = new CoreNLPServerClient();
-        }
-        else
-        {
-            corenlpClient = new CoreNLPLocalClient();
-        }
+            if (Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER")) {
+                corenlpClient = new CoreNLPServerClient();
+            } else {
+                corenlpClient = new CoreNLPLocalClient();
+            }
 
         return;
     }

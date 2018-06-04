@@ -33,11 +33,16 @@ public class Controller {
         String taskId =factcheckResponse.getTaskid();
         System.out.println(factcheckResponse.getFile());
 
-        String fileData =factcheckResponse.getFile();
+        String fileData = factcheckResponse.getFile();
 
         TripleExtractor tripleExtractor = new TripleExtractor(fileData, false);
         FCpreprocessor fCpreprocessor = new FCpreprocessor(tripleExtractor.getSimplifiedData(), taskId, "");
         DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
+
+        defactoModel.corenlpClient = ApplicationStartup.corenlpClient;
+
+
+
         Evidence evidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
 
 
