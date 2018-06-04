@@ -459,7 +459,6 @@ export class AppComponent {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
-          // text
         }
         return true;
       } else {

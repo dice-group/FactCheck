@@ -124,9 +124,14 @@
         
         <ngx-spinner></ngx-spinner>
 
-        <blockquote class="blockquote word-wrap">
+        <blockquote class="blockquote word-wrap">          
+          <div class="text-center">
+            <p class="lead badge-light">This section displays defecto score and 
+              evidences including websites and evidences that were found as response to search.
+            </p>
+          </div>
           <div class="text-center" *ngIf="loading">
-            <p class="lead">{{loadingText}}</p>
+            <p class="lead badge-danger">{{loadingText}}</p>
           </div>
           <ul class="list-group word-wrap" *ngIf="noEvidence !== ''">
             <li class="list-group-item">
