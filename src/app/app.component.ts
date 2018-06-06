@@ -21,6 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -55,7 +56,8 @@ export class AppComponent {
   boxTitle = '';
   boxMessage = '';
   noEvidence = '';
-
+  N3 = require('n3');
+  parser;
   /* Return value that is return from model dialog */
   retValue = false;
 
@@ -81,6 +83,7 @@ export class AppComponent {
     const oUri = JSON.parse(localStorage.getItem('objectURI'));
     this.objectURI = oUri === null ? '' : oUri.objectURI;
     // this.testEnvironment();
+    this.parser = new this.N3.Parser();
   }
 
   openDialog(): any {
@@ -468,6 +471,10 @@ export class AppComponent {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
+        } else if ( !this.utfTest() ) {
+          this.boxTitle = 'Error';
+          this.openDialog();
+          return false;
         }
         return true;
       } else {
@@ -480,6 +487,17 @@ export class AppComponent {
       this.boxMessage = 'No file is selected, Please select ttl File...! ';
       this.boxTitle = 'Error';
       this.openDialog();
+      return false;
+    }
+  }
+
+  utfTest() {
+    try {
+      this.parser.parse(this.text);
+      return true;
+    } catch (e) {
+      this.boxMessage = e;
+      console.log(e);
       return false;
     }
   }
