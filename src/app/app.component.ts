@@ -91,7 +91,7 @@ export class AppComponent {
       const dialogRef = this.dialog.open(DialogComponent, {
         disableClose: true,
         closeOnNavigation: false,
-        width: '350px',
+        // width: '350px',
         data: { title: this.boxTitle, message: this.boxMessage, yesNo: this.yesNo }
       }).afterClosed()
         .toPromise()
