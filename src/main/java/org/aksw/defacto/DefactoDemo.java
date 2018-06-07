@@ -18,6 +18,9 @@ import org.aksw.defacto.Defacto.TIME_DISTRIBUTION_ONLY;
 import org.aksw.defacto.model.DefactoModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.dice.factcheck.nlp.stanford.CoreNLPClient;
+import org.dice.factcheck.nlp.stanford.impl.CoreNLPLocalClient;
+import org.dice.factcheck.nlp.stanford.impl.CoreNLPServerClient;
 import org.ini4j.InvalidFileFormatException;
 
 import com.hp.hpl.jena.rdf.model.Model;
@@ -32,7 +35,7 @@ import com.hp.hpl.jena.vocabulary.RDFS;
 public class DefactoDemo {
 
     private static Logger logger = Logger.getLogger(DefactoDemo.class);
-    
+    public static CoreNLPClient corenlpClient;
     /**
      * @param args
      * @throws IOException 
@@ -49,8 +52,22 @@ public class DefactoDemo {
 
         List<DefactoModel> models = new ArrayList<>();
         Defacto.init();
-        models.add(getEinsteinModel());
+        //models.add(getEinsteinModel());
         //models = getRDFModels();
+
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
+        {
+            corenlpClient = new CoreNLPServerClient();
+        }
+        else
+        {
+            corenlpClient = new CoreNLPLocalClient();
+        }
+        DefactoModel model = getEinsteinModel();
+        model.corenlpClient = corenlpClient;
+        models.add(model);
+
+
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
     }
@@ -73,7 +90,8 @@ public class DefactoDemo {
 
     public static DefactoModel getEinsteinModel() {
         final Model model = ModelFactory.createDefaultModel();
-        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("Einstein.ttl"), null,
+
+        model.read(DefactoModel.class.getClassLoader().getResourceAsStream("death_00005.ttl"), null,
                 "TURTLE");
         return new DefactoModel(model, "Einstein Model", true, Arrays.asList("en"));
     }
