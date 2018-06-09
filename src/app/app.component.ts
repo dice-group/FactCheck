@@ -112,13 +112,19 @@ export class AppComponent {
   submitData() {
     let obj;
     if (this.isFile) {
-      if (this.validateFileInput()) {
-        obj = { 'taskid': this.taskId, 'filedata': this.text };
-      } else { return false; }
+      if (!this.validateFileInput()) {
+        return;
+      } else { obj = { 'taskid': this.taskId, 'filedata': this.text }; }
     } else {
-      if (!this.validate()) { return; } // return if validation fails
+      if (!this.validateInput()) { return; } // return if validation fails
       const builder = new StringBuilder();
       builder.Append(this.createTtlFile());
+
+      if ( !this.inputParseTest(builder.ToString()) ) {
+        this.boxTitle = 'Error';
+        this.openDialog();
+        return false;
+      }
       obj = { 'taskid': this.taskId, 'filedata': builder.ToString() };
     }
     const myJSON = JSON.stringify(obj);
@@ -178,7 +184,7 @@ export class AppComponent {
       '@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\n\n'
     ).ToString();
   }
-  validate() {
+  validateInput() {
     if (this.predicate === '') {
       this.boxMessage = 'No Predicate is selected, please select atleast one predicate from the list';
       this.boxTitle = 'Error';
@@ -471,7 +477,7 @@ export class AppComponent {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
-        } else if ( !this.utfTest() ) {
+        } else if ( !this.inputParseTest(this.text) ) {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
@@ -491,12 +497,12 @@ export class AppComponent {
     }
   }
 
-  utfTest() {
+  inputParseTest(text) {
     try {
-      this.parser.parse(this.text);
+      this.parser.parse(text);
       return true;
     } catch (e) {
-      this.boxMessage = e;
+      this.boxMessage = e + '\nPlease see the console for details';
       console.log(e);
       return false;
     }
