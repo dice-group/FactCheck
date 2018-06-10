@@ -323,7 +323,7 @@ public class DefactoModel {
     @Override
     public String toString() {
 
-        return String.format("'%s' <%s> <%s> <%s> [%s-%s]", this.name, this.subject.getLabel("en"), this.predicate.getURI(), this.object.getLabel("en"), this.timePeriod.getFrom(), this.timePeriod.getTo()); 
+        return String.format("'%s' <%s> <%s> <%s> [%s-%s]", this.name, (this.subject.getLabel("en")).isEmpty() ? this.subject.getLabel("") : this.subject.getLabel("en") , this.predicate.getURI(), this.object.getLabel("en"), this.timePeriod.getFrom(), this.timePeriod.getTo());
     }
 
 	public Statement getFact() {
