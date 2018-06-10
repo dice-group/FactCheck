@@ -67,6 +67,7 @@ public class DefactoModel {
         this.name       = name;
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
+    /*
         if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
         {
         	this.corenlpClient = new CoreNLPServerClient();
@@ -75,6 +76,7 @@ public class DefactoModel {
         {
         	this.corenlpClient = new CoreNLPLocalClient();
         }
+        */
         init(model);
         
     }
