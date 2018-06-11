@@ -418,6 +418,7 @@ export class AppComponent {
       document.getElementById('fileInput').setAttribute('type', 'file');
       this.file = '';
       this.fileName = '';
+      this.clearResults();
     } else {
 
       this.boxTitle = 'Confirm';
