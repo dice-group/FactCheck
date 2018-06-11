@@ -33,7 +33,7 @@ public class Controller {
         String taskId =factcheckResponse.getTaskid();
         System.out.println(factcheckResponse.getFile());
 
-        String fileData =factcheckResponse.getFile();
+        String fileData = factcheckResponse.getFile();
 
         TripleExtractor tripleExtractor = new TripleExtractor(fileData, false);
         FCpreprocessor fCpreprocessor = new FCpreprocessor(tripleExtractor.getSimplifiedData(), taskId, "");
@@ -73,7 +73,7 @@ public class Controller {
         Evidence factEvidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
         double defactoScore = factEvidence.getDeFactoScore();
 
-        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace(), setProofSentences(factEvidence));
+        return new FactCheckHobbitResponse(taskId, defactoScore, fCpreprocessor.getFileTrace());
     }
 
 
@@ -84,5 +84,32 @@ public class Controller {
             complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
         });
         return complexProofs;
+    }
+
+    public static void main(String[] args) throws IOException {
+        String fileData = "@prefix fbase: <http://rdf.freebase.com/ns> .\n" +
+                "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n" +
+                "@prefix dbo:   <http://dbpedia.org/ontology/> .\n" +
+                "@prefix owl:   <http://www.w3.org/2002/07/owl#> .\n" +
+                "@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\n" +
+                "@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\n" +
+                "\n" +
+                "<http://dbpedia.org/resource/Albert_Einstein>\n" +
+                "\tdbo:award\t<http://dbpedia.org/resource/Nobel_Prize_in_Physics> .\n" +
+                "\n" +
+                "<http://dbpedia.org/resource/Albert_Einstein>\t\n" +
+                "\trdfs:label\t\"Albert Einstein\" .\n" +
+                "\n" +
+                "<http://dbpedia.org/resource/Nobel_Prize_in_Physics>\n" +
+                "\trdfs:label\t\"Nobel Prize in Physics\" .";
+        String taskId = "task1";
+
+        TripleExtractor tripleExtractor = new TripleExtractor(fileData, false);
+        FCpreprocessor fCpreprocessor = new FCpreprocessor(tripleExtractor.getSimplifiedData(), taskId, "");
+        DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
+        Evidence evidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
+
+        double defactoScore = evidence.getDeFactoScore();
+        System.out.println(defactoScore);
     }
 }

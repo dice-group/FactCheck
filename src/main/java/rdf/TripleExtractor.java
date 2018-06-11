@@ -119,7 +119,6 @@ public class TripleExtractor {
                 Statement statement = stmtIterator.next();
 
                 if (statement.getSubject() != null) {
-                    startNode = true;
                     if (statement.getObject().isResource()) {
                         subjectNode = statement.getSubject();
                         if (subjectNode == null)

@@ -1,7 +1,5 @@
 package api;
 
-import java.util.ArrayList;
-
 /**
  * @author DANISH AHMED on 4/22/2018
  */
@@ -14,16 +12,13 @@ public class FactCheckHobbitResponse {
     private String taskId;
     private double truthValue = 0.0;
     private String fileTrace;
-    public ArrayList<ComplexProofs> complexProofs;
+
     private String responseData;
 
-
-
-    FactCheckHobbitResponse(String taskId, double truthValue, String fileTrace, ArrayList<ComplexProofs> complexProofs) {
+    FactCheckHobbitResponse(String taskId, double truthValue, String fileTrace) {
         this.taskId = taskId;
         this.truthValue = truthValue;
         this.fileTrace = fileTrace;
-        this.complexProofs = complexProofs;
         init();
     }
 
@@ -41,13 +36,5 @@ public class FactCheckHobbitResponse {
 
     public String getResponseData() {
         return responseData;
-    }
-
-    public ArrayList<ComplexProofs> getComplexProofs() {
-        return complexProofs;
-    }
-
-    public void setComplexProofs(ArrayList<ComplexProofs> complexProofs) {
-        this.complexProofs = complexProofs;
     }
 }

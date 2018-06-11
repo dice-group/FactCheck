@@ -48,9 +48,7 @@ public class RDFResource {
             String label = rdfNode.asLiteral().getLexicalForm();
 
             langLabelsMap.put(lang, label);
-            if (lang.equals("en")) {
-                this.label = label;
-            }
+            this.label = label;
         }
     }
 
