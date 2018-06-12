@@ -56,7 +56,7 @@ export class ListService {
     return this.subjects.length > 0;
   }
 
-  hasOjbects() {
+  hasObjects() {
     return this.objects.length > 0;
   }
 

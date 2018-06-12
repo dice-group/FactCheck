@@ -126,6 +126,7 @@ export class AppComponent {
         return false;
       }
       obj = { 'taskid': this.taskId, 'filedata': builder.ToString() };
+
     }
     const myJSON = JSON.stringify(obj);
     this.loading = true;
@@ -187,6 +188,18 @@ export class AppComponent {
   validateInput() {
     if (this.predicate === '') {
       this.boxMessage = 'No Predicate is selected, please select atleast one predicate from the list';
+      this.boxTitle = 'Error';
+      this.openDialog();
+      return false;
+    }
+    if (!this.list.hasSubjects()) {
+      this.boxMessage = 'No Label for subject is entered, please enter atleast one subject label.';
+      this.boxTitle = 'Error';
+      this.openDialog();
+      return false;
+    }
+    if (!this.list.hasObjects()) {
+      this.boxMessage = 'No Label for object is entered, please enter atleast one object label.';
       this.boxTitle = 'Error';
       this.openDialog();
       return false;
@@ -499,8 +512,23 @@ export class AppComponent {
   }
 
   inputParseTest(text) {
+    console.log(text);
     try {
       this.parser.parse(text);
+      this.parser.parse(text, console.log);
+      // this.parser.parse(text, console.log);
+      // this.parser.parse(
+      //   `PREFIX c: <http://example.org/cartoons#>
+      //    c:Tom a c:Cat.
+      //    c:Jerry a c:Mouse;
+      //            c:smarterThan c:Tom.`,
+      //   (error, quad, prefixes) => {
+      //     if (quad) {
+      //       console.log(quad);
+      //     } else {
+      //       console.log('# Thats all, folks!', prefixes);
+      //     }
+      //   });
       return true;
     } catch (e) {
       this.boxMessage = e + '\nPlease see the console for details';
