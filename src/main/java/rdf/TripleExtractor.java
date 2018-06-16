@@ -35,14 +35,10 @@ public class TripleExtractor {
 
         setModel(model);
 
-        ResIterator listSub = model.listSubjects();
-        NodeIterator listObj = model.listObjects();
-
         parseStatements();
         setUris();
 
         setSimplifiedData();
-//        setSimplifiedModel();
     }
 
     private void setUris() {
@@ -95,7 +91,6 @@ public class TripleExtractor {
         StmtIterator stmtIterator = this.model.listStatements();
         Resource subjectNode = null;
         RDFNode objectNode = null;
-        int statementCount = 0;
         while (stmtIterator.hasNext()) {
             Statement statement = stmtIterator.next();
 
