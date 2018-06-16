@@ -5,11 +5,12 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
  * @author DANISH AHMED on 3/22/2018
+ * Extraction idea taken from: https://github.com/SmartDataAnalytics/DeFacto
+ * and then modified/optimized according to our need
  */
 public class TripleExtractor {
 
