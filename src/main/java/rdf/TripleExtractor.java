@@ -15,11 +15,24 @@ import java.io.IOException;
 public class TripleExtractor {
 
     private Model model;     // provides model after file has been read
+
+    public String getSubject() {
+        return subject.label;
+    }
+
+    public String getObject() {
+        return object.label;
+    }
     private RDFResource subject;
     private Property predicate;
     private RDFResource object;
 
     private String subjectUri;
+
+    public String getPredicateUri() {
+        return predicateUri;
+    }
+
     private String predicateUri;
     private String objectUri;
 

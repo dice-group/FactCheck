@@ -29,8 +29,8 @@ public class Controller {
     @PostMapping("/execTask/")
     public FactcheckResponse execT(@RequestBody FactcheckResponse factcheckResponse) throws IOException {
 
-       System.out.println(factcheckResponse.getTaskid());
-        String taskId =factcheckResponse.getTaskid();
+        System.out.println(factcheckResponse.getTaskid());
+        String taskId = factcheckResponse.getTaskid();
         System.out.println(factcheckResponse.getFile());
 
         String fileData = factcheckResponse.getFile();
@@ -40,7 +40,6 @@ public class Controller {
         DefactoModel defactoModel = new ModelTransform(fCpreprocessor, taskId).getDefactoModel();
 
         defactoModel.corenlpClient = ApplicationStartup.corenlpClient;
-
 
 
         Evidence evidence = Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
@@ -58,15 +57,20 @@ public class Controller {
         //Setting proof sentences
         factcheckResponse.setComplexProofs(setProofSentences(evidence));
 
+        // returning input subject, predicate and object
+        factcheckResponse.subject = tripleExtractor.getSubject();
+        factcheckResponse.object = tripleExtractor.getObject();
+        String predicate = tripleExtractor.getPredicateUri();
+        String[] p = predicate.split("/");
+        factcheckResponse.predicate = p[p.length - 1];
+
         // Setting defacto score received from response
         factcheckResponse.setDefactoScore(defactoScore);
 
         return factcheckResponse;
     }
 
-
-
-    @RequestMapping(value="/hobbitTask/{taskId}", method= RequestMethod.POST)
+    @RequestMapping(value = "/hobbitTask/{taskId}", method = RequestMethod.POST)
     public FactCheckHobbitResponse execT(@PathVariable(value = "taskId") String taskId,
                                          @RequestParam(value = "dataISWC", required = true) String dataISWC,
                                          @RequestParam(value = "fileTrace", required = true) String fileTrace) {
@@ -82,15 +86,14 @@ public class Controller {
     }
 
 
-
     private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
         ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
-        evidence.getComplexProofs().forEach( p -> {
+        evidence.getComplexProofs().forEach(p -> {
             complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
         });
         return complexProofs;
     }
-
+/*
     public static void main(String[] args) throws IOException {
         String fileData = "@prefix fbase: <http://rdf.freebase.com/ns> .\n" +
                 "@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\n" +
@@ -117,4 +120,5 @@ public class Controller {
         double defactoScore = evidence.getDeFactoScore();
         System.out.println(defactoScore);
     }
+ */
 }

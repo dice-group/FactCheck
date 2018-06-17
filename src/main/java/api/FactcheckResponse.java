@@ -8,7 +8,9 @@ public class FactcheckResponse implements Serializable {
     public String filedata;
     public double defactoScore;
     public ArrayList<ComplexProofs> complexProofs;
-
+    public String subject;
+    public String predicate;
+    public String object;
     public FactcheckResponse() {
         super();
     }
