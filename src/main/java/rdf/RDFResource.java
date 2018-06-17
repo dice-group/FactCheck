@@ -42,21 +42,32 @@ public class RDFResource {
     }
 
     private void getResourceLabel(NodeIterator nodeIterator) {
+        Boolean englishLabelFound = false;
+        Boolean emptyLang = false;
+        String emptyLabel = "";
         while (nodeIterator.hasNext()) {
             RDFNode rdfNode = nodeIterator.nextNode();
             String lang = rdfNode.asLiteral().getLanguage();
             String label = rdfNode.asLiteral().getLexicalForm();
 
+            if (lang.isEmpty()) {
+                emptyLang = true;
+                emptyLabel = label;
+            }
+
             if (lang.equals("en")) {
                 langLabelsMap.clear();
                 langLabelsMap.put(lang, label);
                 this.label = label;
+                englishLabelFound = true;
                 break;
             }
 
             langLabelsMap.put(lang, label);
             this.label = label;
         }
+        if (!englishLabelFound && emptyLang)
+            this.label = emptyLabel;
     }
 
     /**
