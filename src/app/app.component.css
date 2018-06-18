@@ -63,7 +63,29 @@
 }
 
 .list-group.word-wrap .list-group-item .proof-img {    
-    padding-top: 10px;
+    padding-top: 2px;
     margin-right: 3px;
     float: left;
+}
+.list-group.word-wrap .list-group-item li {    
+    margin-top: 25px;
+}
+.list-group.word-wrap .list-group-item .proofphrase {    
+    padding: 0px;
+    margin: 0px;    
+}
+.list-group.word-wrap .list-group-item .website {    
+    padding-bottom: 0px;
+    margin-bottom: 0px;    
+}
+.proofsentence {
+    font-weight: normal;
+}
+.downloadimage {
+    float: right;
+    margin-top: 7px;
+    
+}
+.hreadingresult {
+    float:left;
 }

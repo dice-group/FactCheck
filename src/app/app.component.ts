@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-// import * as $ from 'jquery';
 import { ListService } from './list.service';
 import { Item } from './item';
+// import * as $ from 'jquery';
 import { MatTabChangeEvent } from '@angular/material';
 import { String, StringBuilder } from 'typescript-string-operations';
 import {
@@ -20,7 +20,8 @@ import { StatuscodesService } from './statuscodes.service';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { DialogComponent } from './dialog/dialog.component';
-
+import { saveAs } from 'file-saver/FileSaver';
+import * as jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-root',
@@ -28,15 +29,23 @@ import { DialogComponent } from './dialog/dialog.component';
   styleUrls: ['./app.component.css']
 })
 
-
+/**
+ * main Component class
+ */
 export class AppComponent {
+
+  @ViewChild('resultcontent') resultcontent: ElementRef;
   position = 'below';
   apiRoot: String = 'http://localhost:8080';
-  results: any;
+  querySubject = '';
+  queryPredicate = '';
+  queryObject = '';
+  evidences: any;
   loading: boolean;
   headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
+  html2canvas = require('html2canvas');
   title = 'FactCheck';
   url = `${this.apiRoot}/api/execTask/`;
   // url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
@@ -65,13 +74,21 @@ export class AppComponent {
   show confirm buttons (yes/no),  false otherwise. */
   yesNo = false;
 
+  /**
+   * Default constructor.
+   * @param list ListService
+   * @param http Http
+   * @param spinner NgxSpinnerService
+   * @param dialog MatDialog
+   * @param map StatuscodesService
+   */
   constructor(public list: ListService,
     public http: Http,
     public spinner: NgxSpinnerService,
     public dialog: MatDialog,
     public map: StatuscodesService) {
 
-      this.results = [];
+    this.evidences = [];
     this.loading = false;
 
     const subUri = JSON.parse(localStorage.getItem('subjectURI'));
@@ -86,6 +103,9 @@ export class AppComponent {
     this.parser = new this.N3.Parser();
   }
 
+  /**
+   * Opens dialog box with appropriate message.
+   */
   openDialog(): any {
     const promise = new Promise((resolve, reject) => {
       const dialogRef = this.dialog.open(DialogComponent, {
@@ -109,6 +129,9 @@ export class AppComponent {
     return promise;
   }
 
+  /**
+   * Called when user clicks on submit button.
+   */
   submitData() {
     let obj;
     if (this.isFile) {
@@ -120,7 +143,7 @@ export class AppComponent {
       const builder = new StringBuilder();
       builder.Append(this.createTtlFile());
 
-      if ( !this.inputParseTest(builder.ToString()) ) {
+      if (!this.inputParseTest(builder.ToString())) {
         this.boxTitle = 'Error';
         this.openDialog();
         return false;
@@ -140,7 +163,7 @@ export class AppComponent {
       })
       .catch((e) => {
         this.spinner.hide();
-          const code = this.map.get(e.status);
+        const code = this.map.get(e.status);
         if (code !== undefined) {
           this.loadingText = code;
           console.log(this.loadingText);
@@ -149,6 +172,10 @@ export class AppComponent {
         }
       });
   }
+
+  /**
+   * Creates ttl file from text input.
+   */
   createTtlFile() {
     const builder = new StringBuilder();
     builder.Append(this.getPrefixes());
@@ -156,7 +183,9 @@ export class AppComponent {
     return builder.ToString();
   }
 
-  // Create rest of the contents of ttl
+  /**
+   * Create rest of the contents of ttl.
+   */
   createContents() {
     const builder = new StringBuilder();
     builder.Append(this.subjectURI + '\n');
@@ -174,7 +203,9 @@ export class AppComponent {
     return builder.ToString();
   }
 
-  // Create prefixes
+  /**
+   * Creates prefixes to generate tll file.
+   */
   getPrefixes() {
     return new StringBuilder(
       '@prefix fbase: <http://rdf.freebase.com/ns> .\n' +
@@ -185,6 +216,10 @@ export class AppComponent {
       '@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\n\n'
     ).ToString();
   }
+
+  /**
+   * Validates input for subject, object and predicate.
+   */
   validateInput() {
     if (this.predicate === '') {
       this.boxMessage = 'No Predicate is selected, please select atleast one predicate from the list';
@@ -206,23 +241,40 @@ export class AppComponent {
     }
     if (this.subjectURI === '') {
       this.subjectURI = '<https://www.example.com/subject>';
+      this.storeSUri();
     }
     if (this.objectURI === '') {
       this.objectURI = '<https://www.example.com/object>';
+      this.storeOUri();
     }
     return true;
   }
 
+  /**
+   * Checks if input contains multiple labels for subject or object.
+   * @param input string
+   */
   multipleLables(input: string) {
     return input.lastIndexOf(',') !== -1;
   }
 
+  /**
+   * Clears previous resutls.
+   */
   clearResults() {
     this.defactoScore = '';
-    this.results = [];
+    this.evidences = [];
     this.noEvidence = '';
     this.loadingText = '';
+    this.querySubject = this.queryPredicate = this.queryObject = '';
+    this.storeSUri();
+    this.storeOUri();
   }
+
+  /**
+   * Sends request to back-end
+   * @param myJSON string
+   */
   sendToApi(myJSON: string) {
     this.clearResults();
     const promise = new Promise((resolve, reject) => {
@@ -232,9 +284,11 @@ export class AppComponent {
           res => {
             try {
               this.defactoScore = res.json().defactoScore;
-              this.results = res.json().complexProofs;
-              if (this.results.length === 0 ) {
-                this.defactoScore = '';
+              this.querySubject = res.json().subject;
+              this.queryObject = res.json().object;
+              this.queryPredicate = res.json().predicate;
+              this.evidences = res.json().complexProofs;
+              if (this.evidences.length === 0) {
                 this.noEvidence = 'No Evedences where found.';
               }
               this.taskId++;
@@ -267,11 +321,17 @@ export class AppComponent {
     };
     reader.readAsText(this.file);
   }
-
+  /**
+   * Called when user changes the tab.
+   * @param event MatTabChangeEvent
+   */
   onTabChange(event: MatTabChangeEvent) {
     this.isFile = event.tab.textLabel === 'FILE';
   }
 
+  /**
+   * Adds subject as URI or label if uri exists.
+   */
   addSubject() {
     if (this.validateTextInput(this.subject)) {
       if (this.isURI(this.subject)) {
@@ -297,6 +357,10 @@ export class AppComponent {
       }
     }
   }
+
+  /**
+   * Replaces subject labels.
+   */
   replaceSubLabels() {
     const temp = '"' + this.subject + '"';
     if (this.list.getSubjectLabels().indexOf(temp) === -1) {
@@ -318,6 +382,10 @@ export class AppComponent {
       this.subject = '';
     }
   }
+
+  /**
+   * Replaces subject uri.
+   */
   replaceSubURI() {
     this.boxTitle = 'Confirm';
     this.boxMessage = 'Current URI will be relaced with the new URI. Are you sure ' +
@@ -338,24 +406,46 @@ export class AppComponent {
 
   }
 
+  /**
+   * Stores subject uri in local storage
+   */
   storeSUri(): void {
     localStorage.setItem('subjectURI', JSON.stringify({ subjectURI: this.subjectURI }));
   }
 
+  /**
+   * Stores predicate in local storage
+   */
   storePredicate(): void {
     localStorage.setItem('predicate', JSON.stringify({ predicate: this.predicate }));
   }
+
+  /**
+   * Stores object uri in local storage
+   */
   storeOUri(): void {
     localStorage.setItem('objectURI', JSON.stringify({ objectURI: this.objectURI }));
   }
+
+  /**
+   * Removes object uri from local storage
+   */
   removeObjectURI() {
     this.objectURI = '';
     this.storeOUri();
   }
+
+  /**
+   * Removes subject uri from local storage
+   */
   removeSubjectURI() {
     this.subjectURI = '';
     this.storeSUri();
   }
+
+  /**
+   * Adds object uri, if uri exists it adds as label.
+   */
   addObject() {
     if (this.validateTextInput(this.object)) {
       if (this.isURI(this.object)) {
@@ -382,6 +472,9 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Replaces old object resource URI with new URI
+   */
   replaceObjURI() {
     this.boxTitle = 'Confirm';
     this.boxMessage = 'Current URI will be relaced with the new URI. Are you sure ' +
@@ -401,6 +494,9 @@ export class AppComponent {
     });
   }
 
+  /**
+   * Adds uri as object label.
+   */
   replaceObjLabels() {
     const temp = '"' + this.object + '"';
     if (this.list.getObjectLabels().indexOf(temp) === -1) {
@@ -422,6 +518,7 @@ export class AppComponent {
       this.object = '';
     }
   }
+
   /**
    * Resets all the variables value to default.
    */
@@ -491,7 +588,7 @@ export class AppComponent {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
-        } else if ( !this.inputParseTest(this.text) ) {
+        } else if (!this.inputParseTest(this.text)) {
           this.boxTitle = 'Error';
           this.openDialog();
           return false;
@@ -511,24 +608,15 @@ export class AppComponent {
     }
   }
 
+  /**
+   * Parses ttl file, throws exception if file is not correct.
+   * @param text string
+   */
   inputParseTest(text) {
     console.log(text);
     try {
       this.parser.parse(text);
       this.parser.parse(text, console.log);
-      // this.parser.parse(text, console.log);
-      // this.parser.parse(
-      //   `PREFIX c: <http://example.org/cartoons#>
-      //    c:Tom a c:Cat.
-      //    c:Jerry a c:Mouse;
-      //            c:smarterThan c:Tom.`,
-      //   (error, quad, prefixes) => {
-      //     if (quad) {
-      //       console.log(quad);
-      //     } else {
-      //       console.log('# Thats all, folks!', prefixes);
-      //     }
-      //   });
       return true;
     } catch (e) {
       this.boxMessage = e + '\nPlease see the console for details';
@@ -538,15 +626,58 @@ export class AppComponent {
   }
 
   /**
+   * Creates and saves ttl file from text input.
+   */
+  createTTLFile() {
+    const builder = new StringBuilder();
+    builder.Append(this.createTtlFile());
+    if (!this.inputParseTest(builder.ToString())) {
+      this.boxTitle = 'Error';
+      this.openDialog();
+      return false;
+    } else {
+      const filename = 'file.ttl';
+      const blob = new Blob([builder.ToString()], { type: 'text/plain' });
+      saveAs(blob, filename);
+    }
+  }
+  /**
+   * Saves results as pdf file
+   */
+  saveResultsAsPdf() {
+    const content = this.resultcontent.nativeElement;
+    // const str = content.innerHTML;
+    // const newstr = $(str).find('img').remove().end();
+    // $('#hidden').append(newstr);
+    // const elem = document.getElementById('hidden');
+    const doc = new jsPDF();
+    const specialElementHandlers = {
+      '#editor': function (element, renderer) {
+        return true;
+      }
+    };
+    // doc.fromHTML(elem, 15, 15, {
+    doc.fromHTML(content.innerHTML, 15, 15, {
+      'width': 190,
+      'elementHandlers': specialElementHandlers
+    }, function (bla) {
+      doc.save('file.pdf');
+    });
+
+  }
+  /**
    * Temporary function to test
    * should be removed when development is finished.
    */
   testEnvironment() {
+    this.querySubject = 'Einstein';
+    this.queryPredicate = 'award';
+    this.queryObject = 'Nobel Price';
     this.defactoScore = '0.156748798798798';
-    this.results = [
+    this.evidences = [
       {
         website: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
-        proofPhrase: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
+        proofPhrase: 'This is sample proof phrase 1 . checking wraping , spacing , margin etc',
       },
       {
         website: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
