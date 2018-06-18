@@ -45,7 +45,6 @@ export class AppComponent {
   headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
-  html2canvas = require('html2canvas');
   title = 'FactCheck';
   // url = `${this.apiRoot}/api/execTask/`;
   url = `${this.apiRoot}/factcheck-api/api/execTask/`;
