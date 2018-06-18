@@ -47,8 +47,8 @@ export class AppComponent {
   isURI = require('validate.io-uri');
   html2canvas = require('html2canvas');
   title = 'FactCheck';
-  url = `${this.apiRoot}/api/execTask/`;
-  // url = `${this.apiRoot}/factcheck-api-0.1.0/api/execTask/`;
+  // url = `${this.apiRoot}/api/execTask/`;
+  url = `${this.apiRoot}/factcheck-api/api/execTask/`;
   subject = '';
   predicate = '';
   object = '';
