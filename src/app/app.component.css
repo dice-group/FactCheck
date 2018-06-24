@@ -1,91 +1,33 @@
-/* body{background: black;
-    background-color: black
-} */
-.wrap-word {    
-    
-    word-wrap: break-word;
-    margin-right: 2px;
-    color: white;
-    background-color: #b7b8b2;
-    display: inline;
-    padding: .2em .6em .3em;
-    /* font-size: 75%; */
-    /* font-weight: 700; */
-    line-height: 1;
-    border-radius: 2px;
-}
-.button {
-    /* font-size: 10px;
-    
-    position: absolute;
-    top: 0px;
-    right: 0px; */
-    margin-left: 8px;
-    cursor: pointer;
-    box-sizing: border-box;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-   
-    padding: 0px 2px;
-    font-size: 75%;
-    font-weight: 700;
-    
-    color: white;
-   
-   }
-   .cont{
+.cont {
     position:relative;
     margin-right:3px;
     padding-top:13px;
-   }
+}
 
-   .word-wrap {
-    -ms-word-break: break-all;
-    word-break: break-all;
-  
-    /* Non standard for webkit */
-    word-break: break-word;
-  
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    hyphens: auto;
-  }
+   
   ::ng-deep .mat-tooltip  {
     white-space: pre-line    !important;
 }
-.list-group.word-wrap .list-group-item .url-img {    
-    padding-top: 3px;
-    margin-right: 3px;
-    float: left;
+
+.stylish-color-dark {
+    background-color: #3e4551 !important; 
 }
 
-.list-group.word-wrap .list-group-item .proof-img {    
-    padding-top: 2px;
-    margin-right: 3px;
-    float: left;
+footer.page-footer {
+    bottom: 0;
+    color: #fff; 
 }
-.list-group.word-wrap .list-group-item li {    
-    margin-top: 25px;
+footer.page-footer .container-fluid {
+    width: auto; 
 }
-.list-group.word-wrap .list-group-item .proofphrase {    
-    padding: 0px;
-    margin: 0px;    
+footer.page-footer .footer-copyright {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.6); 
 }
-.list-group.word-wrap .list-group-item .website {    
-    padding-bottom: 0px;
-    margin-bottom: 0px;    
+footer.page-footer a {
+    color: #fff; 
 }
-.proofsentence {
-    font-weight: normal;
-}
-.downloadimage {
-    float: right;
-    margin-top: 7px;
-    
-}
-.hreadingresult {
-    float:left;
+.font-small {
+    font-size: 0.9rem;
 }

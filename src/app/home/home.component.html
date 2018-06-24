@@ -1,0 +1,186 @@
+<div class="container">
+    <h3>
+      Welcome to {{ title }}!
+    </h3>
+    <div class="row">
+      <div class="col-sm-8">
+        <form>
+          <mat-tab-group (selectedTabChange)="onTabChange($event)">
+            <mat-tab label="TEXT">
+              <br>
+              <div class="form-group">
+                <label for="subject">Subject:
+                  <!-- [matTooltipPosition]="position" -->
+                  <small class="badge badge-secondary" matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Subjects cannot contain only numeric values.&#13;
+                    A Subject URI can be entered in this input box but it must meet URI standard  eg: should start with http://&#13;
+                    Single or Multiple Labels for a subject can be entered. 
+                    - To enter multiple label at once, just seperate all the labels with the , (a comma) &#13;
+                    Note: If no URI or Labels are input, dummy URI is created for subject when user clicks submit button.">?
+                  </small>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="subject" placeholder="Enter subject" name="subject" (keyup)="$event.keyCode == 13 && addSubject()"
+                  required/>
+                <span class="form-text text-muted mt-2">
+                  <label class="badge badge-primary p-2 mr-2" *ngIf="subjectURI !== ''">URI: </label>
+  
+                  <small class="wrap-word" *ngIf="subjectURI !== ''">{{subjectURI}}
+                    <span class="button" (click)="removeSubjectURI()">X</span>
+                  </small>
+                  <div class="clearfix"></div>
+                  <div *ngIf="list.hasSubjects()">
+                    <label class="badge badge-success p-2">Labels: </label>
+                    <span *ngFor="let item of list.subjects; let i = index">
+                      <small class="wrap-word">{{item}}
+                        <span class="button" (click)="list.removeSubject(i)">X</span>
+                      </small>
+                    </span>
+                  </div>
+                </span>
+  
+              </div>
+  
+              <div class="form-group">
+                <label for="predicate"> Predicate:
+                  <small class="badge badge-secondary" matTooltipHideDelay="2000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Must select a predicate before submitting the request.">?
+                  </small>
+                </label>
+                <select class="form-control" id="predicate" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" (click)="storePredicate()">
+                  <option></option>
+                  <option>award</option>
+                  <option>birth</option>
+                  <option>death</option>
+                  <option>foundationPlace</option>
+                  <option>leader</option>
+                  <option>nbateam</option>
+                  <option>publicationDate</option>
+                  <option>spouse</option>
+                  <option>starring</option>
+                  <option>subsidiary</option>
+                </select>
+                <!-- <input type="text" [disabled]="isFile" class="form-control" [(ngModel)]="predicate" name="predicate" placeholder="Enter predicate" /> -->
+                <small class="form-text text-muted">Enter predicate, Nubers are not allowed...</small>
+              </div>
+  
+              <div class="form-group">
+                <label for="object">Object:
+                  <small class="badge badge-secondary" matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltipPosition="right" matTooltip="Object cannot contain only numeric values.&#13;
+                      A Object URI can be entered in this input box but it must meet URI standard  eg: should start with http://&#13;
+                      Single or Multiple Labels for a object can be entered. 
+                      - To enter multiple label at once, just seperate all the labels with the , (a comma) &#13;
+                      Note: If no URI or Labels are input, dummy URI is created for subject when user clicks submit button.">?
+                  </small>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="object" name="object" placeholder="Enter object input" (keyup)="$event.keyCode == 13 && addObject()"
+                />
+                <span class="form-text text-muted mt-2">
+                  <label class="badge badge-primary p-2 mr-2" *ngIf="objectURI !== ''">URI: </label>
+                  <small class="wrap-word" *ngIf="objectURI !== ''">{{objectURI}}
+                    <span class="button" (click)="removeObjectURI()">X</span>
+                  </small>
+  
+                  <div class="clearfix"></div>
+                  <div *ngIf="list.hasObjects()">
+                    <label class="badge badge-success p-2">Labels: </label>
+                    <span *ngFor="let item of list.objects; let i = index">
+                      <small class="wrap-word">{{item}}
+                        <span class="button" (click)="list.removeObject(i)">X</span>
+                      </small>
+                    </span>
+                  </div>
+                </span>
+              </div>
+            </mat-tab>
+  
+            <mat-tab label="FILE">
+              <br>
+              <div class="form-group">
+                <label for="file">Please Select .tll file to upload. </label>
+                <input name="file" id="fileInput" type="file" accept=".ttl" (change)="uploadFile($event)" />
+              </div>
+              <div class="filler"></div>
+            </mat-tab>
+          </mat-tab-group>
+          <br>
+          <div class="form-group">
+            <button mat-raised-button type="button" value="Submit" (click)="submitData()">Submit</button>
+            <button mat-raised-button type="button" value="Reset" (click)="resetEverthing()">Reset</button>
+            <button mat-raised-button type="button" value="Save as ttl file" (click)="createTTLFile()" *ngIf="!this.isFile">Save as ttl file</button>
+          </div>
+        </form>
+        <!-- end of "col-sm-8" div -->
+      </div>
+  
+  
+      <div class="col-sm-4">
+  
+        <ul class="list-group word-wrap">
+          <li class="list-group-item heading">
+            <h5 class="hreadingresult">Results:</h5>
+  
+            <span class="button" (click)="saveResultsAsPdf()">
+              <img matTooltipHideDelay="3000" matTooltipShowDelay="1000" matTooltip="Donload Results as pdf file.
+              " class="downloadimage" src="../assets/download.png" />
+            </span>
+          </li>
+        </ul>
+  
+        <ngx-spinner></ngx-spinner>
+  
+        <blockquote class="blockquote word-wrap">
+          <!-- <div class="text-center">
+              <p class="lead badge-light">This section displays defecto score and 
+                evidences including websites and evidences that were found as response to search.
+              </p>
+            </div> -->
+          <div class="text-center" *ngIf="loading">
+            <p class="lead badge-danger">{{loadingText}}</p>
+          </div>
+          <ul class="list-group word-wrap" *ngIf="noEvidence !== ''">
+            <li class="list-group-item">
+              {{noEvidence}}
+            </li>
+          </ul>
+  
+          <div class="list-group word-wrap" id="resultcontent" #resultcontent>
+            <div class="list-group-item" *ngIf="querySubject && queryPredicate && queryObject">
+              <h5>
+                <b> Your Query: </b>
+              </h5>
+              <p class="text-muted">{{querySubject + ' ' + queryPredicate + ' ' + queryObject}}</p>
+            </div>
+            <div class="list-group-item" *ngIf="defactoScore">
+              <h5>
+                <b>Defacto Score: </b>
+              </h5>
+              <p class="text-muted">{{defactoScore}}</p>
+            </div>
+            <!-- <div id='hidden'></div> -->
+            <div class="list-group-item" *ngIf="evidences.length">
+              <h5>
+                <b>Evidences:</b>
+              </h5>
+              <hr>
+              <li *ngFor="let item of evidences" class="list-unstyled">
+                <div class="website">
+                  <h6>
+                    <!-- <img class="url-img" src="../assets/webicon.png" /> -->
+                    <a href="{{item.website}}">{{item.website}}</a>
+                  </h6>
+                </div>
+  
+                <div class="proofphrase">
+                  <!-- <img class="proof-img" src="../assets/prooficon.png" /> -->
+                  <h6 class="proofsentence text-muted"> {{item.proofPhrase}} </h6>
+                </div>
+  
+              </li>
+            </div>
+          </div>
+        </blockquote>
+  
+        <!-- end of "col-sm-4" div -->
+      </div>
+      <!-- end of row div -->
+    </div>    
+    <!-- end of container div -->
+  </div>
