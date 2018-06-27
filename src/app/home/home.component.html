@@ -135,12 +135,7 @@
           <div class="text-center" *ngIf="loading">
             <p class="lead badge-danger">{{loadingText}}</p>
           </div>
-          <ul class="list-group word-wrap" *ngIf="noEvidence !== ''">
-            <li class="list-group-item">
-              {{noEvidence}}
-            </li>
-          </ul>
-  
+
           <div class="list-group word-wrap" id="resultcontent" #resultcontent>
             <div class="list-group-item" *ngIf="querySubject && queryPredicate && queryObject">
               <h5>
@@ -175,6 +170,15 @@
   
               </li>
             </div>
+
+
+            <div class="list-group-item" *ngIf="noEvidence !== '' && !evidences.length">
+              <h5>
+                <b>Evidences:</b>
+              </h5>              
+              {{noEvidence}}
+            </div>
+
           </div>
         </blockquote>
   

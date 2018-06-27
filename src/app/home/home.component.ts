@@ -41,14 +41,20 @@ export class HomeComponent {
   querySubject = '';
   queryPredicate = '';
   queryObject = '';
+  predicates = {
+    'award': 'recieved award', 'birth': 'birth place',
+    'death': 'death place', 'foundationPlace': 'foundation place', 'leader': 'office',
+    'nbateam': 'played team', 'publicationDate': 'publication', 'spouse': 'marriaged to',
+    'starring': 'is starring', 'subsidiary': 'acquisition'
+  };
   evidences: any;
   loading: boolean;
   headers = new Headers({ 'Content-Type': 'application/json;charset=UTF-8' });
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
   title = 'FactCheck';
-  // url = `${this.apiRoot}/api/execTask/`;
-  url = `${this.apiRoot}/factcheck-api/api/execTask/`;
+  url = `${this.apiRoot}/api/execTask/`;
+  // url = `${this.apiRoot}/factcheck-api/api/execTask/`;
   subject = '';
   predicate = '';
   object = '';
@@ -158,10 +164,12 @@ export class HomeComponent {
     this.spinner.show();
     this.sendToApi(myJSON)
       .then(() => {
+        console.log('then');
         this.loading = false;
         this.spinner.hide();
       })
       .catch((e) => {
+        console.log('catch');
         this.spinner.hide();
         const code = this.map.get(e.status);
         if (code !== undefined) {
@@ -171,6 +179,7 @@ export class HomeComponent {
           this.loadingText = e;
         }
       });
+    console.log('below');
   }
 
   /**
@@ -284,17 +293,19 @@ export class HomeComponent {
         .then(
           res => {
             try {
+              console.log('try begin');
               this.defactoScore = res.json().defactoScore;
               this.querySubject = res.json().subject;
               this.queryObject = res.json().object;
               this.queryPredicate = res.json().predicate;
-              this.evidences = res.json().complexProofs;
+              this.evidences = res.json().complexProofs == null ? [] : res.json().complexProofs;
               if (this.evidences.length === 0) {
                 this.noEvidence = 'No Evedences where found.';
               }
               // this.taskId++;
               this.loading = false;
               resolve();
+              console.log('try end');
             } catch (e) {
               console.log('Exception: ' + e);
               this.loading = false;
@@ -302,6 +313,7 @@ export class HomeComponent {
             }
           },
           msg => {
+            console.log('reject');
             reject(msg);
           }
         );
@@ -674,7 +686,7 @@ export class HomeComponent {
    */
   testEnvironment() {
     this.querySubject = 'Einstein';
-    this.queryPredicate = 'award';
+    this.queryPredicate = this.predicates.award;
     this.queryObject = 'Nobel Price';
     this.defactoScore = '0.156748798798798';
     this.evidences = [
