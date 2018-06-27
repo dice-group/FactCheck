@@ -20,7 +20,8 @@ public class Application {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 System.out.println("allow cross origins");
-                registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:4200","http://131.234.28.204:4200");
             }
         };
     }
