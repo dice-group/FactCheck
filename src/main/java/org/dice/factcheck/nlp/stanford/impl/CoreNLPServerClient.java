@@ -2,6 +2,7 @@ package org.dice.factcheck.nlp.stanford.impl;
 
 import java.util.Properties;
 
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import org.aksw.defacto.Defacto;
 import org.dice.factcheck.nlp.stanford.CoreNLPClient;
 
@@ -14,6 +15,7 @@ public class CoreNLPServerClient implements CoreNLPClient {
 	// Other for applying Coreference on extracted sentences
 	private StanfordCoreNLPClient pipelineSentence;
 	private StanfordCoreNLPClient pipelineCoref;
+	private StanfordCoreNLP pipelineNegation;
 	private String CORENLP_SERVER1;
 	private String CORENLP_PORT1;
 	private String CORENLP_SERVER2;
@@ -40,6 +42,14 @@ public class CoreNLPServerClient implements CoreNLPClient {
 		propCoreference.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
 		propCoreference.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
 		this.pipelineCoref = new StanfordCoreNLPClient(propCoreference, "http://"+CORENLP_SERVER2, Integer.parseInt(CORENLP_PORT2), 8);
+
+//		pipelineNegation = getPipeline("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
+	}
+
+	private StanfordCoreNLP getPipeline(String propertyKey, String propertyValue) {
+		Properties props = new Properties();
+		props.setProperty(propertyKey, propertyValue);
+		return new StanfordCoreNLP(props);
 	}
 
 	@Override
@@ -57,6 +67,13 @@ public class CoreNLPServerClient implements CoreNLPClient {
 		this.pipelineCoref.annotate(annotatedDoc);
 		return annotatedDoc;
 
+	}
+
+	@Override
+	public Annotation negationAnnotation(String document) {
+		Annotation annotatedDoc = new Annotation(document);
+		this.pipelineNegation.annotate(annotatedDoc);
+		return annotatedDoc;
 	}
 
 }
