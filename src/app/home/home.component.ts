@@ -37,7 +37,7 @@ export class HomeComponent {
 
   @ViewChild('resultcontent') resultcontent: ElementRef;
   position = 'below';
-  apiRoot: String = 'http://localhost:8080';
+  apiRoot: String = 'http://131.234.28.204:8080';
   querySubject = '';
   queryPredicate = '';
   queryObject = '';
@@ -53,7 +53,7 @@ export class HomeComponent {
   options = new RequestOptions({ headers: this.headers });
   isURI = require('validate.io-uri');
   title = 'FactCheck';
-  url = `${this.apiRoot}/api/execTask/`;
+  url = `${this.apiRoot}/factcheck-api/api/execTask/`;
   // url = `${this.apiRoot}/factcheck-api/api/execTask/`;
   subject = '';
   predicate = '';
