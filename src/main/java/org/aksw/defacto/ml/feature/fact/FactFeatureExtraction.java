@@ -19,6 +19,7 @@ import org.aksw.defacto.ml.feature.fact.impl.SubjectObjectSimilarityFeature;
 import org.aksw.defacto.ml.feature.fact.impl.TokenDistanceFeature;
 import org.aksw.defacto.ml.feature.fact.impl.TotalOccurrenceFeature;
 import org.aksw.defacto.ml.feature.fact.impl.WordnetExpensionFeature;
+import org.dice.factcheck.ml.feature.fact.impl.ContextProofNegationIdentifierFeature;
 import org.dice.factcheck.ml.feature.fact.impl.DependencyParseFeature;
 
 /**
@@ -43,6 +44,7 @@ public class FactFeatureExtraction {
         FactFeatureExtraction.factFeatures.add(new PropertyFeature());
         FactFeatureExtraction.factFeatures.add(new ClassFeature());
         FactFeatureExtraction.factFeatures.add(new DependencyParseFeature());
+//        FactFeatureExtraction.factFeatures.add(new ContextProofNegationIdentifierFeature());
     }
     
     /**

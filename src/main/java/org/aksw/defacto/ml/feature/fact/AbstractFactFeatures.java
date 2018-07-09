@@ -44,7 +44,8 @@ public class AbstractFactFeatures {
     public static final Attribute END_OF_SENTENCE_EXCLAMATION_MARK  		= new Attribute("end_of_sentence_exclamation_mark");
     public static final Attribute NUMBER_OF_NON_ALPHA_NUMERIC_CHARACTERS 	= new Attribute("number_of_non_alpha_numeric_characters");
     public static final Attribute DEPENDENCY_SUBJECT_OBJECT					= new Attribute("dependency_subject_object");
-    
+    public static final Attribute CONTEXT_IN_FAVOR_PREDICATE			    = new Attribute("context_in_favor_predicate");
+
 	public static final Attribute SUBJECT_SIMILARITY 						= new Attribute("subject_similarity");
 	public static final Attribute OBJECT_SIMILARITY 						= new Attribute("object_similarity");
 
