@@ -3,28 +3,16 @@ package wrapper;
 import api.ApplicationStartup;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
-import org.aksw.defacto.DefactoDemo;
-import org.aksw.defacto.config.DefactoConfig;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
-import org.dice.factcheck.nlp.stanford.*;
-import org.dice.factcheck.nlp.stanford.impl.CoreNLPLocalClient;
-import org.dice.factcheck.nlp.stanford.impl.CoreNLPServerClient;
-import org.ini4j.Ini;
-import org.ini4j.InvalidFileFormatException;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import static org.aksw.defacto.DefactoDemo.corenlpClient;
-import static org.aksw.defacto.DefactoDemo.getEinsteinModel;
 
 public class FactCheckBytes {
 

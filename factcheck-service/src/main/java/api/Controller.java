@@ -64,7 +64,7 @@ public class Controller {
                                          @RequestParam(value = "dataISWC", required = true) String dataISWC,
                                          @RequestParam(value = "fileTrace", required = true) String fileTrace) {
 
-        logger.info("Task {} received from HOBBIT", taskId);
+        logger.info("Received HOBBIT Task {} ({})", taskId, fileTrace);
 
         FCpreprocessor fCpreprocessor = new FCpreprocessor(dataISWC, taskId, fileTrace);
         Evidence factEvidence = getEvidence(fCpreprocessor, taskId);
@@ -78,7 +78,7 @@ public class Controller {
     private Evidence getEvidence(FCpreprocessor preprocessor, String taskId) {
 
         DefactoModel defactoModel = new ModelTransform(preprocessor, taskId).getDefactoModel();
-        defactoModel.corenlpClient = ApplicationStartup.corenlpClient;
+        defactoModel.setCorenlpClient(ApplicationStartup.corenlpClient);
 
         return Defacto.checkFact(defactoModel, Defacto.TIME_DISTRIBUTION_ONLY.NO);
     }
