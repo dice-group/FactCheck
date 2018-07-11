@@ -66,7 +66,7 @@ export class HomeComponent {
   defactoScore = '';
   fileData: string;
   text = 'sample';
-  taskId = '1';
+  taskId = 1;
   loadingText = 'Loading...';
   boxTitle = '';
   boxMessage = '';
@@ -140,6 +140,7 @@ export class HomeComponent {
    */
   submitData() {
     let obj;
+    this.taskId++;
     if (this.isFile) {
       if (!this.validateFileInput()) {
         return;
@@ -293,7 +294,6 @@ export class HomeComponent {
         .then(
           res => {
             try {
-              console.log('try begin');
               this.defactoScore = res.json().defactoScore;
               this.querySubject = res.json().subject;
               this.queryObject = res.json().object;
@@ -302,10 +302,8 @@ export class HomeComponent {
               if (this.evidences.length === 0) {
                 this.noEvidence = 'No Evedences where found.';
               }
-              // this.taskId++;
               this.loading = false;
               resolve();
-              console.log('try end');
             } catch (e) {
               console.log('Exception: ' + e);
               this.loading = false;
