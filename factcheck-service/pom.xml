@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.springframework</groupId>
+    <groupId>org.dice-research</groupId>
     <artifactId>factcheck-service</artifactId>
     <version>1.0.3</version>
 
@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>org.dice-research</groupId>
-            <artifactId>FactCheck</artifactId>
+            <artifactId>factcheck-core</artifactId>
             <version>1.0.4</version>
         </dependency>
     </dependencies>
@@ -84,7 +84,7 @@
                 </dependencies>
                 <configuration>
                     <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
-                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
                     <filters>
                         <filter>
                             <artifact>*:*</artifact>
@@ -117,7 +117,7 @@
                                     <resource>META-INF/spring.schemas</resource>
                                 </transformer>
                                 <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>api.Application</mainClass>
