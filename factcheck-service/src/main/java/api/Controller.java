@@ -61,17 +61,16 @@ public class Controller {
 
     @RequestMapping(value = "/hobbitTask/{taskId}", method = RequestMethod.POST)
     public FactCheckHobbitResponse execT(@PathVariable(value = "taskId") String taskId,
-                                         @RequestParam(value = "dataISWC", required = true) String dataISWC,
-                                         @RequestParam(value = "fileTrace", required = true) String fileTrace) {
+                                         @RequestParam(value = "dataISWC", required = true) String dataISWC) {
 
-        logger.info("Received HOBBIT Task {} ({})", taskId, fileTrace);
+        logger.info("Received HOBBIT Task {} ({})", taskId);
 
-        FCpreprocessor fCpreprocessor = new FCpreprocessor(dataISWC, taskId, fileTrace);
+        FCpreprocessor fCpreprocessor = new FCpreprocessor(dataISWC, taskId);
         Evidence factEvidence = getEvidence(fCpreprocessor, taskId);
 
         logger.info("Score {} returned for task {}", factEvidence.getDeFactoScore(), taskId);
 
-        return new FactCheckHobbitResponse(taskId, factEvidence.getDeFactoScore(), fCpreprocessor.getFileTrace());
+        return new FactCheckHobbitResponse(taskId, factEvidence.getDeFactoScore());
     }
 
     //Return evidence object for task specified

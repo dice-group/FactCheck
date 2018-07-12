@@ -5,25 +5,23 @@ package api;
  */
 public class FactCheckHobbitResponse {
     private static final String RESPONSE =
-            "<http://swc2017.aksw.org/%s/dataset/%s> " +
+            "<http://swc2017.aksw.org/%s/dataset/> " +
                     "<http://swc2017.aksw.org/hasTruthValue> \"%s\"" +
                     "^^<http://www.w3.org/2001/XMLSchema#double> .";
 
     private String taskId;
     private double truthValue = 0.0;
-    private String fileTrace;
 
     private String responseData;
 
-    FactCheckHobbitResponse(String taskId, double truthValue, String fileTrace) {
+    FactCheckHobbitResponse(String taskId, double truthValue) {
         this.taskId = taskId;
         this.truthValue = truthValue;
-        this.fileTrace = fileTrace;
         init();
     }
 
     private void init() {
-        responseData = String.format(RESPONSE, taskId, fileTrace, truthValue);
+        responseData = String.format(RESPONSE, taskId, truthValue);
     }
 
     public double getTruthValue() {
