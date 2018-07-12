@@ -7,12 +7,14 @@ The project has three components:
 
 1. [factcheck-core](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-core): the main functionalities and libraries for the algorithm
 2. [factcheck-service](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-service): web application built using the Spring framework. The application currently supports requests from factcheck-demo as well as [factcheck-benchmark](https://github.com/hobbit-project/Fact-Checking-Benchmark).
-2. [factcheck-demo](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-demo): Angular application that allows users to submit queries as a .ttl file or by providing the subject, predicate and object of the query.
+3. [factcheck-demo](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-demo): Angular application that allows users to submit queries as a .ttl file or by providing the subject, predicate and object of the query.
 
 ## How to run
 1. Set data-directory path in defacto.ini files
 2. goto factcheck folder, open command line and 
-run  
-`mvn clean install`  
-    then run   
-`mvn spring-boot:run` 
+run following commands.
+``` 
+mvn clean install 
+mvn spring-boot:run
+``` 
+Open [http://localhost:8080](http://localhost:8080) in your browser. 
