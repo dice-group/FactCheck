@@ -20,7 +20,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/factcheck-demo/dist
+#/factcheck-demo/dist
 /factcheck-demo/dist-server
 /factcheck-demo/tmp
 /factcheck-demo/out-tsc
