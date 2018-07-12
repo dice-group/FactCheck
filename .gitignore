@@ -20,16 +20,17 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/dist-server
-/tmp
-/out-tsc
+/factcheck-demo/dist
+/factcheck-demo/dist-server
+/factcheck-demo/tmp
+/factcheck-demo/out-tsc
 
 # dependencies
-/node_modules
+/factcheck-demo/node_modules
 
 # IDEs and editors
 /.idea
+/factcheck-service/.idea
 .project
 .classpath
 .c9/
@@ -55,8 +56,8 @@ testem.log
 /typings
 
 # e2e
-/e2e/*.js
-/e2e/*.map
+/factcheck-demo/e2e/*.js
+/factcheck-demo/e2e/*.map
 
 # System Files
 .DS_Store
@@ -66,6 +67,10 @@ Thumbs.db
 .idea/**
 .idea/*
 *.iml
+/factcheck-service/.idea/*.xml
+/factcheck-service/.idea/**
+/factcheck-service/.idea/*
+/factcheck-service/*.iml
 
 # Created by https://www.gitignore.io/api/java,intellij
 
