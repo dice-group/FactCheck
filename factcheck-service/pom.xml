@@ -44,7 +44,7 @@
             <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.dice-research</groupId>
+            <groupId>org.dice-research.Factcheck</groupId>
             <artifactId>factcheck-core</artifactId>
             <version>1.0.4</version>
         </dependency>
@@ -123,6 +123,24 @@
                                     <mainClass>api.Application</mainClass>
                                 </transformer>
                             </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals><goal>copy-resources</goal></goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/static/</outputDirectory >
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/../factcheck-demo/dist</directory >
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
