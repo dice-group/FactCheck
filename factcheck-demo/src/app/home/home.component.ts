@@ -180,7 +180,6 @@ export class HomeComponent {
           this.loadingText = e;
         }
       });
-    console.log('below');
   }
 
   /**
@@ -288,13 +287,13 @@ export class HomeComponent {
   sendToApi(myJSON: string) {
     this.clearResults();
     const promise = new Promise((resolve, reject) => {
-      console.log('api url: ' + this.url);
+      console.log('Send Request to: ' + this.url);
       this.http.post(this.url, myJSON, this.options)
         .toPromise()
         .then(
           res => {
             try {
-              this.defactoScore = res.json().defactoScore;
+              this.defactoScore = (parseFloat(res.json().defactoScore) * 100).toFixed(2).toString().concat(" %");
               this.querySubject = res.json().subject;
               this.queryObject = res.json().object;
               this.queryPredicate = res.json().predicate;
@@ -311,7 +310,7 @@ export class HomeComponent {
             }
           },
           msg => {
-            console.log('reject');
+            console.log('rejected');
             reject(msg);
           }
         );
@@ -629,7 +628,7 @@ export class HomeComponent {
     console.log(text);
     try {
       this.parser.parse(text);
-      this.parser.parse(text, console.log);
+      // this.parser.parse(text, console.log);
       return true;
     } catch (e) {
       this.boxMessage = e + '\nPlease see the console for details';
@@ -686,7 +685,8 @@ export class HomeComponent {
     this.querySubject = 'Einstein';
     this.queryPredicate = this.predicates.award;
     this.queryObject = 'Nobel Price';
-    this.defactoScore = '0.156748798798798';
+    this.defactoScore = '0.956748798798798';
+    this.defactoScore = (parseFloat(this.defactoScore)*100).toFixed(2).toString().concat(" %");
     this.evidences = [
       {
         website: 'http://www.google.com/test/data/dateofbirth/etc/this.thml',
