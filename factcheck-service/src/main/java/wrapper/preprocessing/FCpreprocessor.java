@@ -9,14 +9,12 @@ import java.io.ByteArrayInputStream;
  */
 public class FCpreprocessor {
     private String data;
-    private String fileTrace;
     private DefactoModel defactoModel;
     private Model modelFC;
     private Model modelISWC;
 
-    public FCpreprocessor(String data, String taskId, String fileTrace) {
+    public FCpreprocessor(String data, String taskId) {
         this.data = data;
-        this.fileTrace = fileTrace;
         Model modelISWC = createModel(data);
         setModelISWC(modelISWC);
         init(modelISWC, taskId);
@@ -24,10 +22,6 @@ public class FCpreprocessor {
 
     public String getData() {
         return this.data;
-    }
-
-    public String getFileTrace() {
-        return fileTrace;
     }
 
     private void setModelISWC(Model model) {
