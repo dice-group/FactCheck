@@ -14,16 +14,25 @@ The project has three components:
 2. Npm
 3. Java 1.8 (minimum)
 ## How to run
-1. Goto **factcheck-demo** directory using command prompt and run following commands.
+1. Goto **factcheck-demo** directory using command prompt and run following commands.  
+**One time.**
 ``` 
 npm install 
 ng build -prod
 ``` 
-2. Set data-directory path in defacto.ini files
-3. goto **factcheck** directory using command prompt and 
-run following commands.
+
+**Start client by running following command**
+```
+ng serve
+```
+Open client [http://localhost:4200](http://localhost:4200) in your browser.
+1. Set data-directory path in defacto.ini files
+2. goto **factcheck** directory using command prompt and 
+run following command.  
+**- One time.**
 ``` 
-mvn clean install 
-mvn spring-boot:run
+mvn clean install -DskipTests=true
 ``` 
-Open [http://localhost:8080](http://localhost:8080) in your browser. 
+Run factcheck-service\src\main\java\api\Application.java 
+Open server [http://localhost:8080](http://localhost:8080) in your browser.
+ 
