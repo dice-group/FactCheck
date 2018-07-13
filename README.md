@@ -9,9 +9,18 @@ The project has three components:
 2. [factcheck-service](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-service): web application built using the Spring framework. The application currently supports requests from factcheck-demo as well as [factcheck-benchmark](https://github.com/hobbit-project/Fact-Checking-Benchmark).
 3. [factcheck-demo](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-demo): Angular application that allows users to submit queries as a .ttl file or by providing the subject, predicate and object of the query.
 
+## Prerequisites
+1. Nodejs
+2. Npm
+3. Java 1.8 (minimum)
 ## How to run
-1. Set data-directory path in defacto.ini files
-2. goto factcheck folder, open command line and 
+1. Goto **factcheck-demo** directory using command prompt and run following commands.
+``` 
+npm install 
+ng build -prod
+``` 
+2. Set data-directory path in defacto.ini files
+3. goto **factcheck** directory using command prompt and 
 run following commands.
 ``` 
 mvn clean install 
