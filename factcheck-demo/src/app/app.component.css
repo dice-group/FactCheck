@@ -1,0 +1,33 @@
+.cont {
+    position:relative;
+    margin-right:3px;
+    padding-top:13px;
+}
+
+   
+  ::ng-deep .mat-tooltip  {
+    white-space: pre-line    !important;
+}
+
+.stylish-color-dark {
+    background-color: #3e4551 !important; 
+}
+
+footer.page-footer {
+    bottom: 0;
+    color: #fff; 
+}
+footer.page-footer .container-fluid {
+    width: auto; 
+}
+footer.page-footer .footer-copyright {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: rgba(255, 255, 255, 0.6); 
+}
+footer.page-footer a {
+    color: #fff; 
+}
+.font-small {
+    font-size: 0.9rem;
+}

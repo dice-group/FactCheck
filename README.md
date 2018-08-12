@@ -1,15 +1,38 @@
 # FactCheck
-**Usage Instructions** 
 
-To use FactCheck do the following:
 
- 1. Clone the repository from https://github.com/dice-group/FactCheck.git
- 2.  Build the project  **defacto-core**  by issuing the command `mvn clean install`
- 3. Additionally, FactCheck needs MySQL 5.5 for query support. Set up [MySQL](https://dev.mysql.com/doc/refman/5.5/en/) environment. 
-    - Create MySQL database named `dbpedia_metrics` and import the file `dbpedia_metrics.sql`(file can be found in the `FactCheck/data_for_installation` folder).
- 4. Update the following entries in the defacto-core/target/classes/defacto.ini
-    - set the entry [eval] : data-directory to map to `FactCheck/data` folder.
-    - set the entry [evidence] : WORDNET_DICTIONARY to map to `FactCheck/data/wordnet/dict`
-      (Unfortunately, the dictionary provided (WordNet 3.0) does not support Windows. Windows users can download [WordNet 2.1](https://wordnet.princeton.edu/wordnet/download/current-version/). Make sure to set the above entry to map to `dict` folder)
-    - set the entry [mysql] : PASSWORD to the password for root user you chose during installation in **step 3**.
-5. Run the file `DefactoDemo.java`
+FactCheck is an algorithm for validating statements by finding confirming sources for it on the web. It takes a statement (such as "Jamaica Inn was directed by Alfred Hitchcock") as input and then tries to find evidence for the truth of that statement by searching for information in the web. In contrast to typical search engines, it does not just search for textual occurences of parts of the statement, but tries to find web pages, which contain the statement phrased in natural language. It presents the user with a confidence score for the input statement as well as a set of excerpts of relevant web pages, which allows the user to manually look at the evidence.
+
+The project has three components:
+
+1. [factcheck-core](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-core): the main functionalities and libraries for the algorithm
+2. [factcheck-service](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-service): web application built using the Spring framework. The application currently supports requests from factcheck-demo as well as [factcheck-benchmark](https://github.com/hobbit-project/Fact-Checking-Benchmark).
+3. [factcheck-demo](https://github.com/danishahmed92/FactCheck/tree/master/factcheck-demo): Angular application that allows users to submit queries as a .ttl file or by providing the subject, predicate and object of the query.
+
+## Prerequisites
+1. Nodejs
+2. Npm
+3. Java 1.8 (minimum)
+## How to run
+1. Goto **factcheck-demo** directory using command prompt and run following commands.  
+**One time.**
+``` 
+npm install 
+ng build -prod
+``` 
+
+**Start client by running following command**
+```
+ng serve
+```
+Open client [http://localhost:4200](http://localhost:4200) in your browser.
+1. Set data-directory path in defacto.ini files
+2. goto **factcheck** directory using command prompt and 
+run following command.  
+**- One time.**
+``` 
+mvn clean install -DskipTests=true
+``` 
+Run factcheck-service\src\main\java\api\Application.java 
+Open server [http://localhost:8080](http://localhost:8080) in your browser.
+ 
