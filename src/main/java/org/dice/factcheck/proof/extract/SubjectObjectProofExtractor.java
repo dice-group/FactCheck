@@ -243,10 +243,13 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 								//break;
 							}
 						}
+						if(sublabel.toLowerCase()!="" && objlabel.toLowerCase()!="")
+						{
 						if(!(StringUtils.substringBetween(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase())==null))
 							tinyContext = breakString(proofPhrase.toLowerCase(), sublabel.toLowerCase(), objlabel.toLowerCase());
 						else
 							tinyContext = breakString(proofPhrase.toLowerCase(), objlabel.toLowerCase(), sublabel.toLowerCase());
+						}
 					}
 
 					if(sublabel.isEmpty()) sublabel = evidence.getModel().getSubjectLabel("en");

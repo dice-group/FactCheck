@@ -1,4 +1,4 @@
-package org.dice.factcheck.topicterms;
+/*package org.dice.factcheck.topicterms;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -127,3 +127,4 @@ public class TopicTermsCoherenceTest extends AbstractElasticInstance {
 	}
 
 }
+*/

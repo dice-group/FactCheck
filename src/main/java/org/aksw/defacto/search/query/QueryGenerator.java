@@ -37,7 +37,6 @@ public class QueryGenerator {
     public static final BoaPatternSearcher patternSearcher = new BoaPatternSearcher();
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryGenerator.class);
     private DefactoModel model;
-    private RestClient restClientobj;
     
     /**
      * 
@@ -46,7 +45,6 @@ public class QueryGenerator {
     public QueryGenerator(DefactoModel model) {
         
         this.model = model;
-        restClientobj = RestClient.builder(new HttpHost("131.234.28.255" , 6060, "http")).build();
     }
     
     /**

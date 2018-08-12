@@ -1,5 +1,6 @@
 package org.dice.factcheck.search.engine.elastic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 	private static String ELASTIC_SERVER;
 	private static Logger logger =  Logger.getLogger(ElasticSearchEngine.class);
 	private static String ELASTIC_PORT;
+	private RestClient restClientobj;
 
 	public ElasticSearchEngine() {
 
@@ -59,7 +61,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 		try {
 			List<WebSite> results = new ArrayList<WebSite>();
 
-			RestClient restClientobj = RestClient.builder(new HttpHost(ELASTIC_SERVER , Integer.parseInt(ELASTIC_PORT), "http")).build();
+			this.restClientobj = RestClient.builder(new HttpHost(ELASTIC_SERVER , Integer.parseInt(ELASTIC_PORT), "http")).build();
 			String subject  = query.getSubjectLabel().replace("&", "and");
 			String property = normalizePredicate(query.getPropertyLabel().trim());
 			String object   = query.getObjectLabel().replace("&", "and");
@@ -80,7 +82,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"} \n"+
 							"}", ContentType.APPLICATION_JSON);
 
-			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
+			Response response = restClientobj.performRequest("GET", "/wikipedia/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());			
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
@@ -110,13 +112,24 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				website.setPredicate(property);
 				results.add(website);
 			}
-			restClientobj.close();
 			return new DefaultSearchResult(results, new Long(docCount), query, pattern, false);
 		}
 		catch (Exception e) {
 
 			logger.info("Issue with the running Elastic search instance. Please check if the instance is running! "+e.getMessage());
 			return new DefaultSearchResult(new ArrayList<WebSite>(), 0L, query, pattern, false);
+		}
+		
+		finally {
+			//Close the connection
+			try {
+				
+				this.restClientobj.close();
+				
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
 		}
 	}
 	public String normalizePredicate(String propertyLabel) {

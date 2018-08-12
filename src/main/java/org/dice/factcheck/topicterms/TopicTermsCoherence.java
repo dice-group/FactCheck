@@ -62,12 +62,12 @@ public class TopicTermsCoherence {
 							"} ,\n"+
 							"  \"sort\": [\n"+
 							"{\n"+
-							"    \"Coherence_NPMI\" : {\n" +
+							"    \"C_NPMI\" : {\n" +
 							"  \"order\" : \"desc\""+
 							"}\n"+
 							"}]\n"+
 							"}", ContentType.APPLICATION_JSON);
-			Response response = restClientobj.performRequest("GET", "/wiki-factcheck/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
+			Response response = restClientobj.performRequest("GET", "/wikipedia/topicterms/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
@@ -82,7 +82,7 @@ public class TopicTermsCoherence {
 			{				
 				JsonNode document = hits.get("hits").get(i).get("_source");
 				JsonNode Term = document.get("Term");
-				JsonNode NPMI = document.get("Coherence_NPMI");
+				JsonNode NPMI = document.get("C_NPMI");
 				String topicTerm = Term.asText();
 				float uciScore = Float.parseFloat(NPMI.asText());
 				Word word = new Word(topicTerm, uciScore);

@@ -40,8 +40,8 @@ public class DefactoDemo {
 
         List<DefactoModel> models = new ArrayList<>();
         Defacto.init();
-        models.add(getEinsteinModel());
-        //models = getRDFModels();
+        //models.add(getEinsteinModel());
+        models = getRDFModels();
         Defacto.checkFacts(models, TIME_DISTRIBUTION_ONLY.NO);
 
 
@@ -58,7 +58,7 @@ public class DefactoDemo {
     public static List<DefactoModel> getRDFModels() throws FileNotFoundException
     {
     	List<DefactoModel> models = new ArrayList<>();
-    	File dir = new File("/home/data");
+    	File dir = new File("E:\\RDFModels");
     	  File[] directoryListing = dir.listFiles();
     	  if (directoryListing != null) {
     	    for (File child : directoryListing) {

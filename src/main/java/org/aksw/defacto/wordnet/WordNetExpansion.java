@@ -90,9 +90,9 @@ public class WordNetExpansion {
     public static void main(String args[])
     {
         WordNetExpansion wne = new WordNetExpansion("C:\\Program Files (x86)\\WordNet\\2.1\\dict");
-        String token = "ulm";
+        String token = "received the 1921";
         System.out.println(wne.getSynset(token));
-        String token2 = "table";
+        String token2 = "accepted";
         System.out.println(wne.getSynset(token2));
         System.out.println(wne.getExpandedJaccardSimilarity(token, token2));
         

@@ -85,14 +85,14 @@ public class DependencyParseFeature implements FactFeature {
 					while(it.hasNext())
 					{
 						TypedDependency td = it.next();
-						if((td.gov().toString().toLowerCase().contains(patternString) && (subLabels.contains(td.dep().originalText().toLowerCase())))
-								|| (td.dep().toString().toLowerCase().contains(patternString) && (subLabels.contains(td.gov().originalText().toLowerCase()))))
+						if((patternString.contains(td.gov().toString().toLowerCase()) && (subLabels.contains(td.dep().originalText().toLowerCase())))
+								|| (patternString.contains(td.dep().toString().toLowerCase()) && (subLabels.contains(td.gov().originalText().toLowerCase()))))
 							score = (float) (score + 0.5);
-						if((subLabels.contains(td.dep().originalText()) && (objLabels.contains(td.gov().originalText().toLowerCase())))
-								|| (subLabels.contains(td.dep().originalText()) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
+						if((subLabels.contains(td.dep().originalText().toLowerCase()) && (objLabels.contains(td.gov().originalText().toLowerCase())))
+								|| (subLabels.contains(td.dep().originalText().toLowerCase()) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
 							score = (float) (score + 0.5);
-						if((td.gov().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.dep().originalText().toLowerCase())))
-								|| (td.dep().toString().toLowerCase().contains(patternString) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
+						if((patternString.contains(td.gov().toString().toLowerCase()) && (objLabels.contains(td.dep().originalText().toLowerCase())))
+								|| (patternString.contains(td.dep().toString().toLowerCase()) && (objLabels.contains(td.gov().originalText().toLowerCase()))))
 							score = (float) (score + 0.5);
 					}							
 				}

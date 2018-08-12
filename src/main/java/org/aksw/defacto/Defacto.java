@@ -193,8 +193,14 @@ public class Defacto {
 
 			// we want to print the score of the classifier 
 			if ( !Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE") ) 
+			{
 				System.out.println("Defacto: " + new DecimalFormat("0.00").format(evidence.getDeFactoScore()) + " % that this fact is true!");
-
+				BufferedFileWriter writer = new BufferedFileWriter("F:\\Test4.csv", Encoding.UTF_8, WRITER_WRITE_MODE.APPEND);
+				PrintWriter out = new PrintWriter(writer);
+				//out.println(AbstractEvidenceFeature.provenance.toString());
+				out.println(model.name+","+new DecimalFormat("0.00").format(evidence.getDeFactoScore()));
+				writer.close();
+			}
 			// rewrite the fact training file after every proof
 			if ( DEFACTO_CONFIG.getBooleanSetting("fact", "OVERWRITE_FACT_TRAINING_FILE") ) 
 				writeFactTrainingDataFile(DEFACTO_CONFIG.getStringSetting("fact", "FACT_TRAINING_DATA_FILENAME"));
@@ -214,7 +220,8 @@ public class Defacto {
 
 		BufferedFileWriter writer = new BufferedFileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, Encoding.UTF_8, WRITER_WRITE_MODE.OVERRIDE);
 		PrintWriter out = new PrintWriter(writer);
-		out.println(AbstractEvidenceFeature.provenance.toString());
+		//out.println(AbstractEvidenceFeature.provenance.toString());
+		out.println();
 		writer.close();
 	}
 
