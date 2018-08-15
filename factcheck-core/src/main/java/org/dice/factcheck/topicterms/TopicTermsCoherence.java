@@ -62,11 +62,7 @@ public class TopicTermsCoherence {
 							"} ,\n"+
 							"  \"sort\": [\n"+
 							"{\n"+
-<<<<<<< HEAD:factcheck-core/src/main/java/org/dice/factcheck/topicterms/TopicTermsCoherence.java
 							"    \"C_NPMI\" : {\n" +
-=======
-							"    \"C_UCI\" : {\n" +
->>>>>>> master:factcheck-core/src/main/java/org/dice/factcheck/topicterms/TopicTermsCoherence.java
 							"  \"order\" : \"desc\""+
 							"}\n"+
 							"}]\n"+
@@ -86,11 +82,7 @@ public class TopicTermsCoherence {
 			{				
 				JsonNode document = hits.get("hits").get(i).get("_source");
 				JsonNode Term = document.get("Term");
-<<<<<<< HEAD:factcheck-core/src/main/java/org/dice/factcheck/topicterms/TopicTermsCoherence.java
 				JsonNode NPMI = document.get("C_NPMI");
-=======
-				JsonNode NPMI = document.get("C_UCI");
->>>>>>> master:factcheck-core/src/main/java/org/dice/factcheck/topicterms/TopicTermsCoherence.java
 				String topicTerm = Term.asText();
 				float uciScore = Float.parseFloat(NPMI.asText());
 				Word word = new Word(topicTerm, uciScore);

@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package org.aksw.defacto.ml.feature.fact.impl;
 
@@ -18,12 +18,12 @@ import org.aksw.defacto.wordnet.WordNetExpansion;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
+ *
  */
 public class WordnetExpensionFeature implements FactFeature {
 	
 	private static WordNetExpansion wordnetExpansion;
 
-<<<<<<< HEAD:factcheck-core/src/main/java/org/aksw/defacto/ml/feature/fact/impl/WordnetExpensionFeature.java
 //    WordNetExpansion wordnetExpansion = new WordNetExpansion(new File(WordnetExpensionFeature.class.getResource("/wordnet/dict").getFile()).getAbsolutePath());
 	public static void init()
 	{
@@ -31,40 +31,29 @@ public class WordnetExpensionFeature implements FactFeature {
 	}
     
     
-=======
-    //    WordNetExpansion wordnetExpansion = new WordNetExpansion(new File(WordnetExpensionFeature.class.getResource("/wordnet/dict").getFile()).getAbsolutePath());
-    private static WordNetExpansion wordnetExpansion;
-
-
->>>>>>> master:factcheck-core/src/main/java/org/aksw/defacto/ml/feature/fact/impl/WordnetExpensionFeature.java
     BoaPatternSearcher searcher = new BoaPatternSearcher();
-
-    public static void init() {
-        wordnetExpansion = new WordNetExpansion(Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "WORDNET_DICTIONARY"));
-    }
-
+    
     /* (non-Javadoc)
      * @see org.aksw.defacto.ml.feature.fact.FactFeature#extractFeature(org.aksw.defacto.evidence.ComplexProof)
      */
     @Override
     public void extractFeature(ComplexProof proof, Evidence evidence) {
-
+        
         double similarity = 0;
 
         List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-
-        for (Pattern pattern : patterns) {
-            similarity = Math.max(similarity, wordnetExpansion.getExpandedJaccardSimilarity(proof.getProofPhrase(), pattern.getNormalized()));
+        
+        for ( Pattern pattern : patterns ) {
+        	similarity = Math.max(similarity, wordnetExpansion.getExpandedJaccardSimilarity(proof.getProofPhrase(), pattern.getNormalized()));
         }
-
-        if (Double.isInfinite(similarity) || Double.isNaN(similarity))
-            proof.getFeatures().setValue(AbstractFactFeatures.WORDNET_EXPANSION, 0D);
+        
+        if ( Double.isInfinite(similarity) || Double.isNaN(similarity) ) proof.getFeatures().setValue(AbstractFactFeatures.WORDNET_EXPANSION, 0D);
         else proof.getFeatures().setValue(AbstractFactFeatures.WORDNET_EXPANSION, similarity);
     }
-
+    
     public static void main(String[] args) {
 
-        System.out.println(new File(WordnetExpensionFeature.class.getResource("/wordnet/dict").getFile()).getAbsolutePath());
+    	System.out.println(new File(WordnetExpensionFeature.class.getResource("/wordnet/dict").getFile()).getAbsolutePath());
         System.out.println(new WordNetExpansion(new File(WordnetExpensionFeature.class.getResource("/wordnet/dict").getFile()).getAbsolutePath()).getExpandedJaccardSimilarity(", the director of", "the director of"));
     }
 }

@@ -26,11 +26,7 @@ public class NameFeature implements FactFeature {
         proof.getFeatures().setValue(AbstractFactFeatures.SUBJECT, Utils.quote(proof.getSubject()));
         proof.getFeatures().setValue(AbstractFactFeatures.PHRASE, Utils.quote(proof.getProofPhrase()));
         proof.getFeatures().setValue(AbstractFactFeatures.OBJECT, Utils.quote(proof.getObject()));
-<<<<<<< HEAD:factcheck-core/src/main/java/org/aksw/defacto/ml/feature/fact/impl/NameFeature.java
         proof.getFeatures().setValue(AbstractFactFeatures.CONTEXT, Utils.quote(""));
-=======
-        proof.getFeatures().setValue(AbstractFactFeatures.CONTEXT, "");
->>>>>>> master:factcheck-core/src/main/java/org/aksw/defacto/ml/feature/fact/impl/NameFeature.java
         proof.getFeatures().setValue(AbstractFactFeatures.FILE_NAME, proof.getModel().getName());
         proof.getFeatures().setValue(AbstractFactFeatures.LANGUAGE, proof.getLanguage());
     }

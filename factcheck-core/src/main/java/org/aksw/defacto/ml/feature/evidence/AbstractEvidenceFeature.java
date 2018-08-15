@@ -33,7 +33,7 @@ public abstract class AbstractEvidenceFeature implements EvidenceFeature {
     public static final Attribute GOODNESS 									   = new Attribute("goodness");
 
     
-    public static Attribute PROPERTY_NAME                     				   = new Attribute("property_name");
+//    public static Attribute PROPERTY_NAME                     				   = new Attribute("property_name");    
     public static Attribute CLASS                                              = new Attribute("clazz");
     public static Instances provenance;
 
@@ -76,8 +76,8 @@ public abstract class AbstractEvidenceFeature implements EvidenceFeature {
         propertyName.addElement("birthPlace");
         propertyName.addElement("deathPlace");
         propertyName.addElement("starring");
-        PROPERTY_NAME = new Attribute("property_name", propertyName);
-        attributes.addElement(PROPERTY_NAME);
+//        PROPERTY_NAME = new Attribute("property_name", propertyName);
+//        attributes.addElement(PROPERTY_NAME);
         
         FastVector clazz = new FastVector(2);
         clazz.addElement("true");

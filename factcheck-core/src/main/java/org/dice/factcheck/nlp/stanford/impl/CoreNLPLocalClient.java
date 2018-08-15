@@ -13,7 +13,6 @@ public class CoreNLPLocalClient implements CoreNLPClient {
 	// Other for applying Coreference on extracted sentences
 	private StanfordCoreNLP pipelineSentence;
 	private StanfordCoreNLP pipelineCoref;
-	private StanfordCoreNLP pipelineNegation;
 
 	public CoreNLPLocalClient() {
 
@@ -31,15 +30,6 @@ public class CoreNLPLocalClient implements CoreNLPClient {
 		propCoreference.put("coref.model", "edu/stanford/nlp/models/coref/statistical/ranking_model.ser.gz");
 		propCoreference.put("annotators", "tokenize, ssplit, pos, lemma, ner, parse, mention, coref");
 		this.pipelineCoref = new StanfordCoreNLP(propCoreference);
-
-
-//		pipelineNegation = getPipeline("annotators", "tokenize, ssplit, pos, lemma, ner, parse, dcoref");
-	}
-
-	private StanfordCoreNLP getPipeline(String propertyKey, String propertyValue) {
-		Properties props = new Properties();
-		props.setProperty(propertyKey, propertyValue);
-		return new StanfordCoreNLP(props);
 	}
 
 	@Override
@@ -55,14 +45,6 @@ public class CoreNLPLocalClient implements CoreNLPClient {
 
 		Annotation annotatedDoc = new Annotation(document);
 		this.pipelineCoref.annotate(annotatedDoc);
-		return annotatedDoc;
-	}
-
-	@Override
-	public Annotation negationAnnotation(String document) {
-
-		Annotation annotatedDoc = new Annotation(document);
-		this.pipelineNegation.annotate(annotatedDoc);
 		return annotatedDoc;
 	}
 

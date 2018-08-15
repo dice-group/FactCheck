@@ -3,11 +3,14 @@
  */
 package org.aksw.defacto.search.time;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.util.BufferedFileReader;
 import org.aksw.defacto.util.Encoder.Encoding;
@@ -47,8 +50,7 @@ public class TimeUtil {
 //		BufferedFileReader reader = new BufferedFileReader(path, Encoding.UTF_8);
 		
 		try {
-//			BufferedReader reader = new BufferedReader(new InputStreamReader(TimeUtil.class.getClassLoader().getResourceAsStream("normalization/"+ contextSize +".tsv")));
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(Constants.RESOURCE_PATH + "normalization/"+ contextSize +".tsv")));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(TimeUtil.class.getClassLoader().getResourceAsStream("normalization/"+ contextSize +".tsv")));
 			String line = "";
 			while ((line = reader.readLine()) != null ) {
 				
@@ -140,7 +142,7 @@ public class TimeUtil {
 	
 	/**
 	 * 
-//	 * @param valueOf
+	 * @param valueOf
 	 * @return
 	 */
 	public static Double getDomainNormalizedLogPopularity(Integer year) {

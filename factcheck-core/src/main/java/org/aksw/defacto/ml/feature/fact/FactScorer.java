@@ -1,5 +1,5 @@
 /**
- *
+ * 
  */
 package org.aksw.defacto.ml.feature.fact;
 
@@ -27,24 +27,21 @@ import weka.core.Instances;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
+ *
  */
 public class FactScorer {
 
-    private Classifier classifier = null;
+    private Classifier classifier       = null;
     private Instances trainingInstances = null;
 
     /**
-     *
+     * 
      */
-    public FactScorer(Classifier classifier, Instances instances) {
-
-        // this.classifier = loadClassifier();
-        this.classifier = classifier;
-        this.trainingInstances = instances;
-
-       /*
+    public FactScorer() {
+        
+        this.classifier = loadClassifier();
         try {
-
+            
 //            this.trainingInstances = new Instances(new BufferedReader(new FileReader(
 //            		loadFileName("/training/arff/fact/defacto_fact_word.arff"))));
         	this.trainingInstances = new Instances(new BufferedReader(new FileReader(
@@ -55,23 +52,24 @@ public class FactScorer {
             throw new RuntimeException(e);
         }
         catch (IOException e) {
-
+            
             throw new RuntimeException(e);
-        }*/
+        }
     }
-
+    
     /**
+     * 
      * @param evidence
      */
     public void scoreEvidence(Evidence evidence) {
 
-        Instances instancesWithStringVector = new Instances(trainingInstances);
+    	Instances instancesWithStringVector = new Instances(trainingInstances);
         instancesWithStringVector.setClassIndex(26);
-
-        for (ComplexProof proof : evidence.getComplexProofs()) {
-
+    	
+        for ( ComplexProof proof : evidence.getComplexProofs() ) {
+        	
             try {
-
+                
                 // create new instance and delete debugging features
                 Instance newInstance = new Instance(proof.getFeatures());
                 newInstance.deleteAttributeAt(28);
@@ -83,7 +81,7 @@ public class FactScorer {
                 withoutName.setClassIndex(withoutName.numAttributes() - 1);
                 withoutName.deleteStringAttributes();
                 newInstance.setDataset(withoutName);
-
+                
                 // insert all the words which occur
                 /*for ( int i = 26 + 1 ; i < instancesWithStringVector.numAttributes(); i++) {
                     
@@ -97,51 +95,55 @@ public class FactScorer {
                 //System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
                 proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
 //                System.out.println(proof.getScore() + " -> " + this.classifier.classifyInstance(newInstance) + " -> " + proof.getTinyContext());
-
+                
                 // remove the new instance again
                 //instancesWithStringVector.delete();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
 
                 e.printStackTrace();
                 System.exit(0);
             }
         }
-
+        
         // set for each website the score by multiplying the proofs found on this site
-        for (WebSite website : evidence.getAllWebSites()) {
-
+        for ( WebSite website : evidence.getAllWebSites() ) {
+            
             double score = 1D;
+            
+            for ( ComplexProof proof : evidence.getComplexProofs(website)) {
 
-            for (ComplexProof proof : evidence.getComplexProofs(website)) {
-
-                score *= (1D - proof.getScore());
+                score *= ( 1D - proof.getScore() );
             }
             website.setScore(1 - score);
         }
     }
-
+    
     /**
+     * 
      * @return
      */
     private Classifier loadClassifier() {
 
         try {
+            
             return (Classifier) weka.core.SerializationHelper.read(
-                    DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"));
-        } catch (Exception e) {
+            		DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"));
+        }
+        catch (Exception e) {
 
-            throw new RuntimeException("Could not load classifier from: " +
-                    DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"), e);
+            throw new RuntimeException("Could not load classifier from: " + 
+            		DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"), e);
         }
     }
-
-    public String loadFileName(String name) {
-
-        return new File(FactScorer.class.getResource(name).getFile()).getAbsolutePath();
+    
+    public String loadFileName(String name){
+    	
+    	return new File(FactScorer.class.getResource(name).getFile()).getAbsolutePath(); 
     }
-
+    
     public static void main(String[] args) {
-
-        System.out.println("-" + "".split(";").length + "-");
-    }
+		
+    	System.out.println("-"+ "".split(";").length + "-");
+	}
 }
