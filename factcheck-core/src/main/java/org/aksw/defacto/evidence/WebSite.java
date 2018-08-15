@@ -1,312 +1,327 @@
 package org.aksw.defacto.evidence;
 
-import org.aksw.defacto.Defacto;
-import org.aksw.defacto.search.query.MetaQuery;
-import org.apache.commons.lang.StringUtils;
-import org.dice.factcheck.topicterms.Word;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import org.aksw.defacto.Defacto;
+import org.aksw.defacto.search.cache.solr.TopicTermSolr4Cache;
+import org.aksw.defacto.search.query.MetaQuery;
+import org.dice.factcheck.topicterms.Word;
+import org.apache.commons.lang.StringUtils;
 
 
 public class WebSite {
 
-    private String text = "";
-    private String title = "";
-    private String url = "";
-    private float pagerank = Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK");
-    private double score = 0D;
-    private MetaQuery query = null;
-
-    private Map<Word, Integer> topicTermsOccurrences = new LinkedHashMap<Word, Integer>();
-    private float rank;
-    private boolean cached;
-    private Double topicMajorityWeb = 0D;
-    private Double topicMajoritySearch = 0D;
-    private Double pageRankScore = 0D;
-    private Double topicCoverageScore = 0D;
-    private String annotatedSentences;
-    private String language = "";
-    private String predicate = "";
-    private String lowerCaseText = null;
-    private String lowerCaseTitle = null;
-
-    /**
-     * @param query
-     * @param url
-     */
-    public WebSite(MetaQuery query, String url) {
-
-        this.query = query;
-        this.url = url;
-    }
-
-    public WebSite(MetaQuery query, String url, String language) {
-
-        this.query = query;
-        this.url = url;
-        this.language = language;
-    }
-
-    /**
-     * @param text
-     */
-    public void setText(String text) {
-
-        this.text = text;
-    }
-
-    public void setTitle(String title) {
-
-        this.title = title;
-    }
-
-    /**
-     * @return
-     */
-    public float getPageRank() {
-
-        return this.pagerank;
-    }
-
-    public String getPredicate() {
-        return predicate;
-    }
-
-    public void setPredicate(String predicate) {
-        this.predicate = predicate;
-    }
-
-    /**
-     * @return
-     */
-    public double getScore() {
-
-        return this.score;
-    }
-
-    /**
-     * @param score
-     */
-    public void setScore(double score) {
-
-        this.score = score;
-    }
-
-    /**
-     * @return
-     */
-    public String getText() {
-
-        return this.text;
-    }
-
-    /**
-     * @param topicTerms
-     */
-    public void setTopicTerms(String language, Collection<Word> topicTerms) {
-
-        String text = this.text.toLowerCase();
-
-        for (Word topicTerm : topicTerms)
-            this.topicTermsOccurrences.put(topicTerm, StringUtils.countMatches(text, topicTerm.getWord().toLowerCase()));
-    }
-
-    /**
-     * @return
-     */
-    public List<Integer> getTopicTerms() {
-
-        return new ArrayList<Integer>(this.topicTermsOccurrences.values());
-    }
-
-    public void setPageRank(int pagerank) {
-
-        this.pagerank = pagerank;
-    }
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#toString()
-     */
-    @Override
-    public String toString() {
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("WebSite [text.length=");
-        builder.append(text.length());
-        builder.append(", url=");
-        builder.append(url);
-        builder.append(", pagerank=");
-        builder.append(pagerank);
-        builder.append(", score=");
-        builder.append(score);
-        builder.append(", topicTermsOccurrences=");
-        builder.append(topicTermsOccurrences);
-        builder.append("]");
-        return builder.toString();
-    }
-
-    public String getTitle() {
-
-        return this.title;
-    }
+	private String text                     = "";
+	private String title                    = "";
+	private String url                      = "";
+	private float pagerank                    = Defacto.DEFACTO_CONFIG.getIntegerSetting("evidence", "UNASSIGNED_PAGE_RANK");
+	private double score                    = 0D;
+	private MetaQuery query                 = null;
+
+	private Map<Word,Integer> topicTermsOccurrences    = new LinkedHashMap<Word,Integer>();
+	private float rank;
+	private boolean cached;
+	private Double topicMajorityWeb = 0D;
+	private Double topicMajoritySearch = 0D;
+	private Double pageRankScore = 0D;
+	private Double topicCoverageScore = 0D;
+	private String annotatedSentences;
+	private String language ="";
+	private String predicate = "";
+	private String lowerCaseText = null;
+	private String lowerCaseTitle = null; 
+
+	/**
+	 * 
+	 * @param query
+	 * @param url
+	 */
+	public WebSite(MetaQuery query, String url) {
+
+		this.query = query;
+		this.url = url;
+	}
+
+	public WebSite(MetaQuery query, String url, String language) {
+
+		this.query = query;
+		this.url = url;
+		this.language = language;
+	}
+
+	/**
+	 * 
+	 * @param text
+	 */
+	public void setText(String text) {
+
+		this.text = text;
+	}
+
+	public void setTitle(String title) {
+
+		this.title = title;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public float getPageRank() {
+
+		return this.pagerank;
+	}
+
+	public String getPredicate() {
+		return predicate;
+	}
+
+	public void setPredicate(String predicate) {
+		this.predicate = predicate;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public double getScore() {
+
+		return this.score;
+	}
+
+	/**
+	 * 
+	 * @param score
+	 */
+	public void setScore(double score) {
+
+		this.score = score;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String getText() {
+
+		return this.text;
+	}
+
+	/**
+	 * 
+	 * @param topicTermsOccurrences
+	 */
+	public void setTopicTerms(String language, Collection<Word> topicTerms) {
+
+		String text = this.text.toLowerCase();
+
+		for ( Word topicTerm : topicTerms )
+			this.topicTermsOccurrences.put(topicTerm, StringUtils.countMatches(text, topicTerm.getWord().toLowerCase()));
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Integer> getTopicTerms() {
+
+		return new ArrayList<Integer>(this.topicTermsOccurrences.values());
+	}
+
+	public void setPageRank(int pagerank) {
+
+		this.pagerank = pagerank;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("WebSite [text.length=");
+		builder.append(text.length());
+		builder.append(", url=");
+		builder.append(url);
+		builder.append(", pagerank=");
+		builder.append(pagerank);
+		builder.append(", score=");
+		builder.append(score);
+		builder.append(", topicTermsOccurrences=");
+		builder.append(topicTermsOccurrences);
+		builder.append("]");
+		return builder.toString();
+	}
+
+	public String getTitle() {
+
+		return this.title;
+	}
+
+
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+
+		return url;
+	}
 
+	/**
+	 * @return the query
+	 */
+	public MetaQuery getQuery() {
 
-    /**
-     * @return the url
-     */
-    public String getUrl() {
+		return query;
+	}
 
-        return url;
-    }
+	/**
+	 * @return returns all topic terms which appear in the website's body
+	 */
+	public List<Word> getOccurringTopicTerms() {
 
-    /**
-     * @return the query
-     */
-    public MetaQuery getQuery() {
+		List<Word> words = new ArrayList<Word>();
+		for ( Map.Entry<Word, Integer> wordToOccurrence : this.topicTermsOccurrences.entrySet()) {
 
-        return query;
-    }
+			if ( wordToOccurrence.getValue() > 0 ) words.add(wordToOccurrence.getKey());
+		}
+		return words;
+	}
 
-    /**
-     * @return returns all topic terms which appear in the website's body
-     */
-    public List<Word> getOccurringTopicTerms() {
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
 
-        List<Word> words = new ArrayList<Word>();
-        for (Map.Entry<Word, Integer> wordToOccurrence : this.topicTermsOccurrences.entrySet()) {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
 
-            if (wordToOccurrence.getValue() > 0) words.add(wordToOccurrence.getKey());
-        }
-        return words;
-    }
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		WebSite other = (WebSite) obj;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		}
+		else
+			if (!url.equals(other.url))
+				return false;
+		return true;
+	}
 
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((url == null) ? 0 : url.hashCode());
-        return result;
-    }
+	public void setRank(float rank) {
 
-    /* (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object obj) {
+		this.rank = rank;
+	}
 
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        WebSite other = (WebSite) obj;
-        if (url == null) {
-            if (other.url != null)
-                return false;
-        } else if (!url.equals(other.url))
-            return false;
-        return true;
-    }
+	public float getSearchRank() {
 
-    public void setRank(float rank) {
+		return this.rank;
+	}
 
-        this.rank = rank;
-    }
+	public void setCached(boolean cached) {
 
-    public float getSearchRank() {
+		this.cached = cached;
+	}
 
-        return this.rank;
-    }
 
-    public void setCached(boolean cached) {
+	/**
+	 * @return the cached
+	 */
+	public boolean isCached() {
 
-        this.cached = cached;
-    }
+		return cached;
+	}
 
+	public void setTopicMajorityWebFeature(double topicMajority) {
 
-    /**
-     * @return the cached
-     */
-    public boolean isCached() {
+		this.topicMajorityWeb  = topicMajority;
+	}
 
-        return cached;
-    }
+	public Double getTopicMajorityWebFeature() {
 
-    public void setTopicMajorityWebFeature(double topicMajority) {
+		return this.topicMajorityWeb;
+	}
 
-        this.topicMajorityWeb = topicMajority;
-    }
+	public void setTopicMajoritySearchFeature(Double topicMajoritySearch) {
 
-    public Double getTopicMajorityWebFeature() {
+		this.topicMajoritySearch  = topicMajoritySearch;
+	}
 
-        return this.topicMajorityWeb;
-    }
+	public Double getTopicMajoritySearchFeature() {
 
-    public void setTopicMajoritySearchFeature(Double topicMajoritySearch) {
+		return this.topicMajoritySearch;
+	}
 
-        this.topicMajoritySearch = topicMajoritySearch;
-    }
+	public void setPageRankScore(Double score) {
 
-    public Double getTopicMajoritySearchFeature() {
+		this.pageRankScore = score;
+	}
 
-        return this.topicMajoritySearch;
-    }
+	public Double getPageRankScore() {
 
-    public void setPageRankScore(Double score) {
+		return this.pageRankScore;
+	}
 
-        this.pageRankScore = score;
-    }
+	public void setTopicCoverageScore(Double score) {
 
-    public Double getPageRankScore() {
+		this.topicCoverageScore = score;
+	}
 
-        return this.pageRankScore;
-    }
+	public Double getTopicCoverageScore() {
 
-    public void setTopicCoverageScore(Double score) {
+		return this.topicCoverageScore;
+	}
 
-        this.topicCoverageScore = score;
-    }
+	public String getTaggedText() {
 
-    public Double getTopicCoverageScore() {
+		return this.annotatedSentences;
+	}
 
-        return this.topicCoverageScore;
-    }
+	public void setTaggedText(String annotatedSentences) {
 
-    public String getTaggedText() {
+		this.annotatedSentences = annotatedSentences;
+	}
 
-        return this.annotatedSentences;
-    }
+	public void setLanguage(String language) {
 
-    public void setTaggedText(String annotatedSentences) {
+		this.language  = language;
+	}
 
-        this.annotatedSentences = annotatedSentences;
-    }
+	public String getLanguage() {
+		return this.language;
+	}
 
-    public void setLanguage(String language) {
+	public String getLowerCaseText() {
 
-        this.language = language;
-    }
+		if ( this.lowerCaseText  == null ) this.lowerCaseText = this.text.toLowerCase();
 
-    public String getLanguage() {
-        return this.language;
-    }
+		return this.lowerCaseText;
+	}
 
-    public String getLowerCaseText() {
+	public String getLowerCaseTitle() {
 
-        if (this.lowerCaseText == null) this.lowerCaseText = this.text.toLowerCase();
+		if ( this.lowerCaseTitle  == null ) this.lowerCaseTitle  = this.title.toLowerCase();
 
-        return this.lowerCaseText;
-    }
-
-    public String getLowerCaseTitle() {
-
-        if (this.lowerCaseTitle == null) this.lowerCaseTitle = this.title.toLowerCase();
-
-        return this.lowerCaseTitle;
-    }
+		return this.lowerCaseTitle;
+	}
 }

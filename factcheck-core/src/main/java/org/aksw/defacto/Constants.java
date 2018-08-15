@@ -48,9 +48,7 @@ public class Constants {
 	
 	public static final String NO_LABEL = "no-label";
 	public static final String NAMED_ENTITY_TAG_DELIMITER = "_";
-
-	public static final String RESOURCE_PATH = "src/main/resources/";
-
+	
 	public static final Set<String> STOP_WORDS = new HashSet<String>();
 	static {
 		Collections.addAll(STOP_WORDS, ":", " ", "``", "`", "_NE_", "''", ",", "'", "'s", "-LRB-", "-RRB-", ".", "-", "--", "i", "a", "about", "an", "and", "are", "as", "at", "be", "but", "by", "com", "for", "from", 

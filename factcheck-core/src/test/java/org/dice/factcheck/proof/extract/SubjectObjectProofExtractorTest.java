@@ -1,4 +1,4 @@
-package org.dice.factcheck.proof.extract;
+/*package org.dice.factcheck.proof.extract;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -103,3 +103,4 @@ public class SubjectObjectProofExtractorTest extends AbstractEvidenceFeatureTest
 	}
 
 }
+*/

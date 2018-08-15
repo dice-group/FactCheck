@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.dice.factcheck.proof.extract.SubjectObjectProofExtractor;
 
 /**
+ * 
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
  */
 public class WebSiteScoreCallable implements Callable<WebSite> {
@@ -20,23 +21,25 @@ public class WebSiteScoreCallable implements Callable<WebSite> {
     private WebSite website;
     private Evidence evidence;
     SubjectObjectProofExtractor searcher = new SubjectObjectProofExtractor();
-
+    
     /**
+     * 
      * @param website
      * @param evidence
      * @param model
+     * @param patterns 
      */
     public WebSiteScoreCallable(WebSite website, Evidence evidence, DefactoModel model) {
 
-        this.website = website;
-        this.model = model;
+        this.website  = website;
+        this.model    = model;
         this.evidence = evidence;
     }
 
     @Override
     public WebSite call() {
-
-        searcher.generateProofs(evidence, website, model, pattern);
+        
+    	searcher.generateProofs(evidence, website, model, pattern);
         return website;
     }
 }

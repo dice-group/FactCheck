@@ -15,8 +15,7 @@ public class NameFeature extends AbstractEvidenceFeature {
 
         evidence.getFeatures().setValue(AbstractEvidenceFeature.MODEL_NAME, evidence.getModel().getName());
         String uri = evidence.getModel().getPropertyUri().replace("http://dbpedia.org/ontology/", "");
-    	if ( uri.equals("office") )
-    	    uri = "leaderName";
-    	evidence.getFeatures().setValue(AbstractEvidenceFeature.PROPERTY_NAME, uri);
+/*    	if ( uri.equals("office") ) uri = "leaderName";
+    	evidence.getFeatures().setValue(AbstractEvidenceFeature.PROPERTY_NAME, uri);*/
     }
 }

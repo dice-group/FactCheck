@@ -5,6 +5,10 @@ package org.aksw.defacto
 
 .search.cache.solr;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.cache.Cache;
@@ -13,15 +17,11 @@ import org.aksw.defacto.topic.frequency.Word;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author gerb
@@ -29,11 +29,11 @@ import java.util.List;
  */
 public class TopicTermSolr4Cache implements Cache<TopicTerm> {
 
-	private HttpSolrClient server;
+	private HttpSolrServer server;
 	
 	public TopicTermSolr4Cache(){
 
-		server = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_topicterms"));
+		server = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_topicterms"));
 		server.setRequestWriter(new BinaryRequestWriter());
 	}
 	
@@ -133,13 +133,15 @@ public class TopicTermSolr4Cache implements Cache<TopicTerm> {
 	 * @return
 	 */
 	private QueryResponse querySolrServer(SolrQuery query) {
-
-			try {
-				return this.server.query(query);
-			} catch (IOException | SolrServerException e) {
-				e.printStackTrace();
-			}
-
+		
+		try {
+			
+			return this.server.query(query);
+		}
+		catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

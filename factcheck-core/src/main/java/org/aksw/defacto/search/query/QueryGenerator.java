@@ -28,65 +28,67 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
+ * 
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
+ *
  */
 public class QueryGenerator {
 
     public static final BoaPatternSearcher patternSearcher = new BoaPatternSearcher();
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryGenerator.class);
     private DefactoModel model;
-    //private RestClient restClientobj;
-
+    
     /**
+     * 
      * @param model
      */
     public QueryGenerator(DefactoModel model) {
-
+        
         this.model = model;
-        //  restClientobj = RestClient.builder(new HttpHost("131.234.28.255" , 6060, "http")).build();
     }
-
+    
     /**
+     * 
      * @return
      */
-    public Map<Pattern, MetaQuery> getSearchEngineQueries(String language) {
-
-        // and generate the query strings
+    public Map<Pattern,MetaQuery> getSearchEngineQueries(String language){
+        
+        // and generate the query strings 
         return this.generateSearchQueries(model.getFact(), language);
     }
-
+    
     /**
+     * 
+     * @param uriToLabels
      * @param fact
-     * @param language
      * @return
      */
-    private Map<Pattern, MetaQuery> generateSearchQueries(Statement fact, String language) {
-
-        Map<Pattern, MetaQuery> queryStrings = new HashMap<Pattern, MetaQuery>();
-        String subjectLabel = model.getSubjectLabelNoFallBack(language);//.replaceAll("\\(.+?\\)", "").trim();
-        String objectLabel = model.getObjectLabelNoFallBack(language);//.replaceAll("\\(.+?\\)", "").trim();
-
+    private Map<Pattern,MetaQuery> generateSearchQueries(Statement fact, String language){
+     
+        Map<Pattern,MetaQuery> queryStrings =  new HashMap<Pattern,MetaQuery>();
+        String subjectLabel = model.getSubjectLabelNoFallBack(language);//.replaceAll("\\(.+?\\)", "").trim(); 
+        String objectLabel  = model.getObjectLabelNoFallBack(language);//.replaceAll("\\(.+?\\)", "").trim();
+        
         // we dont have labels in the given language so we generate a foreign query with english labels
-        if (subjectLabel.equals(Constants.NO_LABEL) || objectLabel.equals(Constants.NO_LABEL)) {
-
-            subjectLabel = model.getSubjectLabel("en");
-            objectLabel = model.getObjectLabel("en");
+        if ( subjectLabel.equals(Constants.NO_LABEL) || objectLabel.equals(Constants.NO_LABEL) ) {
+        	
+        	subjectLabel = model.getSubjectLabel("en");
+        	objectLabel = model.getObjectLabel("en");
         }
-
+        
         // TODO
         // query boa index and generate the meta queries
-        LOGGER.info("Using predicate {}", fact.getPredicate());
-        //  System.out.println();
+        System.out.println(fact.getPredicate());
         for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations(fact.getPredicate().getURI(), language)) {
-
-            if (!pattern.getNormalized().trim().isEmpty()) {
-
-                MetaQuery metaQuery = new MetaQuery(subjectLabel, pattern.getNormalized(), objectLabel, language, null);
-                LOGGER.info("Generating Meta Query \"{}\"", metaQuery);
-                queryStrings.put(pattern, metaQuery);
-            }
+        	
+        	if ( !pattern.getNormalized().trim().isEmpty() ) {
+        		
+        		MetaQuery metaQuery = new MetaQuery(subjectLabel, pattern.getNormalized(), objectLabel, language, null);
+        		System.out.println(metaQuery);
+        		queryStrings.put(pattern, metaQuery);
+        	}
         }
-
+       
         return queryStrings;
     }
 }

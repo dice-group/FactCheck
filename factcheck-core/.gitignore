@@ -1,0 +1,17 @@
+.classpath
+.project
+.settings
+.directory
+
+/factcheck-core/src/main/resources/training/
+/factcheck-core/src/main/resources/cache
+/factcheck-core/src/main/resources/defacto.ini
+/factcheck-core/.idea/
+/factcheck-core/data/
+/factcheck-core/data_for_installation/
+/factcheck-core/.settings/
+/factcheck-core/cache/
+/factcheck-core/target
+/factcheck-core/log/info.log
+/factcheck-core/log/factConfirmation.html
+/factcheck-core/repo/

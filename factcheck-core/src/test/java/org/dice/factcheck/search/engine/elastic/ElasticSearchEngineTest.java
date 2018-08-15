@@ -1,4 +1,4 @@
-package org.dice.factcheck.search.engine.elastic;
+/*package org.dice.factcheck.search.engine.elastic;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -129,3 +129,4 @@ public class ElasticSearchEngineTest extends AbstractElasticInstance {
 	}
 
 }
+*/
