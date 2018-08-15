@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite tests="4" failures="0" name="org.dice.factcheck.ml.feature.evidence.impl.TopicMajoritySearchFeatureTest" time="0.001" errors="0" skipped="0">
+  <properties>
+    <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
+    <property name="sun.boot.library.path" value="C:\Java\jdk1.8.0_101\jre\bin"/>
+    <property name="java.vm.version" value="25.101-b13"/>
+    <property name="java.vm.vendor" value="Oracle Corporation"/>
+    <property name="maven.multiModuleProjectDirectory" value="F:\Zafar\Thesis\FactCheck"/>
+    <property name="java.vendor.url" value="http://java.oracle.com/"/>
+    <property name="path.separator" value=";"/>
+    <property name="guice.disable.misplaced.annotation.check" value="true"/>
+    <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM"/>
+    <property name="file.encoding.pkg" value="sun.io"/>
+    <property name="user.script" value=""/>
+    <property name="user.country" value="IN"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.os.patch.level" value=""/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="user.dir" value="F:\Zafar\Thesis\FactCheck"/>
+    <property name="java.runtime.version" value="1.8.0_101-b13"/>
+    <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
+    <property name="java.endorsed.dirs" value="C:\Java\jdk1.8.0_101\jre\lib\endorsed"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.io.tmpdir" value="C:\Users\Habeeb\AppData\Local\Temp\"/>
+    <property name="line.separator" value="
+"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.variant" value=""/>
+    <property name="os.name" value="Windows 10"/>
+    <property name="classworlds.conf" value="C:\Users\Habeeb\eclipse-workspace\.metadata\.plugins\org.eclipse.m2e.launching\launches\m2conf3807428719196452865.tmp"/>
+    <property name="sun.jnu.encoding" value="Cp1252"/>
+    <property name="java.library.path" value="C:\Java\jdk1.8.0_101\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:/Program Files/Java/jre1.8.0_144/bin/server;C:/Program Files/Java/jre1.8.0_144/bin;C:/Program Files/Java/jre1.8.0_144/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Java\jdk1.8.0_72\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\OpenVPN\bin;C:\Java\jdk1.8.0_101\bin;C:\Java\jdk1.8.0_101\jre\bin;C:\Program Files\Git\cmd;C:\cygwin64\bin;F:\Softwares\hadoop-2.8.0\bin;C:\Program Files\PuTTY\;C:\Program Files\MySQL\MySQL Server 5.5\bin;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;E:\stanford-corenlp-full-2017-06-09\stanford-corenlp-3.8.0-models.jar;F:\Softwares\apache-ant-1.10.1\bin;E:\stanford-corenlp-full-2017-06-09;C:\Program Files (x86)\sbt\bin;C:\Program Files (x86)\sbt\bin\;C:\Program Files (x86)\scala\bin;C:\Program Files (x86)\scala\bin;F:\Softwares\spark-2.2.1-bin-hadoop2.7\bin;F:\Softwares\hadoop-2.8.0\bin;F:\Softwares\hadoop-2.8.0\bin;C:\Program Files\nodejs\;C:\Users\Habeeb\AppData\Local\Programs\Python\Python36\Scripts\;C:\Users\Habeeb\AppData\Local\Programs\Python\Python36\;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;F:\Softwares\apache-maven-3.3.9\bin;C:\Users\Habeeb\AppData\Local\Microsoft\WindowsApps;F:\Zafar\solr-6.4.2\bin;C:\cygwin64\bin;F:\Softwares\apache-ant-1.10.1\bin;E:\TexLive\bin\win32;C:\Program Files\Microsoft VS Code\bin;E:\stanford-corenlp-full-2017-06-09;C:\Users\Habeeb\AppData\Roaming\npm;C:\Users\Habeeb\AppData\Local\Programs\Fiddler;C:\WINDOWS\System32;;."/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.class.version" value="52.0"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="os.version" value="10.0"/>
+    <property name="user.home" value="C:\Users\Habeeb"/>
+    <property name="user.timezone" value="Europe/Berlin"/>
+    <property name="java.awt.printerjob" value="sun.awt.windows.WPrinterJob"/>
+    <property name="java.specification.version" value="1.8"/>
+    <property name="file.encoding" value="Cp1252"/>
+    <property name="user.name" value="Habeeb"/>
+    <property name="java.class.path" value="C:\Users\Habeeb\.p2\pool\plugins\org.eclipse.m2e.maven.runtime_1.8.2.20171007-0216\jars\plexus-classworlds-2.5.2.jar"/>
+    <property name="java.vm.specification.version" value="1.8"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.home" value="C:\Java\jdk1.8.0_101\jre"/>
+    <property name="sun.java.command" value="org.codehaus.plexus.classworlds.launcher.Launcher -B test"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="user.language" value="en"/>
+    <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
+    <property name="java.vm.info" value="mixed mode"/>
+    <property name="java.version" value="1.8.0_101"/>
+    <property name="java.ext.dirs" value="C:\Java\jdk1.8.0_101\jre\lib\ext;C:\WINDOWS\Sun\Java\lib\ext"/>
+    <property name="sun.boot.class.path" value="C:\Java\jdk1.8.0_101\jre\lib\resources.jar;C:\Java\jdk1.8.0_101\jre\lib\rt.jar;C:\Java\jdk1.8.0_101\jre\lib\sunrsasign.jar;C:\Java\jdk1.8.0_101\jre\lib\jsse.jar;C:\Java\jdk1.8.0_101\jre\lib\jce.jar;C:\Java\jdk1.8.0_101\jre\lib\charsets.jar;C:\Java\jdk1.8.0_101\jre\lib\jfr.jar;C:\Java\jdk1.8.0_101\jre\classes"/>
+    <property name="java.vendor" value="Oracle Corporation"/>
+    <property name="maven.home" value="F:\Zafar\Thesis\FactCheck\EMBEDDED"/>
+    <property name="file.separator" value="\"/>
+    <property name="java.vendor.url.bug" value="http://bugreport.sun.com/bugreport/"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="sun.desktop" value="windows"/>
+    <property name="sun.cpu.isalist" value="amd64"/>
+  </properties>
+  <testcase classname="org.dice.factcheck.ml.feature.evidence.impl.TopicMajoritySearchFeatureTest" name="test[0]" time="0"/>
+  <testcase classname="org.dice.factcheck.ml.feature.evidence.impl.TopicMajoritySearchFeatureTest" name="test[1]" time="0"/>
+  <testcase classname="org.dice.factcheck.ml.feature.evidence.impl.TopicMajoritySearchFeatureTest" name="test[2]" time="0"/>
+  <testcase classname="org.dice.factcheck.ml.feature.evidence.impl.TopicMajoritySearchFeatureTest" name="test[3]" time="0.001"/>
+</testsuite>
