@@ -3,15 +3,15 @@
 .settings
 .directory
 
-/factcheck-core/src/main/resources/training/
-/factcheck-core/src/main/resources/cache
-/factcheck-core/src/main/resources/defacto.ini
-/factcheck-core/.idea/
-/factcheck-core/data/
-/factcheck-core/data_for_installation/
-/factcheck-core/.settings/
-/factcheck-core/cache/
-/factcheck-core/target
-/factcheck-core/log/info.log
-/factcheck-core/log/factConfirmation.html
-/factcheck-core/repo/
+src/main/resources/training/
+src/main/resources/cache
+src/main/resources/defacto.ini
+.idea/
+data/
+data_for_installation/
+.settings/
+cache/
+target
+log/info.log
+log/factConfirmation.html
+repo/
