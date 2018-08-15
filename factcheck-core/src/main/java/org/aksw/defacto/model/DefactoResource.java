@@ -27,7 +27,7 @@ public class DefactoResource {
 	private Model model;
 	public Map<String,String> labels = new HashMap<String,String>();
 	public Map<String,Set<String>> altLabels = new HashMap<String,Set<String>>();
-	public List<Resource> owlSameAs = new ArrayList<Resource>();
+	public HashSet<Resource> owlSameAs = new HashSet<>();
 	private String uri;
 
 	public DefactoResource(Resource resource, Model model) {
@@ -142,7 +142,9 @@ public class DefactoResource {
 	public String getLabel(String language) {
 		
 		String label = this.labels.get(language);
-		return label != null && !label.isEmpty() ? label : this.labels.get("en");
+		if (label == null || label.isEmpty())
+			label = this.labels.get("en");
+		return label != null && !label.isEmpty() ? label : this.labels.get("");
 	}
 	
 	public String getLabelNoFallBack(String language) {

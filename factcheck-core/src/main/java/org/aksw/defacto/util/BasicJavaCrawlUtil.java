@@ -1,16 +1,17 @@
 package org.aksw.defacto.util;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.log4j.Logger;
 
 
 public class BasicJavaCrawlUtil implements CrawlUtil {
@@ -25,7 +26,7 @@ public class BasicJavaCrawlUtil implements CrawlUtil {
      */
     public String readPage(String url, int timeout) {
 
-        DefaultHttpClient client    = null;
+        CloseableHttpClient client    = null;
         HttpGet request             = null;
         HttpResponse response       = null;
         Reader reader               = null;
@@ -33,7 +34,7 @@ public class BasicJavaCrawlUtil implements CrawlUtil {
         
         try {
             
-            client   = new DefaultHttpClient();
+            client   = HttpClientBuilder.create().build();
             request  = new HttpGet(new URL(url).toURI());
             response = client.execute(request);
             

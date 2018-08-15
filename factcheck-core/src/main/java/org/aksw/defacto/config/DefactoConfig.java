@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.aksw.defacto.config;
 
@@ -12,49 +12,49 @@ import org.ini4j.Ini;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
- *
  */
 public class DefactoConfig {
 
-	private Ini defactoConfig;
-    
+    private Ini defactoConfig;
+
     public static String DEFACTO_DATA_DIR;
 
     public DefactoConfig(Ini config) {
-        
-        this.defactoConfig =  config;
+
+        this.defactoConfig = config;
         DEFACTO_DATA_DIR = this.defactoConfig.get("eval", "data-directory");
     }
-    
+
     /**
      * returns boolean values from the config file
-     * 
+     *
      * @param section
      * @param key
      * @return
      */
     public boolean getBooleanSetting(String section, String key) {
-        
+
         return Boolean.valueOf(defactoConfig.get(section, key));
     }
-    
+
     /**
      * returns string values from defacto config
-     * 
+     *
      * @param section
      * @param key
      * @return
      */
     public String getStringSetting(String section, String key) {
-        
+
         return defactoConfig.get(section, key);
     }
 
     /**
      * this should overwrite a config setting, TODO make sure that it does
-     * 
-     * @param string
-     * @param string2
+     *
+     * @param section
+     * @param key
+     * @param value
      */
     public void setStringSetting(String section, String key, String value) {
 
@@ -63,7 +63,7 @@ public class DefactoConfig {
 
     /**
      * returns integer values for defacto setting
-     * 
+     *
      * @param section
      * @param key
      * @return
@@ -75,7 +75,7 @@ public class DefactoConfig {
 
     /**
      * returns double values from the config
-     * 
+     *
      * @param section
      * @param key
      * @return

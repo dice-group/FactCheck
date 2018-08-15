@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.aksw.defacto.search.crawl;
 
@@ -10,6 +10,7 @@ import org.aksw.defacto.search.engine.SearchEngine;
 import org.aksw.defacto.search.query.MetaQuery;
 import org.aksw.defacto.search.result.SearchResult;
 import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
+import org.elasticsearch.client.RestClient;
 
 
 /**
@@ -21,7 +22,7 @@ public class SearchResultCallable implements Callable<SearchResult> {
     private MetaQuery query;
     private Pattern pattern;
     private SearchEngine engine;
-    
+
     public SearchResultCallable(MetaQuery query, Pattern pattern) {
 
         this.query      = query;
