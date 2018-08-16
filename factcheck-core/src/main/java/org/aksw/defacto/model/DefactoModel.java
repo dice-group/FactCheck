@@ -67,14 +67,6 @@ public class DefactoModel {
         this.name       = name;
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
-        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
-        {
-        	this.corenlpClient = new CoreNLPServerClient();
-        }
-        else
-        {
-        	this.corenlpClient = new CoreNLPLocalClient();
-        }
         init(model);
         
     }
@@ -208,6 +200,7 @@ public class DefactoModel {
 		result = prime * result + ((predicateUri == null) ? 0 : predicateUri.hashCode());
 		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
 		result = prime * result + ((timePeriod == null) ? 0 : timePeriod.hashCode());
+		result = prime * result + ((this.getSubjectLabel("en") == null) ? 0 : getSubjectLabel("en").hashCode());
 		return result;
 	}
 
@@ -368,6 +361,11 @@ public class DefactoModel {
 	 */
 	public DefactoResource getObject() {
 		return object;
+	}
+	
+	public void setCorenlpClient(CoreNLPClient coreNLPClient)
+	{
+		this.corenlpClient = coreNLPClient;
 	}
 
 	public void write(String path, String name) throws IOException {

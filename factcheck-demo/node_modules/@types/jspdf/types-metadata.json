@@ -1,0 +1,23 @@
+{
+    "authors": "Amber Schühmacher <https://github.com/amberjs>",
+    "definitionFilename": "index.d.ts",
+    "libraryDependencies": [],
+    "moduleDependencies": [],
+    "libraryMajorVersion": "1",
+    "libraryMinorVersion": "1",
+    "libraryName": "jsPDF v1.1.135",
+    "typingsPackageName": "jspdf",
+    "projectName": "https://github.com/MrRio/jsPDF",
+    "sourceRepoURL": "https://www.github.com/DefinitelyTyped/DefinitelyTyped",
+    "sourceBranch": "types-2.0",
+    "kind": "DeclareModule",
+    "globals": [],
+    "declaredModules": [
+        "jspdf"
+    ],
+    "files": [
+        "index.d.ts"
+    ],
+    "hasPackageJson": false,
+    "contentHash": "06ba0281a353ba09aadd5eeebc5db9eefed098decf2469b6a02ad4affe8c64df"
+}

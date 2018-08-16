@@ -18,6 +18,7 @@ import org.aksw.defacto.search.result.SearchResult;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -33,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Solr4SearchResultCache implements Cache<SearchResult> {
 	
-	private static HttpSolrServer server;
+	private static HttpSolrClient server;
 	private static final Logger LOGGER = LoggerFactory.getLogger(Solr4SearchResultCache.class);
 	
 	public Solr4SearchResultCache(){
@@ -42,7 +43,7 @@ public class Solr4SearchResultCache implements Cache<SearchResult> {
 	
 	public static void inti()
 	{
-		server = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_searchresults"));
+		server = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_searchresults"));
 		server.setRequestWriter(new BinaryRequestWriter());
 	}
 	
@@ -218,6 +219,9 @@ public class Solr4SearchResultCache implements Cache<SearchResult> {
 			return this.server.query(query);
 		}
 		catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
