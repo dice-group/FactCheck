@@ -1,5 +1,6 @@
 package org.aksw.defacto.boa;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -26,9 +28,9 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class BoaPatternSearcher {
 
-    private static HttpSolrServer enIndex;
-    private static HttpSolrServer deIndex;
-    private static HttpSolrServer frIndex;
+    private static HttpSolrClient enIndex;
+    private static HttpSolrClient deIndex;
+    private static HttpSolrClient frIndex;
     private Logger logger = Logger.getLogger(BoaPatternSearcher.class);
 	private Map<String,QueryResponse> queryCache = new HashMap<>();
 
@@ -38,11 +40,11 @@ public class BoaPatternSearcher {
     
     public static void init()
     {
-    	enIndex = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_en"));
+    	enIndex = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_en"));
         enIndex.setRequestWriter(new BinaryRequestWriter());
-        deIndex = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_de"));
+        deIndex = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_de"));
         deIndex.setRequestWriter(new BinaryRequestWriter());
-        frIndex = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_fr"));
+        frIndex = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_boa_fr"));
         frIndex.setRequestWriter(new BinaryRequestWriter());
     }
     
@@ -112,8 +114,8 @@ public class BoaPatternSearcher {
             query.addField("nlr-var");
             query.addField("nlr-gen");
             query.addField("nlr-no-var");
-            query.addField("SUPPORT_NUMBER_OF_PAIRS_LEARNED_FROM");
-            query.addSortField("SUPPORT_NUMBER_OF_PAIRS_LEARNED_FROM", ORDER.desc);
+            query.addField("SUPPORT_NUMBER_OF_PAIRS_LEARNED_FROM");            
+            query.addSort("SUPPORT_NUMBER_OF_PAIRS_LEARNED_FROM", SolrQuery.ORDER.desc);
             //query.addSortField("boa-score", ORDER.desc);
             if ( numberOfBoaPatterns > 0 ) query.setRows(numberOfBoaPatterns);
             
@@ -153,7 +155,10 @@ public class BoaPatternSearcher {
 
             System.out.println("Could not execute query: " + e);
             e.printStackTrace();
-        }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         
         List<Pattern> patternList = new ArrayList<Pattern>(patterns.values());
         

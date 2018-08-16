@@ -17,6 +17,7 @@ import org.aksw.defacto.topic.frequency.Word;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
@@ -29,11 +30,11 @@ import org.apache.solr.common.SolrInputDocument;
  */
 public class TopicTermSolr4Cache implements Cache<TopicTerm> {
 
-	private HttpSolrServer server;
+	private HttpSolrClient server;
 	
 	public TopicTermSolr4Cache(){
 
-		server = new HttpSolrServer(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_topicterms"));
+		server = new HttpSolrClient(Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "solr_topicterms"));
 		server.setRequestWriter(new BinaryRequestWriter());
 	}
 	
@@ -139,6 +140,9 @@ public class TopicTermSolr4Cache implements Cache<TopicTerm> {
 			return this.server.query(query);
 		}
 		catch (SolrServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
