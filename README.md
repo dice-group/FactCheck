@@ -1,5 +1,7 @@
 # FactCheck
 
+This repository contains code to reproduce the results presented in the paper [FactCheck: Validating RDF Triples Using Textual Evidence](https://svn.aksw.org/papers/2018/CIKM_FACTCHECK/public.pdf).
+
 [FactCheck](https://github.com/dice-group/FactCheck) is an algorithm that is used to validate triples i.e., <s, p, o> from a given Knowledge base KB. It does this by finding textual evidences from the Web or given reference corpus and use them to classify a triple as correct or incorrect.
 
 FactCheck is modularized and contains the following three component:
