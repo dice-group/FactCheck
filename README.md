@@ -12,4 +12,4 @@ FactCheck is modularized and contains the following three component:
 
 3. **factcheck-core** contain the core algorithm that is used to validate a given triple. The algorithm is developed as a framework and can be adapted to use various state-of-the-art classification techcniques available in [WEKA](https://www.cs.waikato.ac.nz/ml/weka/). The algorithm can be used independently.
 
-Detailed instructions on installation and usage is described under these modules. Additionally, all the links to external datasets, corpora are provided.
+Detailed instructions on installation and usage is described under each module. Additionally, all the links to external datasets, corpora are provided.
