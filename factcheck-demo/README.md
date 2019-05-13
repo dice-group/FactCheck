@@ -1,8 +1,4 @@
-# FactCheckDemo
-
-[FactCheck](https://github.com/dice-group/FactCheck) is an algorithm that validates facts by finding evidences on the web to approve or deny a query.
-
-FactCheckDemo is Front-end which lets users to enter **subject**, **predicate** and **object** or a (ttl) **file** and submit to **factcheck-service** for fact checking. 
+# FactCheckDemo 
 
 This demo is created with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3, 
 Nodejs v8.9.4 and Npm v5.8.0  .
