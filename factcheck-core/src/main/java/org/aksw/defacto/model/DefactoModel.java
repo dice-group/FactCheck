@@ -50,8 +50,6 @@ public class DefactoModel {
     public DefactoTimePeriod timePeriod = new DefactoTimePeriod("", "");
     public List<String> languages = new ArrayList<String>();
     public CoreNLPClient corenlpClient;
-    
-    
     /**
      * Creates a new Defacto Model. This is a wrapper around a jena model. But with
      * additional information for example if we know if the fact is correct or the name
@@ -68,6 +66,13 @@ public class DefactoModel {
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
         init(model);
+        
+        
+        // Whether to load corenlp library locally or access it from server
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
+            this.corenlpClient = new CoreNLPServerClient();
+        else
+        	this.corenlpClient = new CoreNLPLocalClient();
         
     }
     

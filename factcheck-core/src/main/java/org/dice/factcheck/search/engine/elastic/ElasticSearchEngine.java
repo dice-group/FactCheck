@@ -71,7 +71,6 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			String q1 = "\""+subject+" "+property+" "+object+"\"";
 			if ( query.getPropertyLabel().equals("??? NONE ???") )
 				q1 = "\""+subject+" "+object+"\"";
-			System.out.println(q1);
 			HttpEntity entity1 = new NStringEntity(
 					"{\n" +
 							"	\"size\" : 500 ,\n" +
@@ -84,15 +83,17 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"} \n"+
 							"} \n"+
 							"}", ContentType.APPLICATION_JSON);
+			String index = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "INDEX");
+			String mapping = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "MAPPING");
 
-			Response response = restClientobj.performRequest("GET", "/wikipedia/articles/_search",Collections.singletonMap("pretty", "true"),entity1);
+			Response response = restClientobj.performRequest("GET", "/"+index+"/"+mapping+"/_search",Collections.singletonMap("pretty", "true"),entity1);
 			String json = EntityUtils.toString(response.getEntity());			
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
-			int docCount = Integer.parseInt(hitCount.asText());
+			int docCount = Integer.parseInt(hitCount.get("value").asText());
 			int number_of_search_results = Integer.parseInt(NUMBER_OF_SEARCH_RESULTS);
 			if(!(docCount<number_of_search_results))
 				docCount = number_of_search_results;

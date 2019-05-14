@@ -55,10 +55,6 @@ public class EvidenceCrawler {
     private Map<Pattern,MetaQuery> patternToQueries;
     private DefactoModel model;
     BoaPatternSearcher searcher = new BoaPatternSearcher();
-    private static String CORENLP_SERVER1;
-    private static String CORENLP_PORT1;
-    private static String CORENLP_SERVER2;
-    private static String CORENLP_PORT2;
     
     public static Map<DefactoModel,Evidence> evidenceCache = new HashMap<DefactoModel,Evidence>();
     
@@ -71,10 +67,6 @@ public class EvidenceCrawler {
 
         this.patternToQueries = queries;
         this.model            = model;
-        CORENLP_SERVER1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS1");
-        CORENLP_SERVER2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "SERVER_ADDRESS2");
-        CORENLP_PORT1 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER1");
-        CORENLP_PORT2 = Defacto.DEFACTO_CONFIG.getStringSetting("corenlp", "PORT_NUMBER2");
     }
 
     /**
@@ -131,8 +123,8 @@ public class EvidenceCrawler {
         		
         		if ( !subjectLabel.equals(Constants.NO_LABEL) && !objectLabel.equals(Constants.NO_LABEL) ) {
 
-        			List<Word> topicTerms = TopicTermsCoherence.getTerms(subjectLabel);
-        			List<Word> topicTermsObject = TopicTermsCoherence.getTerms(objectLabel);
+        			List<Word> topicTerms = new ArrayList<Word>();
+        			List<Word> topicTermsObject = new ArrayList<Word>();
         			topicTerms.addAll(topicTermsObject);
         			if(topicTerms.isEmpty())
         			{

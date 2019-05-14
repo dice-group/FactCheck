@@ -94,7 +94,7 @@ public class FactScorer {
                 instancesWithStringVector.add(newInstance);*/
                 //System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
                 proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
-//                System.out.println(proof.getScore() + " -> " + this.classifier.classifyInstance(newInstance) + " -> " + proof.getTinyContext());
+               System.out.println("Proof score for " + " -> " + proof.getProofPhrase() +" -> "+proof.getScore());
                 
                 // remove the new instance again
                 //instancesWithStringVector.delete();

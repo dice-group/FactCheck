@@ -78,7 +78,6 @@ public class QueryGenerator {
         
         // TODO
         // query boa index and generate the meta queries
-        System.out.println(fact.getPredicate());
         for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations(fact.getPredicate().getURI(), language)) {
         	
         	if ( !pattern.getNormalized().trim().isEmpty() ) {
