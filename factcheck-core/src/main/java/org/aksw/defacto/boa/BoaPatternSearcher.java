@@ -59,9 +59,11 @@ public class BoaPatternSearcher {
      */
     public List<Pattern> getNaturalLanguageRepresentations(String propertyUri, String language){
 
-        return querySolrIndex(propertyUri, 
-                50, 
+        List<Pattern> result =  querySolrIndex(propertyUri,
+                50,
                 Defacto.DEFACTO_CONFIG.getDoubleSetting("boa", "PATTERN_SCORE_THRESHOLD"), language);
+
+        return result;
     }
     
     /**
@@ -204,7 +206,7 @@ public class BoaPatternSearcher {
     }
 
 	/**
-	 * @param bps
+	 * @param uri
 	 */
 	private static void queryPatterns(String uri) {
 		

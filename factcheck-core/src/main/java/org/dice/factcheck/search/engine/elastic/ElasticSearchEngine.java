@@ -76,7 +76,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"	\"size\" : 500 ,\n" +
 							"    \"query\" : {\n" +
 							"    \"match_phrase\" : {\n"+
-							"	 \"Article\" : {\n" +
+							"	 \"all\" : {\n" +
 							"	\"query\" : "+q1+",\n"+
 							"	\"slop\"  : 50 \n"+
 							"} \n"+
@@ -93,7 +93,13 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
 			JsonNode hits = rootNode.get("hits");
 			JsonNode hitCount = hits.get("total");
-			int docCount = Integer.parseInt(hitCount.get("value").asText());
+			int docCount = 0;
+			if(hitCount.has("value")) {
+				docCount = Integer.parseInt(hitCount.get("value").asText());
+			}else{
+				//TODO check it is correct
+					docCount = Integer.parseInt(hitCount.asText());
+			}
 			int number_of_search_results = Integer.parseInt(NUMBER_OF_SEARCH_RESULTS);
 			if(!(docCount<number_of_search_results))
 				docCount = number_of_search_results;
@@ -101,12 +107,11 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			for(int i=0; i<docCount; i++)
 			{
 				JsonNode document = hits.get("hits").get(i).get("_source");
-				JsonNode articleNode = document.get("Article");
-				JsonNode articleURLNode = document.get("URL");
-				JsonNode articleTitleNode = document.get("Title");
-				JsonNode pagerank = document.get("Pagerank");
+				JsonNode articleNode = document.get("text");
+				JsonNode articleTitleNode = document.get("title");
+				JsonNode pagerank = document.get("popularity_score");
 				String articleText = articleNode.asText();
-				String articleURL = articleURLNode.asText();
+				String articleURL = "https://en.wikipedia.org/wiki/"+articleTitleNode.asText();
 				String articleTitle = articleTitleNode.asText();
 				WebSite website = new WebSite(query, articleURL);
 				website.setTitle(articleTitle);

@@ -57,7 +57,7 @@ public class DefactoModel {
      * 
      * @param model - the jena model with 3 statements (1 link and 2 rdfs:label triples)
      * @param name - the name of the file we got the model from
-     * @param correct is the fact contained in this model correct?
+     * @param isCorrect is the fact contained in this model correct?
      */
     public DefactoModel(Model model, String name, boolean isCorrect, List<String> languages) {
         
@@ -66,7 +66,6 @@ public class DefactoModel {
         this.correct    = isCorrect;
         this.languages	= new ArrayList<String>(languages);
         init(model);
-        
         
         // Whether to load corenlp library locally or access it from server
         if(Defacto.DEFACTO_CONFIG.getBooleanSetting("corenlp", "USE_SERVER"))
@@ -166,6 +165,7 @@ public class DefactoModel {
     		
     		Statement stmt = listIter.next();
     		// we have found the blank node
+
     		if ( stmt.getSubject().getURI().matches("^.*__[0-9]*$") ) {
     			
     			if ( stmt.getObject().isResource() ) {
