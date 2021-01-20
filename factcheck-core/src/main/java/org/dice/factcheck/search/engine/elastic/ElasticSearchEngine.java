@@ -76,7 +76,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 							"	\"size\" : 500 ,\n" +
 							"    \"query\" : {\n" +
 							"    \"match_phrase\" : {\n"+
-							"	 \"all\" : {\n" +
+							"	 \"text\" : {\n" +
 							"	\"query\" : "+q1+",\n"+
 							"	\"slop\"  : 50 \n"+
 							"} \n"+
