@@ -1,13 +1,9 @@
 package org.aksw.defacto;
 
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +36,7 @@ import org.aksw.defacto.util.BufferedFileWriter;
 import org.aksw.defacto.util.BufferedFileWriter.WRITER_WRITE_MODE;
 import org.aksw.defacto.util.Encoder.Encoding;
 import org.aksw.defacto.util.TimeUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Level;
@@ -165,27 +162,55 @@ public class Defacto {
 
 		try {
 
-			if ( Defacto.DEFACTO_CONFIG  == null )
-				Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("/defacto.ini").getFile())));
+			if ( Defacto.DEFACTO_CONFIG  == null ) {
 
+				Class cls = Class.forName("org.aksw.defacto.Defacto");
+
+				// returns the ClassLoader object associated with this Class
+				ClassLoader cLoader = cls.getClassLoader();
+
+				// input stream
+				InputStream inputStream = cLoader.getResourceAsStream("defacto.ini");
+
+				//Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(new File(Defacto.class.getResource("./defacto.ini").getFile())));
+				//InputStream inputStream = ClassLoader.getSystemClassLoader().getResourceAsStream("org/aksw/defacto/defacto.ini");
+				File targetFile = stream2file(inputStream);
+
+				Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(targetFile));
+
+			}
 		} catch (InvalidFileFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
-		
+
 		ElasticSearchEngine.init();
-		Solr4SearchResultCache.inti();
+		//Solr4SearchResultCache.inti();
 		BoaPatternSearcher.init();
 		WordnetExpensionFeature.init();
+	}
+
+	public static final String PREFIX = "stream2file";
+	public static final String SUFFIX = ".tmp";
+
+	public static File stream2file (InputStream in) throws IOException {
+		final File tempFile = File.createTempFile(PREFIX, SUFFIX);
+		tempFile.deleteOnExit();
+		try (FileOutputStream out = new FileOutputStream(tempFile)) {
+			IOUtils.copy(in, out);
+		}
+		return tempFile;
 	}
 
 
 	/**
 	 * 
-	 * @param models
+	 * @param defactoModel
 	 * @return
 	 * @throws IOException 
 	 */

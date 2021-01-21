@@ -53,8 +53,8 @@ public class DefactoConfig {
     /**
      * this should overwrite a config setting, TODO make sure that it does
      * 
-     * @param string
-     * @param string2
+     * @param section
+     * @param value
      */
     public void setStringSetting(String section, String key, String value) {
 

@@ -5,6 +5,13 @@
 	<artifactId>factcheck-core</artifactId>
 	<groupId>org.dice-research</groupId>
 	<version>1.0-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.dice-research</groupId>
+		<artifactId>FactCheck</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
 	<repositories>
 
 		<repository>
