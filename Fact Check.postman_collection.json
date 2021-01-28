@@ -1,0 +1,549 @@
+{
+	"info": {
+		"_postman_id": "9fc9279e-ebbd-44bf-a07d-97b9dff3a9dc",
+		"name": "Fact Check",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "check api is up",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/default",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"default"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "execTask",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"taskid\": 1 ,\n    \"filedata\":\"\",\n    \"defactoScore\":0,\n    \"complexProofs\":[\n        {\n            \"website\":\"\",\n            \"proofPhrase\":\"\"\n        }\n    ],\n    \"subject\":\"http://dbpedia.org/resource/Terry_Pratchett\",\n    \"predicate\":\"http://dbpedia.org/ontology/author\",\n    \"object\":\"http://dbpedia.org/resource/Nova_Express\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/execTask/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"execTask",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"taskid\": 1 ,\n    \"filedata\":\"@prefix fbase: <http:\\/\\/rdf.freebase.com\\/ns> .\\r\\n@prefix rdfs: <http:\\/\\/www.w3.org\\/2000\\/01\\/rdf-schema#> .\\r\\n@prefix dbo: <http:\\/\\/dbpedia.org\\/ontology\\/> .\\r\\n@prefix owl: <http:\\/\\/www.w3.org\\/2002\\/07\\/owl#> .\\r\\n@prefix xsd: <http:\\/\\/www.w3.org\\/2001\\/XMLSchema#> .\\r\\n@prefix skos: <http:\\/\\/www.w3.org\\/2004\\/02\\/skos\\/core#> .\\r\\n\\r\\n<http:\\/\\/rdf.freebase.com\\/ns\\/m.0jcx__24>\\r\\n dbo:award <http:\\/\\/rdf.freebase.com\\/ns\\/m.0dt39> ;\\r\\n dbo:from \\\"1921\\\"^^xsd:gYear ;\\r\\n dbo:to \\\"1921\\\"^^xsd:gYear .\\r\\n\\r\\n<http:\\/\\/rdf.freebase.com\\/ns\\/m.0dt39>\\r\\n rdfs:label \\\"Nobel Prize in Physics\\\"@en , \\\"Prix Nobel de physique\\\"@fr , \\\"Nobelpreis f\\u00FCr Physik\\\"@de ;\\r\\n owl:sameAs <http:\\/\\/fr.dbpedia.org\\/resource\\/Prix_Nobel_de_physique> , <http:\\/\\/fr.dbpedia.org\\/resource\\/> , <http:\\/\\/de.dbpedia.org\\/resource\\/Nobelpreis_f\\u00FCr_Physik> , <http:\\/\\/dbpedia.org\\/resource\\/Nobel_Prize_in_Physics> , <http:\\/\\/de.dbpedia.org\\/resource\\/Liste_der_Nobelpreistr\\u00E4ger_f\\u00FCr_Physik> , <http:\\/\\/dbpedia.org\\/resource\\/List_of_Nobel_laureates_in_Physics> ;\\r\\n skos:altLabel \\\"Nobel Physics Prize\\\"@en , \\\"Nobel laureates in physics\\\"@fr , \\\"Nobel laureates in physics\\\"@en , \\\"Nobel laureates in physics\\\"@de , \\\"Physik-Nobelpreis\\\"@de , \\\"Nobel prize in physics\\\"@fr , \\\"Nobel prize in physics\\\"@en , \\\"Nobel prize in physics\\\"@de , \\\"Nobel Prize for physics\\\"@fr , \\\"Nobel Prize for physics\\\"@en , \\\"Nobel Prize for physics\\\"@de , \\\"Prix Nobel de Physique\\\"@fr , \\\"Physics\\\"@fr , \\\"Physics\\\"@en , \\\"Physics\\\"@de , \\\"Nobel Prizes for Physics\\\"@fr , \\\"Nobel Prizes for Physics\\\"@en , \\\"Nobel Prizes for Physics\\\"@de , \\\"Liste der Physiknobelpreistrager\\\"@de , \\\"Liste des Prix Nobel de physique\\\"@fr , \\\"Liste der Nobelpreistr\\u00E4ger f\\u00FCr Physik\\\"@de , \\\"Nobelpreis fur Physik\\\"@de , \\\"Nobel prize for Physics\\\"@fr , \\\"Nobel prize for Physics\\\"@de , \\\"Nobel prize for Physics\\\"@en , \\\"Physiknobelpreis\\\"@de , \\\"Nobel Prize in Physics\\\"@fr , \\\"Nobel Prize in Physics\\\"@de , \\\"Nobel Prize in Physics\\\"@en , \\\"Prix nobel de physique\\\"@fr , \\\"PhysicS\\\"@fr , \\\"PhysicS\\\"@en , \\\"PhysicS\\\"@de , \\\"Nobel Prize For Physics - 2007\\\"@fr , \\\"Liste der Nobelpreistrager fur Physik\\\"@de , \\\"Nobel Prize For Physics - 2007\\\"@en , \\\"Nobel Prize For Physics - 2007\\\"@de , \\\"Prix Nobel de physique\\\"@fr , \\\"Physics nobel prize\\\"@fr , \\\"Physics nobel prize\\\"@en , \\\"Physics nobel prize\\\"@de , \\\"Noble prize in physics\\\"@fr , \\\"Noble prize in physics\\\"@en , \\\"Noble prize in physics\\\"@de , \\\"Liste der Physiknobelpreistr\\u00E4ger\\\"@de , \\\"Nobel Prize for Physics\\\"@fr , \\\"Nobel prize physics\\\"@fr , \\\"Nobel Prize for Physics\\\"@de , \\\"Nobel Prize for Physics\\\"@en , \\\"Nobel prize physics\\\"@de , \\\"Nobel prize physics\\\"@en , \\\"Nobel Prize in physics\\\"@fr , \\\"Nobel Prize in physics\\\"@en , \\\"Nobel Prize in physics\\\"@de , \\\"Nobelpreis f\\u00FCr Physik\\\"@de , \\\"Nobel Physics Prize\\\"@fr , \\\"Nobel Physics Prize\\\"@de .\\r\\n\\r\\n<http:\\/\\/rdf.freebase.com\\/ns\\/m.0jcx>\\r\\n rdfs:label \\\"Albert Einstein\\\"@fr , \\\"Albert Einstein\\\"@en , \\\"Albert Einstein\\\"@de ;\\r\\n dbo:recievedAward <http:\\/\\/rdf.freebase.com\\/ns\\/m.0jcx__24> ;\\r\\n owl:sameAs <http:\\/\\/dbpedia.org\\/resource\\/Albert_Einstein> , <http:\\/\\/fr.dbpedia.org\\/resource\\/Albert_Einstein> , <http:\\/\\/de.dbpedia.org\\/resource\\/Albert_Einstein> ;\\r\\n skos:altLabel \\\"Albert\\\"@fr , \\\"Compassionate Zionism and Albert Einstein\\\"@fr , \\\"Compassionate Zionism and Albert Einstein\\\"@de , \\\"Compassionate Zionism and Albert Einstein\\\"@en , \\\"A. Einstein\\\"@fr , \\\"Albert Einstin\\\"@fr , \\\"A. Einstein\\\"@de , \\\"A. Einstein\\\"@en , \\\"Albert Einstin\\\"@en , \\\"Albert Einstin\\\"@de , \\\"Albert Einstein's\\\"@fr , \\\"Albert Einstein's\\\"@de , \\\"Albert Einstein's\\\"@en , \\\"Einstein, Albert\\\"@fr , \\\"Einstein, Albert\\\"@de , \\\"Einstein, Albert\\\"@en , \\\"Einsteinian\\\"@fr , \\\"Einsteinian\\\"@de , \\\"Einsteinian\\\"@en , \\\"A Tribute to Einstein\\\"@fr , \\\"A Tribute to Einstein\\\"@de , \\\"A Tribute to Einstein\\\"@en , \\\"Albert Enstien\\\"@fr , \\\"Albert Enstien\\\"@de , \\\"Albert Enstien\\\"@en , \\\"Albert Enstin\\\"@fr , \\\"Albert Enstin\\\"@de , \\\"Albert Enstin\\\"@en , \\\"Ejnstejno\\\"@fr , \\\"Ejnstejno\\\"@de , \\\"Ejnstejno\\\"@en , \\\"Einstein\\\"@fr , \\\"Einstein\\\"@de , \\\"Einstein\\\"@en , \\\"Al Einstein\\\"@fr , \\\"Albert LaFache Einstein\\\"@fr , \\\"Albert LaFache Einstein\\\"@en , \\\"Albert LaFache Einstein\\\"@de , \\\"Al Einstein\\\"@de , \\\"Al Einstein\\\"@en , \\\"Einstein on socialism\\\"@fr , \\\"Einstein on socialism\\\"@de , \\\"Einstein on socialism\\\"@en , \\\"Albert Einstien\\\"@fr , \\\"Albert Einstien\\\"@en , \\\"Albert Einstien\\\"@de , \\\"Einstein's theory\\\"@fr , \\\"Einstein's theory\\\"@de , \\\"Einstein's theory\\\"@en , \\\"Albert Enstein\\\"@fr , \\\"Albert Enstein\\\"@de , \\\"Albert Enstein\\\"@en , \\\"Einstien\\\"@fr , \\\"Einstien\\\"@de , \\\"Einstien\\\"@en , \\\"Alber Enstien\\\"@fr , \\\"Alber Enstien\\\"@de , \\\"Alber Enstien\\\"@en , \\\"Albert Einstein\\\"@fr , \\\"Einsetein\\\"@fr , \\\"Albert Einstein\\\"@de , \\\"Einsetein\\\"@en , \\\"Einsetein\\\"@de , \\\"Albert Einstein\\\"@en , \\\"Einstien, Albert\\\"@fr , \\\"Albert einstein\\\"@fr , \\\"Albert einstein\\\"@en , \\\"Albert einstein\\\"@de , \\\"Einstien, Albert\\\"@en , \\\"Einstien, Albert\\\"@de , \\\"God does not play dice\\\"@fr , \\\"Alber Einstein\\\"@fr , \\\"God does not play dice\\\"@de , \\\"Alber Einstein\\\"@en , \\\"Alber Einstein\\\"@de , \\\"God does not play dice\\\"@en , \\\"Albert Eienstein\\\"@fr , \\\"Albert Eienstein\\\"@de , \\\"Albert Eienstein\\\"@en .\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/execTask/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"execTask",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "execTask elite",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"taskid\": 1 ,\n    \"filedata\":\"@prefix fbase: <http://rdf.freebase.com/ns> .\\n@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .\\n@prefix dbo:   <http://dbpedia.org/ontology/> .\\n@prefix owl:   <http://www.w3.org/2002/07/owl#> .\\n@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\\n@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\\n\\n<http://rdf.freebase.com/ns/m.0jcx__24>\\n        dbo:award  <http://rdf.freebase.com/ns/m.0dt39> ;\\n        dbo:from   \\\"1921\\\"^^xsd:gYear ;\\n        dbo:to     \\\"1921\\\"^^xsd:gYear .\\n\\n<http://rdf.freebase.com/ns/m.0dt39>\\n        rdfs:label     \\\"Nobel Prize in Physics\\\"@en ;\\n        owl:sameAs     <http://dbpedia.org/resource/Nobel_Prize_in_Physics>.\\n\\n<http://rdf.freebase.com/ns/m.0jcx>\\n        rdfs:label         \\\"Albert Einstein\\\"@en;\\n        dbo:recievedAward  <http://rdf.freebase.com/ns/m.0jcx__24> ;\\n        owl:sameAs         <http://dbpedia.org/resource/Albert_Einstein>.\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/execTask/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"execTask",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "execTask elite 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"taskid\": 1 ,\n    \"filedata\":\"@prefix dbo: <http://dbpedia.org/ontology/> .\\n@prefix dbr: <http://dbpedia.org/resource/> .\\n@prefix rdfs: <http://www.w3.org/2000/01/rdf−schema#> .\\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\\ndbr:Albert_Einstein dbo:award dbr:Nobel_Prize_in_Physics ;\\n\\t rdfs:label \\\"AlbertEinstein\\\"@en .\\ndbr:Nobel_Prize_in_Physics rdfs:label \\\"Nobel Prize in Physics\\\"@en .\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/execTask/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"execTask",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "execTask elite3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"taskid\": 1 ,\n    \"filedata\":\"@prefix dbo: <http://dbpedia.org/ontology/> .\\n@prefix dbr: <http://dbpedia.org/resource/> .\\n@prefix rdfs: <http://www.w3.org/2000/01/rdf−schema#> .\\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\\n@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .\\n@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .\\n\\n<http://rdf.freebase.com/ns/m.0jcx> dbo:award <http://rdf.freebase.com/ns/m.0dt39> .\\n\\n<http://rdf.freebase.com/ns/m.0jcx> owl:sameAs dbr:Albert_Einstein;\\n\\trdfs:label \\\"AlbertEinstein\\\"@en .\\n\\t\\n<http://rdf.freebase.com/ns/m.0dt39> owl:sameAs dbr:Nobel_Prize_in_Physics;\\t\\n rdfs:label \\\"Nobel Prize in Physics\\\"@en .\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/api/execTask/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"execTask",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact award",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Albert_Einstein&object=http://dbpedia.org/resource/Nobel_Prize_in_Physics&predicate=http://dbpedia.org/ontology/award",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Albert_Einstein"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Nobel_Prize_in_Physics"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/award"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact birthPlace True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Albert_Einstein&object=http://dbpedia.org/resource/Germany&predicate=http://dbpedia.org/ontology/birthPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Albert_Einstein"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/birthPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact birthPlace False",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Albert_Einstein&object=http://dbpedia.org/resource/Germany&predicate=http://dbpedia.org/ontology/birthPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Albert_Einstein"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/birthPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact deathPlace True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Ludwig_van_Beethoven&object=http://dbpedia.org/resource/Vienna&predicate=http://dbpedia.org/ontology/deathPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Ludwig_van_Beethoven"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Vienna"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/deathPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact deathPlace False ! but True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Ludwig_van_Beethoven&object=http://dbpedia.org/resource/Germany&predicate=http://dbpedia.org/ontology/deathPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Ludwig_van_Beethoven"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/deathPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact foundationPlace True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Ludwig_van_Beethoven&object=http://dbpedia.org/resource/Germany&predicate=http://dbpedia.org/ontology/deathPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Ludwig_van_Beethoven"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/deathPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact foundationPlace False ! but True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/IBM&object=http://dbpedia.org/resource/Germany&predicate=http://dbpedia.org/ontology/foundationPlace",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/IBM"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/foundationPlace"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact leader True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Iran&object=http://dbpedia.org/resource/Ali_Khamenei&predicate=http://dbpedia.org/ontology/spouse",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Iran"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Ali_Khamenei"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/spouse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact leader False",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Germany&object=http://dbpedia.org/resource/Ali_Khamenei&predicate=http://dbpedia.org/ontology/spouse",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Ali_Khamenei"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/spouse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact Suppose True",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Germany&object=http://dbpedia.org/resource/Ali_Khamenei&predicate=http://dbpedia.org/ontology/spouse",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Germany"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Ali_Khamenei"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/spouse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "checkfact Suppose False",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/api/checkfact?subject=http://dbpedia.org/resource/Servando_Carrasco&object=http://dbpedia.org/resource/Ali_Khamenei&predicate=http://dbpedia.org/ontology/spouse",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"checkfact"
+					],
+					"query": [
+						{
+							"key": "subject",
+							"value": "http://dbpedia.org/resource/Servando_Carrasco"
+						},
+						{
+							"key": "object",
+							"value": "http://dbpedia.org/resource/Ali_Khamenei"
+						},
+						{
+							"key": "predicate",
+							"value": "http://dbpedia.org/ontology/spouse"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://dice-fact-check.cs.upb.de/"
+		},
+		{
+			"key": "host2",
+			"value": "http://localhost:8080"
+		}
+	]
+}
