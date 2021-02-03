@@ -18,10 +18,9 @@ import org.aksw.defacto.util.SparqlUtil;
 import org.apache.commons.io.FileUtils;
 import org.ini4j.Ini;
 
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
+
+import org.apache.jena.query.QuerySolution;
+import org.apache.jena.query.ResultSet;
 
 
 

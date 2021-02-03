@@ -6,10 +6,10 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import com.hp.hpl.jena.rdf.model.Property;
 import org.aksw.defacto.Defacto;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.model.DefactoModel;
+import org.apache.jena.rdf.model.Property;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

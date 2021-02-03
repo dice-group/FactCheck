@@ -36,29 +36,17 @@ import org.aksw.defacto.util.BufferedFileWriter;
 import org.aksw.defacto.util.BufferedFileWriter.WRITER_WRITE_MODE;
 import org.aksw.defacto.util.Encoder.Encoding;
 import org.aksw.defacto.util.FileReader;
-import org.aksw.defacto.util.Stream2file;
+
 import org.aksw.defacto.util.TimeUtil;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Level;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.ResourceFactory;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.RDF;
-
-import weka.core.Instance;
 
 /**
  * 

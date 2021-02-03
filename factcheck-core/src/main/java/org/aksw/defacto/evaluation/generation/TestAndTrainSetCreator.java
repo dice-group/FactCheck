@@ -24,9 +24,8 @@ import org.aksw.defacto.reader.DefactoModelReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.stat.Frequency;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.Property;
+;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>

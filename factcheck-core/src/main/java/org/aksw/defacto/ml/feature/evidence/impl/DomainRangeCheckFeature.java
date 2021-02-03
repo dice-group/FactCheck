@@ -4,18 +4,19 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.util.SparqlUtil;
 import org.aksw.jena_sparql_api.cache.core.QueryExecutionFactoryCacheEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheCoreEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheCoreH2;
-import org.aksw.jena_sparql_api.cache.extra.CacheEx;
-import org.aksw.jena_sparql_api.cache.extra.CacheExImpl;
+import org.aksw.jena_sparql_api.cache.extra.CacheBackend;
+import org.aksw.jena_sparql_api.cache.extra.CacheCoreExCompressor;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontend;
+import org.aksw.jena_sparql_api.cache.extra.CacheFrontendImpl;
+import org.aksw.jena_sparql_api.cache.h2.*;
+
 import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
 import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
+import org.apache.jena.query.ResultSet;
 import org.dllearner.kb.sparql.SparqlEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.hp.hpl.jena.query.ResultSet;
 
 /**
  * 
@@ -40,8 +41,13 @@ public class DomainRangeCheckFeature extends AbstractEvidenceFeature {
 	        QueryExecutionFactory qef = new QueryExecutionFactoryHttp("http://dbpedia.org/sparql", "http://dbpedia.org");
 	        // Some boilerplace code which may get simpler soon
 	        long timeToLive = 150l * 60l * 60l * 1000l; 
-	        CacheCoreEx cacheBackend = CacheCoreH2.create("mldefacto", timeToLive, false);
-	        CacheEx cacheFrontend = new CacheExImpl(cacheBackend);
+	        //CacheCoreEx cacheBackend = CacheCoreH2.create("mldefacto", timeToLive, false);
+ 	        //CacheEx cacheFrontend = new CacheExImpl(cacheBackend);
+
+			//CacheBackend cacheBackend = CacheCoreH2.create("~/mldefacto", timeToLive, false);
+
+			CacheBackend cacheBackend = CacheCoreH2.create(true,"./cache/sparql","mldefacto", timeToLive);
+			CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
 
 	        qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
 	        

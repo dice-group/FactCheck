@@ -19,6 +19,10 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.aksw.defacto.util.LabeledTriple;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.RDFS;
 import org.apache.log4j.Logger;
 import org.nnsoft.sameas4j.DefaultSameAsServiceFactory;
 import org.nnsoft.sameas4j.Equivalence;
@@ -27,15 +31,6 @@ import org.nnsoft.sameas4j.SameAsServiceException;
 import org.nnsoft.sameas4j.cache.InMemoryCache;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.QGramsDistance;
-
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDF;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * 

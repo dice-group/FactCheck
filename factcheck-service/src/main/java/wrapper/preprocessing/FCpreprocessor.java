@@ -1,6 +1,6 @@
 package wrapper.preprocessing;
 
-import com.hp.hpl.jena.rdf.model.*;
+import org.apache.jena.rdf.model.*;
 
 import java.io.ByteArrayInputStream;
 

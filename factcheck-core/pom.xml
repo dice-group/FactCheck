@@ -94,16 +94,7 @@
 			<artifactId>ini4j</artifactId>
 			<version>0.5.2</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>2.10.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-tdb</artifactId>
-			<version>0.10.1</version>
-		</dependency>
+
 		<!-- <dependency> <groupId>org.apache.httpcomponents</groupId> <artifactId>httpclient</artifactId> 
 			<version>4.5.2</version> <exclusions> <exclusion> <groupId>org.apache.httpcomponents</groupId> 
 			<artifactId>httpcore</artifactId> </exclusion> </exclusions> </dependency> -->
@@ -288,12 +279,81 @@
 					<groupId>mysql</groupId>
 					<artifactId>mysql-connector-java</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.aksw.jena-sparql-api</groupId>
+					<artifactId>jena-sparql-api-cache</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jena</groupId>
+					<artifactId>jena-arq</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.jena</groupId>
+					<artifactId>jena-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.aksw.jena-sparql-api</groupId>
+					<artifactId>jena-sparql-api-resources</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.aksw.jena-sparql-api</groupId>
+					<artifactId>jena-sparql-api-cache-h2</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>aksw-commons-collections</artifactId>
+			<version>0.8.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.commons</groupId>
+			<artifactId>aksw-commons-util</artifactId>
+			<version>0.8.14</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-cache</artifactId>
+			<version>3.16.0-2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-core</artifactId>
+			<version>3.16.0-2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>3.16.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>3.16.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-resources</artifactId>
+			<version>3.16.0-2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-cache-h2</artifactId>
+			<version>3.16.0-2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+			<version>3.16.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.aksw</groupId>
 			<artifactId>sparql-metrics</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/sparql-metrics-0.0.1-SNAPSHOT.jar</systemPath>
 		</dependency>
 
 		<dependency>
@@ -317,11 +377,12 @@
 			<version>2.13.0</version> </dependency> <dependency> <groupId>org.aksw.jena-sparql-api</groupId> 
 			<artifactId>jena-sparql-api-utils</artifactId> <version>2.10.0-20</version> 
 			</dependency> -->
-		<dependency>
+<!--		<dependency>
 			<groupId>org.aksw.jena-sparql-api</groupId>
 			<artifactId>jena-sparql-api-core</artifactId>
 			<version>2.10.0-18-SNAPSHOT</version>
-		</dependency>
+		</dependency>-->
+
 		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring</artifactId> 
 			<version>2.5.4</version> </dependency> -->
 		<!--<dependency> <groupId>org.dllearner</groupId> <artifactId>components-core</artifactId> 
@@ -350,6 +411,30 @@
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
 			<version>2.6.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-cache-h2</artifactId>
+			<version>3.16.0-2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>3.16.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-tdb</artifactId>
+			<version>3.16.0</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.aksw.jena-sparql-api</groupId>
+			<artifactId>jena-sparql-api-core</artifactId>
+			<version>3.16.0-2</version>
+			<scope>compile</scope>
 		</dependency>
 		<!--<dependency> <groupId>com.github.AKSW.DL-Learner</groupId> <artifactId>components-core</artifactId> 
 			<version>1.2</version> </dependency> -->

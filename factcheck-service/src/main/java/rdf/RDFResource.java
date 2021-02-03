@@ -1,6 +1,6 @@
 package rdf;
 
-import com.hp.hpl.jena.rdf.model.*;
+import org.apache.jena.rdf.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

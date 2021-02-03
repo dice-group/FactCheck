@@ -15,6 +15,7 @@ import org.apache.http.ParseException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
+import org.apache.jena.rdf.model.Statement;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
 import org.slf4j.Logger;
@@ -25,7 +26,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.hp.hpl.jena.rdf.model.Statement;
 
 /**
  * 
@@ -59,8 +59,8 @@ public class QueryGenerator {
     
     /**
      * 
-     * @param uriToLabels
      * @param fact
+     * @param language
      * @return
      */
     private Map<Pattern,MetaQuery> generateSearchQueries(Statement fact, String language){

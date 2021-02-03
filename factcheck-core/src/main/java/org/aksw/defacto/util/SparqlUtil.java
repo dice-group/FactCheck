@@ -3,9 +3,9 @@ package org.aksw.defacto.util;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
 
 /**
  * Some convenience methods related to SparqlUtil.

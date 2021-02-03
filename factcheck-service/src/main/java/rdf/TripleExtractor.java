@@ -1,7 +1,7 @@
 package rdf;
 
-import com.hp.hpl.jena.rdf.model.*;
 import org.apache.commons.io.IOUtils;
+import org.apache.jena.rdf.model.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;

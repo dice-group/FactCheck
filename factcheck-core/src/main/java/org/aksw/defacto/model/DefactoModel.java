@@ -14,22 +14,14 @@ import java.util.Set;
 
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.Defacto;
-import org.aksw.defacto.config.DefactoConfig;
+
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDFS;
 import org.semanticweb.yars.nx.namespace.SKOS;
 import org.semanticweb.yars.nx.namespace.XSD;
 
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDFS;
-
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.pipeline.StanfordCoreNLPClient;
 import org.dice.factcheck.nlp.stanford.CoreNLPClient;
 import org.dice.factcheck.nlp.stanford.impl.CoreNLPLocalClient;
 import org.dice.factcheck.nlp.stanford.impl.CoreNLPServerClient;

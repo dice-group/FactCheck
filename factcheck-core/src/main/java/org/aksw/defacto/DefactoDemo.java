@@ -13,13 +13,13 @@ import java.util.List;
 import org.aksw.defacto.Defacto.TIME_DISTRIBUTION_ONLY;
 import org.aksw.defacto.model.DefactoModel;
 import org.apache.commons.io.FileUtils;
+import org.apache.jena.rdf.model.Model;
 import org.apache.log4j.Logger;
 import org.ini4j.InvalidFileFormatException;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.RDFS;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.RDFS;
 
 /**
  * 

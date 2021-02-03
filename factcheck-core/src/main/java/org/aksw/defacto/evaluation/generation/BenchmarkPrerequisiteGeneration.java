@@ -22,6 +22,12 @@ import org.aksw.defacto.util.BufferedFileWriter.WRITER_WRITE_MODE;
 import org.aksw.defacto.util.Encoder.Encoding;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.jena.datatypes.xsd.XSDDatatype;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.vocabulary.OWL;
+import org.apache.jena.vocabulary.RDFS;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,12 +36,6 @@ import org.semanticweb.yars.nx.namespace.SKOS;
 import org.semanticweb.yars.nx.namespace.XSD;
 import org.semanticweb.yars.nx.parser.NxParser;
 
-import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.Property;
-import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.vocabulary.OWL;
-import com.hp.hpl.jena.vocabulary.RDFS;
 
 /**
  * @author Daniel Gerber <dgerber@informatik.uni-leipzig.de>
@@ -221,7 +221,7 @@ public class BenchmarkPrerequisiteGeneration {
 	/**
 	 * 
 	 * @param model
-	 * @param first
+	 * @param resource
 	 */
 	public static void addOwlSameAs(Model model, Resource resource) {
 		
