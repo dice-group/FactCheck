@@ -147,6 +147,8 @@
 			<groupId>com.github.jsonld-java</groupId>
 			<artifactId>jsonld-java</artifactId>
 			<version>0.12.5</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/jsonld-java-0.12.5.jar</systemPath>
 		</dependency>
 
 		<dependency>
