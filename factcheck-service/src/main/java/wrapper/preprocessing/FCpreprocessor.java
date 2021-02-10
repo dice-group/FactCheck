@@ -1,5 +1,7 @@
 package wrapper.preprocessing;
 
+import net.didion.jwnl.data.Exc;
+import org.apache.jena.base.Sys;
 import org.apache.jena.rdf.model.*;
 
 import java.io.ByteArrayInputStream;
@@ -33,9 +35,16 @@ public class FCpreprocessor {
     }
 
     private Model createModel(String data) {
-        Model model = ModelFactory.createDefaultModel();
-        model.read(new ByteArrayInputStream(data.getBytes()), null, "TTL");
-        return model;
+        try {
+            System.out.println("Create Model");
+            Model model = ModelFactory.createDefaultModel();
+            System.out.println("Creating Model Done");
+            model.read(new ByteArrayInputStream(data.getBytes()), null, "TTL");
+            return model;
+        }catch (Exception ex){
+            System.out.println(ex.getMessage());
+            throw ex;
+        }
     }
 
     private Resource getResource(Model model, String propertyUri) {

@@ -13,6 +13,7 @@ import org.aksw.jena_sparql_api.cache.h2.*;
 import org.aksw.jena_sparql_api.core.QueryExecutionFactory;
 import org.aksw.jena_sparql_api.delay.core.QueryExecutionFactoryDelay;
 import org.aksw.jena_sparql_api.http.QueryExecutionFactoryHttp;
+import org.apache.jena.dboe.sys.Sys;
 import org.apache.jena.query.ResultSet;
 import org.dllearner.kb.sparql.SparqlEndpoint;
 import org.slf4j.Logger;
@@ -26,7 +27,17 @@ import org.slf4j.LoggerFactory;
 public class DomainRangeCheckFeature extends AbstractEvidenceFeature {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DomainRangeCheckFeature.class);
-	
+
+	public static void printVersion(Class<?> clazz) {
+		Package p = clazz.getPackage();
+		System.out.printf("%s%n  Title: %s%n  Version: %s%n  Vendor: %s%n  HashCode: %s%n" ,
+				clazz.getName(),
+				p.getImplementationTitle(),
+				p.getImplementationVersion(),
+				p.getImplementationVendor(),
+				p.hashCode());
+	}
+
 	@Override
 	public void extractFeature(Evidence evidence) {
 	    
@@ -46,11 +57,15 @@ public class DomainRangeCheckFeature extends AbstractEvidenceFeature {
 
 			//CacheBackend cacheBackend = CacheCoreH2.create("~/mldefacto", timeToLive, false);
 
-			CacheBackend cacheBackend = CacheCoreH2.create(true,"./cache/sparql","mldefacto", timeToLive);
-			CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
+			System.out.println("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+---+-++--+-+-+-+-++-+-");
+			printVersion(org.aksw.jena_sparql_api.cache.h2.CacheCoreH2.class);
+			System.out.println("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+---+-++--+-+-+-+-++-+-");
 
-	        qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
-	        
+			//CacheBackend cacheBackend = CacheCoreH2.create(true,"./cache/sparql","mldefacto", timeToLive);
+			//CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
+
+	        //qef = new QueryExecutionFactoryCacheEx(qef, cacheFrontend);
+
 	        boolean domainViolation = false;
 	        String queryDom = "SELECT * WHERE { <"+propertyURI+"> rdfs:domain ?dom }";
 	        LOGGER.debug("DR-Feature DOMAIN: " + queryDom);
