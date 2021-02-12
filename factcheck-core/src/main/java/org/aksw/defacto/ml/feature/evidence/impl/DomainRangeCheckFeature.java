@@ -57,10 +57,6 @@ public class DomainRangeCheckFeature extends AbstractEvidenceFeature {
 
 			//CacheBackend cacheBackend = CacheCoreH2.create("~/mldefacto", timeToLive, false);
 
-			System.out.println("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+---+-++--+-+-+-+-++-+-");
-			printVersion(org.aksw.jena_sparql_api.cache.h2.CacheCoreH2.class);
-			System.out.println("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++-+---+-++--+-+-+-+-++-+-");
-
 			//CacheBackend cacheBackend = CacheCoreH2.create(true,"./cache/sparql","mldefacto", timeToLive);
 			//CacheFrontend cacheFrontend = new CacheFrontendImpl(cacheBackend);
 

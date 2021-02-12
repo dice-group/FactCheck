@@ -47,7 +47,8 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
 			//System.out.println(dbHost + ":" + dbPort + "/" + database +" ==> dbUser is : "+ dbUser + " pass is " + pw);
             Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&useSSL=false");
 			System.out.println ("endpoint is :"+endpoint);
-			metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);
+
+			//metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);
 			//metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, "pmi-cache", conn);
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
