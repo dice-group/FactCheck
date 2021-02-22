@@ -9,11 +9,13 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.util.FileReader;
 import org.aksw.sparql.metrics.DatabaseBackedSPARQLEndpointMetrics;
-import org.dllearner.core.owl.Individual;
-import org.dllearner.core.owl.ObjectProperty;
 import org.dllearner.kb.sparql.SparqlEndpoint;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +28,8 @@ import java.sql.SQLException;
  *
  */
 public class GoodnessFeature extends AbstractEvidenceFeature {
+
+	//public static OWLDataFactoryImpl owlDataFactory = new OWLDataFactoryImpl();
 
     private static DatabaseBackedSPARQLEndpointMetrics metric = null;
 	private static SparqlEndpoint endpoint = SparqlEndpoint.getEndpointDBpedia();
@@ -48,7 +52,7 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
             Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&useSSL=false");
 			System.out.println ("endpoint is :"+endpoint);
 
-			//metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);
+			metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);
 			//metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, "pmi-cache", conn);
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
@@ -74,9 +78,14 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
     	double goodness = -1;
     	if ( subject != null && object != null  ) {
     		
-    		goodness = metric.getGoodness(
-    				new Individual(subject), new ObjectProperty(evidence.getModel().getPropertyUri()), new Individual(object));
-    		
+    		//goodness = metric.getGoodness(new Individual(subject), new ObjectProperty(evidence.getModel().getPropertyUri()), new Individual(object));
+/*			goodness = metric.getGoodness(
+					owlDataFactory.getOWLNamedIndividual(IRI.create(subject)),
+					owlDataFactory.getOWLObjectProperty(IRI.create(evidence.getModel().getPropertyUri())),
+					owlDataFactory.getOWLNamedIndividual(IRI.create(object)));*/
+
+			goodness = metric.getGoodness(subject,evidence.getModel().getPropertyUri().toString(),object);
+
     		evidence.getFeatures().setValue(AbstractEvidenceFeature.GOODNESS, goodness);
     	}
     	
@@ -84,12 +93,16 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
     
     
     public static void main(String[] args) {
-		
-    	ObjectProperty property = new ObjectProperty("http://dbpedia.org/ontology/author");
-		Individual subject = new Individual("http://dbpedia.org/resource/The_Da_Vinci_Code");
-		Individual object = new Individual("http://dbpedia.org/resource/Dan_Brown");
+
+/*		OWLObjectProperty property = owlDataFactory.getOWLObjectProperty(IRI.create("http://dbpedia.org/ontology/author"));
+		OWLNamedIndividual subject = owlDataFactory.getOWLNamedIndividual(IRI.create("http://dbpedia.org/resource/The_Da_Vinci_Code"));
+		OWLNamedIndividual object = owlDataFactory.getOWLNamedIndividual(IRI.create("http://dbpedia.org/resource/Dan_Brown"));*/
+
+		String property = "http://dbpedia.org/ontology/author";
+		String subject = "http://dbpedia.org/resource/The_Da_Vinci_Code";
+		String object = "http://dbpedia.org/resource/Dan_Brown";
 		
 		System.out.println(metric.getGoodness(subject, property, object));
-		System.out.println(metric.getGoodness(subject, new ObjectProperty("http://dbpedia.org/ontology/writer"), object));
+		//System.out.println(metric.getGoodness(subject, owlDataFactory.getOWLObjectProperty(IRI.create("http://dbpedia.org/ontology/writer")), object));
 	}
 }

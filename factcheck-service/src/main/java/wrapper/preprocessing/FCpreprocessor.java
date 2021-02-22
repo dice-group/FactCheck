@@ -1,6 +1,6 @@
 package wrapper.preprocessing;
 
-import net.didion.jwnl.data.Exc;
+//import net.didion.jwnl.data.Exc;
 import org.apache.jena.base.Sys;
 import org.apache.jena.rdf.model.*;
 
