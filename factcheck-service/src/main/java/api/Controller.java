@@ -1,5 +1,6 @@
 package api;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +46,18 @@ public class Controller {
     @RequestMapping("/default")
     public String defaultpage() {
         return "ok!";
+    }
+
+    @GetMapping("/factBechTest")
+    public void fbt() throws FileNotFoundException {
+        String factBenchPath = "/home/farshad/repos/factBench/factbench";
+
+        factBenchTest d = new factBenchTest();
+        try {
+            d.checkFacts(factBenchPath);
+        }catch (Exception exp){
+            System.out.println(exp);
+        }
     }
 
     @GetMapping("/checkfact")
@@ -107,6 +120,9 @@ public class Controller {
         }
         return false;
     }
+
+
+
 
     public static Integer generateRandomIntInRange(int min, int max) {
         Random r = new Random();

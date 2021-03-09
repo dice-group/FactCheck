@@ -31,4 +31,12 @@ public class ComplexProofs {
         this.website = website;
         this.proofPhrase = proofPhrase;
     }
+
+    @Override
+    public String toString() {
+        return "ComplexProofs{" +
+                "website='" + website + '\'' +
+                ", proofPhrase='" + proofPhrase + '\'' +
+                '}';
+    }
 }
