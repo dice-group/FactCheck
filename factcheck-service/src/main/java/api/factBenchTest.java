@@ -130,21 +130,6 @@ public class factBenchTest {
             }
         }
 
-        HashMap<String,String> progress2 = null;
-        try {
-            FileInputStream fileIn = new FileInputStream(ProgressFileName);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            progress2 = (HashMap) in.readObject();
-            System.out.println("progress2 size is :"+progress2.size());
-            in.close();
-            fileIn.close();
-        } catch (IOException i) {
-            i.printStackTrace();
-        } catch (ClassNotFoundException c) {
-            System.out.println("Employee class not found");
-            c.printStackTrace();
-        }
-
     }
 
     private String checkFactFromFile(File input,String taskId) throws IOException {
