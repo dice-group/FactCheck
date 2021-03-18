@@ -158,6 +158,7 @@ public class DefactoModel {
     		Statement stmt = listIter.next();
     		// we have found the blank node
 
+			String sss = stmt.getSubject().getURI();
     		if ( stmt.getSubject().getURI().matches("^.*__[0-9]*$") ) {
     			
     			if ( stmt.getObject().isResource() ) {
@@ -165,7 +166,12 @@ public class DefactoModel {
         			this.object = new DefactoResource(stmt.getObject().asResource(), model);
         			this.predicate = stmt.getPredicate();
         			this.predicateUri = this.predicate.getURI();
-        			
+
+					NodeIterator tmp = model.listObjectsOfProperty(stmt.getSubject(), Constants.DEFACTO_FROM);
+					RDFNode next = tmp.next();
+					Literal lit = next.asLiteral();
+					String lexForm = lit.getLexicalForm();
+
         			String from = model.listObjectsOfProperty(stmt.getSubject(), Constants.DEFACTO_FROM).next().asLiteral().getLexicalForm();
         			String to = model.listObjectsOfProperty(stmt.getSubject(), Constants.DEFACTO_TO).next().asLiteral().getLexicalForm();
         			

@@ -52,6 +52,24 @@ public class factBenchTest {
         }
     }*/
 
+    public void checkOneFile(String path ) throws IOException {
+        File file = new File(path);
+        //check fact
+        String result = checkFactFromFile(file, Integer.toString(TaskID));
+        TaskID = TaskID+1;
+        // add Progress
+        progress.put(file.getPath(),result);
+        // write to file
+        String FileName = "result_"+file.getName();
+        try (PrintWriter out = new PrintWriter(file.getParent()+"/"+FileName+"r")) {
+            out.println(result);
+        }
+            System.out.println(TaskID);
+            System.out.println(file.toPath());
+            System.out.println(result);
+            System.out.println("-=-=-=-=-=-=-==-=-==-=-=-=-==-=-=-=-=-=-=-==-=-=-=-");
+    }
+
     public void checkFacts(String path) throws IOException {
 
         File dir = new File(path);
