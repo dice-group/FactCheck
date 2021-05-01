@@ -60,6 +60,18 @@ public class Controller {
         }
     }
 
+    @PostMapping("/factBechTestOneFile")
+    public void factBechTestOneFile(@RequestBody String singlefile) throws FileNotFoundException {
+//        String singleFile = "/home/farshad/Downloads/subsidiary_00007.ttl";
+//        String singleFile = "/home/farshad/repos/factBench/factbench/train/wrong/date/subsidiary/subsidiary_00002.ttl";
+        factBenchTest d = new factBenchTest();
+        try {
+            d.checkOneFile(singlefile);
+        }catch (Exception exp){
+            System.out.println(exp);
+        }
+    }
+
     @GetMapping("/checkfact")
     public ResponseEntity<FactcheckResponse> checkFact (@RequestParam(value = "subject", required = true) String subject,
                                                         @RequestParam(value = "predicate", required = true) String predicate,
