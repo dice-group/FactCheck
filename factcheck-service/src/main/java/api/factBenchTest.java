@@ -16,9 +16,9 @@ import java.util.Scanner;
 
 public class factBenchTest {
 
-    String ProgressFileName = "/home/farshad/repos/factBench/factbench/prf.txt";
-    String ProgressTextResults = "/home/farshad/repos/factBench/factbench/textResults.txt";
-    String factBenchPath = "/home/farshad/repos/factBench/factbench";
+    String ProgressFileName = "/home/umair/Desktop/factcheck/datasets/factbench/factbench/prf.txt";
+    String ProgressTextResults = "/home/umair/Desktop/factcheck/datasets/factbench/factbench/textResults.txt";
+    String factBenchPath = "/home/umair/Desktop/factcheck/datasets/factbench/factbench";
     HashMap<String,String> progress = new HashMap<>();
     int TaskID = 0;
 
@@ -183,7 +183,7 @@ public class factBenchTest {
     private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
         ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
         evidence.getComplexProofs().forEach(p -> {
-            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
+            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase(),p.getWebSite().getScore()));
         });
         return complexProofs;
     }
