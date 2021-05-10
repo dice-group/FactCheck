@@ -50,7 +50,7 @@ public class Controller {
 
     @GetMapping("/factBechTest")
     public void fbt() throws FileNotFoundException {
-        String factBenchPath = "/home/farshad/repos/factBench/factbench";
+        String factBenchPath = "/home/umair/Desktop/factcheck/datasets/factbench/factbench";
 
         factBenchTest d = new factBenchTest();
         try {
@@ -222,7 +222,7 @@ public class Controller {
     private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
         ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
         evidence.getComplexProofs().forEach(p -> {
-            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
+            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase(),p.getWebSite().getScore()));
         });
         return complexProofs;
     }
