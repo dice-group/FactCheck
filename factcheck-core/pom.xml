@@ -13,7 +13,7 @@
 	</parent>
 
 	<properties>
-		<owlapi.version>4.5.17</owlapi.version>
+		<owlapi.version>4.5.19</owlapi.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
@@ -448,14 +448,12 @@
 			<groupId>org.aksw</groupId>
 			<artifactId>sparql-metrics</artifactId>
 			<version>0.0.1-SNAPSHOT-jena-3.16-full-0.0.3</version>
-<!--			<exclusions>
+			<exclusions>
 				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
+					<groupId>net.sourceforge.owlapi</groupId>
+					<artifactId>owlapi-distribution</artifactId>
 				</exclusion>
-			</exclusions>-->
-<!--			<scope>system</scope>
-			<systemPath>${basedir}/lib/sparql-metrics-0.0.1-SNAPSHOT-jena-3.16-full.jar</systemPath>-->
+			</exclusions>
 		</dependency>
 <!--		<dependency>-->
 <!--			<groupId>org.aksw</groupId>-->

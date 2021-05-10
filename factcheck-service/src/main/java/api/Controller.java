@@ -130,7 +130,7 @@ public class Controller {
         if(validPredicates.contains(predicate)){
             return true;
         }
-        return false;
+        return true;
     }
 
 
