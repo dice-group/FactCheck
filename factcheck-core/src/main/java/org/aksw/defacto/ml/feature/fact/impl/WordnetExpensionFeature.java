@@ -13,6 +13,7 @@ import org.aksw.defacto.evidence.ComplexProof;
 import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
 import org.aksw.defacto.ml.feature.fact.FactFeature;
+import org.aksw.defacto.search.query.PaternGenerator;
 import org.aksw.defacto.wordnet.WordNetExpansion;
 
 
@@ -41,8 +42,13 @@ public class WordnetExpensionFeature implements FactFeature {
         
         double similarity = 0;
 
-        List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-        
+
+       // TODO : BOA
+        //List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+        PaternGenerator pg = new PaternGenerator();
+        List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+
+
         for ( Pattern pattern : patterns ) {
         	similarity = Math.max(similarity, wordnetExpansion.getExpandedJaccardSimilarity(proof.getProofPhrase(), pattern.getNormalized()));
         }

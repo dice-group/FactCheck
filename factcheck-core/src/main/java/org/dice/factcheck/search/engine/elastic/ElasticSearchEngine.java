@@ -71,6 +71,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			String q1 = "\""+subject+" "+property+" "+object+"\"";
 			if ( query.getPropertyLabel().equals("??? NONE ???") )
 				q1 = "\""+subject+" "+object+"\"";
+
 			HttpEntity entity1 = new NStringEntity(
 					"{\n" +
 							"	\"size\" : 500 ,\n" +

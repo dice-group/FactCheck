@@ -23,7 +23,9 @@ import edu.stanford.nlp.trees.PennTreebankLanguagePack;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreebankLanguagePack;
 import edu.stanford.nlp.trees.TypedDependency; 
-import edu.stanford.nlp.util.CoreMap; 
+import edu.stanford.nlp.util.CoreMap;
+import org.aksw.defacto.search.query.PaternGenerator;
+
 /**
  * @author Zafar Syed <zsyed@mail.uni-paderborn.de>
  *
@@ -43,7 +45,12 @@ public class DependencyParseFeature implements FactFeature {
 	@Override
 	public void extractFeature(ComplexProof proof, Evidence evidence) {
 
-		List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+		//TODO : BOA
+		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+
+		PaternGenerator pg = new PaternGenerator();
+		List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+
 		float score = (float) 0.0;
 		String patternString = "";
 		for ( Pattern p : patterns ) {

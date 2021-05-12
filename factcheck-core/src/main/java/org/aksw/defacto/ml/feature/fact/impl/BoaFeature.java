@@ -13,6 +13,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.fact.AbstractFactFeatures;
 import org.aksw.defacto.ml.feature.fact.FactFeature;
 
+import org.aksw.defacto.search.query.PaternGenerator;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.AbstractStringMetric;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.BlockDistance;
 import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
@@ -70,7 +71,10 @@ public class BoaFeature implements FactFeature {
 		if ( proof.getProofPhrase().trim().isEmpty() ) return; 
 
 		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-		List<Pattern> patterns = searcher.getNaturalLanguageRepresentations(evidence.getModel().getPredicate().getURI(), proof.getLanguage());
+		//TODO : BOA
+		PaternGenerator pg = new PaternGenerator();
+		List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+		//List<Pattern> patterns = searcher.getNaturalLanguageRepresentations(evidence.getModel().getPredicate().getURI(), proof.getLanguage());
 
 		for ( Pattern p : patterns ) {
 

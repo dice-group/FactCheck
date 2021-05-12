@@ -30,6 +30,7 @@ import org.aksw.defacto.search.concurrent.HtmlCrawlerCallable;
 import org.aksw.defacto.search.concurrent.RegexParseCallable;
 import org.aksw.defacto.search.concurrent.WebSiteScoreCallable;
 import org.aksw.defacto.search.query.MetaQuery;
+import org.aksw.defacto.search.query.PaternGenerator;
 import org.aksw.defacto.search.result.SearchResult;
 import org.aksw.defacto.topic.TopicTermExtractor;
 import org.dice.factcheck.topicterms.Word;
@@ -132,7 +133,10 @@ public class EvidenceCrawler {
         				Word object = new Word(objectLabel, 0);
         				topicTerms.add(subject);
         				topicTerms.add(object);
-        				List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, language);
+        				//TODO : BOA
+                        PaternGenerator pg = new PaternGenerator();
+                        List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+        				//List<Pattern> patterns = searcher.querySolrIndex1(evidence.getModel().getPropertyUri(), 20, 0, language);
         				for ( Pattern p : patterns ) {
         					Word predicate = new Word(p.getNormalized().trim(), 0);
         					topicTerms.add(predicate);

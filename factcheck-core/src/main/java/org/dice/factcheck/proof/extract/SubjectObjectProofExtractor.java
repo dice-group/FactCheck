@@ -172,7 +172,8 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 			String sublabel ="";
 			String objlabel ="";
 			String proofPhrase = entry.getKey();
-			// it makes no sense to look at longer strings 
+			// it makes no sense to look at longer strings
+			Integer ll = Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES");
 			if ( proofPhrase.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
 
 				try

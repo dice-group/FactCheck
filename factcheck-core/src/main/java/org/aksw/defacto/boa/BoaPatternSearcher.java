@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.aksw.defacto.Defacto;
+import org.aksw.gerbil.transfer.nif.Document;
+import org.aksw.simba.bengal.paraphrasing.Paraphrasing;
+import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
@@ -21,6 +24,7 @@ import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.dllearner.kb.sparql.SparqlEndpoint;
 
 /**
  * 
@@ -33,6 +37,7 @@ public class BoaPatternSearcher {
     private static HttpSolrClient frIndex;
     private Logger logger = Logger.getLogger(BoaPatternSearcher.class);
 	private Map<String,QueryResponse> queryCache = new HashMap<>();
+
 
     public BoaPatternSearcher(){
     	
@@ -57,9 +62,9 @@ public class BoaPatternSearcher {
      * @param language 
      * @return
      */
-    public List<Pattern> getNaturalLanguageRepresentations(String propertyUri, String language){
+    public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, String language){
 
-        List<Pattern> result =  querySolrIndex(propertyUri,
+        List<Pattern> result =  querySolrIndex1(propertyUri,
                 50,
                 Defacto.DEFACTO_CONFIG.getDoubleSetting("boa", "PATTERN_SCORE_THRESHOLD"), language);
 
@@ -74,9 +79,9 @@ public class BoaPatternSearcher {
      * @param numberOfBoaPatterns
      * @return
      */
-    public List<Pattern> getNaturalLanguageRepresentations(String propertyUri, int numberOfBoaPatterns, String language){
+    public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, int numberOfBoaPatterns, String language){
 
-        return querySolrIndex(propertyUri, numberOfBoaPatterns, 0.5D, language);
+        return querySolrIndex1(propertyUri, numberOfBoaPatterns, 0.5D, language);
     }
     
     /**
@@ -87,9 +92,9 @@ public class BoaPatternSearcher {
      * @param patternThreshold
      * @return
      */
-    public List<Pattern> getNaturalLanguageRepresentations(String propertyUri, int numberOfBoaPatterns, double patternThreshold, String language){
+    public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, int numberOfBoaPatterns, double patternThreshold, String language){
 
-        return querySolrIndex(propertyUri, numberOfBoaPatterns, patternThreshold, language);
+        return querySolrIndex1(propertyUri, numberOfBoaPatterns, patternThreshold, language);
     }
     
     /**
@@ -100,7 +105,7 @@ public class BoaPatternSearcher {
      * @param language 
      * @return a list of patterns
      */
-    public List<Pattern> querySolrIndex(String propertyUri, int numberOfBoaPatterns, double scoreThreshold, String language) {
+    public List<Pattern> querySolrIndex1(String propertyUri, int numberOfBoaPatterns, double scoreThreshold, String language) {
 
     	
     	 this.logger.debug("Querying solr index for uri: " + propertyUri + " and language " + language + "."); 
@@ -198,7 +203,7 @@ public class BoaPatternSearcher {
         System.out.println("--------------");
 //        queryPatterns("http://dbpedia.org/ontology/author");
 //        System.out.println("--------------");
-        queryPatterns("http://dbpedia.org/ontology/spouse");
+        queryPatterns1("http://dbpedia.org/ontology/spouse");
 //        System.out.println("--------------");
 //        queryPatterns("http://dbpedia.org/ontology/starring");
 //        System.out.println("--------------");
@@ -208,12 +213,12 @@ public class BoaPatternSearcher {
 	/**
 	 * @param uri
 	 */
-	private static void queryPatterns(String uri) {
+	private static void queryPatterns1(String uri) {
 		
 		int nr = 50;
 		BoaPatternSearcher bps = new BoaPatternSearcher();
 		List<Pattern> sub = new ArrayList<>();
-        sub.addAll(bps.getNaturalLanguageRepresentations(uri, nr, "en"));
+        sub.addAll(bps.getNaturalLanguageRepresentations1(uri, nr, "en"));
 //        sub.addAll(bps.getNaturalLanguageRepresentations(uri, nr, "de"));
 //        sub.addAll(bps.getNaturalLanguageRepresentations(uri, nr,  "fr"));
         

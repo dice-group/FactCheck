@@ -34,26 +34,26 @@ public class DependencyParseFeatureTest extends AbstractFactFeatureTest{
 		
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 				+ " physics", "Einstein received Nobel Prize for physics.", "Einstein received Nobel Prize for physics.", 
-				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
+				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/wiki/Albert_Einstein", "en")),
 				new Evidence(testModel), (float)1.0, null});
 		
 		// when the subject and predicate are not connected
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize for"
 				+ " physics", "After nominated by Einstein, Pauli received Nobel Prize for physics.", "", 
-				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
+				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/wiki/Albert_Einstein", "en")),
 				new Evidence(testModel), (float)0.5, null});
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize", "Einstein's Nobel prize, which he received in 1921.", "", 
-				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
+				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/wiki/Albert_Einstein", "en")),
 				new Evidence(testModel), (float)1.0, null});
 		
 		// when none of the connections exist
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize", "Tom Hanks received Academy award.", "", 
-				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
+				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/wiki/Albert_Einstein", "en")),
 				new Evidence(testModel), (float)0.0, null});
 		
 		// cehck for exception
 		testInput.add(new Object[] { new ComplexProof(testModel, "Einstein", "Nobel Prize", "Tom Hanks received Academy award.", "", 
-				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/Albert_Einstein", "en")), 
+				new WebSite(new MetaQuery("Einstein", "received", "Nobel Prize for Physics", "en", null), "http://en.wikipedia.com/wiki/Albert_Einstein", "en")),
 				null, (float)0.0, NullPointerException.class});
 		
 		return testInput;

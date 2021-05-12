@@ -1,14 +1,18 @@
 package org.aksw.defacto.search.query;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.aksw.defacto.Constants;
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
+import org.aksw.defacto.boa.RelativePredicates;
 import org.aksw.defacto.model.DefactoModel;
+import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;
+import org.apache.jena.rdf.model.impl.StatementImpl;
+import org.dllearner.kb.sparql.SparqlEndpoint;
+import org.aksw.gerbil.transfer.nif.Document;
+import org.aksw.simba.bengal.paraphrasing.Paraphrasing;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.ParseException;
@@ -37,6 +41,9 @@ public class QueryGenerator {
     public static final BoaPatternSearcher patternSearcher = new BoaPatternSearcher();
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryGenerator.class);
     private DefactoModel model;
+
+/*    protected SemWeb2NLVerbalizer verbalizer =
+            new SemWeb2NLVerbalizer(SparqlEndpoint.getEndpointDBpedia(), true, true);*/
     
     /**
      * 
@@ -75,10 +82,28 @@ public class QueryGenerator {
         	subjectLabel = model.getSubjectLabel("en");
         	objectLabel = model.getObjectLabel("en");
         }
-        
+
+        List<Statement> statements = new ArrayList<>();
+
+        statements.add(fact);
+
+        RelativePredicates relativePredicates = new RelativePredicates();
+
+        for(String p:relativePredicates.all(fact.getPredicate().getLocalName())){
+            Pattern pattern = new Pattern("?R? "+p+" ?D?",language);
+            pattern.naturalLanguageRepresentationWithoutVariables = p;
+            pattern.normalize();
+
+            MetaQuery metaQueryq = new MetaQuery(subjectLabel, p, objectLabel, language, null);
+            System.out.println(metaQueryq);
+            queryStrings.put(pattern, metaQueryq);
+        }
+
+
+
         // TODO
         // query boa index and generate the meta queries
-        for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations(fact.getPredicate().getURI(), language)) {
+/*       for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations1(fact.getPredicate().getURI(), language)) {
         	
         	if ( !pattern.getNormalized().trim().isEmpty() ) {
         		
@@ -86,7 +111,7 @@ public class QueryGenerator {
         		System.out.println(metaQuery);
         		queryStrings.put(pattern, metaQuery);
         	}
-        }
+        }*/
        
         return queryStrings;
     }
