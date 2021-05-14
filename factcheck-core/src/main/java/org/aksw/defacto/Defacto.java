@@ -244,7 +244,7 @@ public class Defacto {
 		}        
 	}
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 
 		int max = 0;
 		int min = 1000;

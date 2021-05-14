@@ -325,7 +325,7 @@ public class TrainingSetCreatorDBpedia implements TrainingSetCreator {
 		return null;
 	}
 	
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		Layout layout = new PatternLayout();
 		ConsoleAppender consoleAppender = new ConsoleAppender(layout);
 		org.apache.log4j.Logger.getRootLogger().setLevel(Level.DEBUG);

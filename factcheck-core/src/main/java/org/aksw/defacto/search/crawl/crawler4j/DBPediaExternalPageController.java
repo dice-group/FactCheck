@@ -22,7 +22,7 @@ public class DBPediaExternalPageController {
     _seeds = seeds;
   }
 
-  public static void main(final String[] args) throws Exception {
+  public void main(final String[] args) throws Exception {
 
     final String crawlStorageFolder =
         Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "CRAWL_STORAGE_FOLDER");

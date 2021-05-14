@@ -59,7 +59,7 @@ public class PageRank {
         return pageRank;
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
         long start = System.currentTimeMillis();
         System.out.println(GetPageRank("http://informatik.uni-leipzig.de"));

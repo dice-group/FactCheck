@@ -175,7 +175,7 @@ public class DefactoTimePeriodService {
 		return message;
 	}
 	
-	public static void main(String[] args) throws UniformInterfaceException, ClientHandlerException, JSONException {
+	public void main(String[] args) throws UniformInterfaceException, ClientHandlerException, JSONException {
 		
 //		String subjectUri, String propertyUri, String objectUri, List<String> languages,
 //		String from, String to, String contextSize, 

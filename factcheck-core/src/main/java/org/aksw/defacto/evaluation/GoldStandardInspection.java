@@ -25,7 +25,7 @@ import edu.stanford.nlp.util.StringUtils;
 
 public class GoldStandardInspection {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public void main(String[] args) throws FileNotFoundException {
 		
 		Defacto.init();
 		

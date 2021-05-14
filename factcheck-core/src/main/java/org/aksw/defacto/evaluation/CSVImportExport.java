@@ -27,7 +27,7 @@ import weka.core.Utils;
  */
 public class CSVImportExport {
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	public void main(String[] args) throws FileNotFoundException, IOException {
 		export();
 	}
 

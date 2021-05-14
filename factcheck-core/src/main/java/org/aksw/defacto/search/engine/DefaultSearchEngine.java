@@ -40,7 +40,7 @@ public abstract class DefaultSearchEngine implements SearchEngine {
         return query(query, pattern);
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 		
     	Defacto.init();
     	

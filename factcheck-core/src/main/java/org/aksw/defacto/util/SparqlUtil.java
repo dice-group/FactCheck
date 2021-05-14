@@ -90,7 +90,7 @@ public class SparqlUtil {
 	}	
 	
 	
-	public static void main(String[] args) {
+	public void main(String[] args) {
 
         SparqlUtil util = new SparqlUtil("http://live.dbpedia.org/sparql", "http://dbpedia.org");
         System.out.println(util.getEnLabel("http://dbpedia.org/resource/Medal_of_Honor"));

@@ -142,7 +142,7 @@ public class FactScorer {
     	return new File(FactScorer.class.getResource(name).getFile()).getAbsolutePath(); 
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 		
     	System.out.println("-"+ "".split(";").length + "-");
 	}

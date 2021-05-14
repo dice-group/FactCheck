@@ -14,7 +14,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 public class DefactoYearsClient {
 
-	public static void main(String[] args) throws IOException, JSONException {
+	public void main(String[] args) throws IOException, JSONException {
 
 		Client client = Client.create(); // should be reused since it expensive to create
 //		WebResource webResource = client.resource("http://localhost:1234/getdefactotimes");

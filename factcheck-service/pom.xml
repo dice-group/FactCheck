@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.dice-research</groupId>
 	<artifactId>factcheck-service</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -57,10 +57,14 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>4.0.1</version>
 		</dependency>
+
 	</dependencies>
 
 
@@ -69,6 +73,25 @@
 		<repository>
 			<id>spring-releases</id>
 			<url>https://repo.spring.io/libs-release</url>
+		</repository>
+		<repository>
+			<id>maven.aksw.internal</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>https://maven.aksw.org/archiva/repository/internal</url>
+		</repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>University Leipzig, AKSW Maven2 Repository</name>
+			<url>https://maven.aksw.org/archiva/repository/snapshots</url>
+		</repository>
+		<repository>
+			<id>scala-tools.org</id>
+			<name>Scala-tools Maven2 Repository</name>
+			<url>https://repo1.maven.org/maven2/org/scala-tools/</url>
+		</repository>
+		<repository>
+			<id>tc-maven-repo</id>
+			<url>https://github.com/tc/tc-maven-repo/raw/master/releases</url>
 		</repository>
 	</repositories>
 	<pluginRepositories>
@@ -84,7 +107,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>1.2.7.RELEASE</version>
+				<version>2.3.4.RELEASE</version>
 				<configuration>
 					<mainClass>api.Application</mainClass>
 					<layout>ZIP</layout>
@@ -97,6 +120,19 @@
 					</execution>
 				</executions>
 			</plugin>
+
+<!--			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>api.Application</mainClass>
+				</configuration>
+				<executions>
+					<execution>
+						<goal>repackage</goal>
+					</execution>
+				</executions>
+			</plugin>-->
 
 <!--			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

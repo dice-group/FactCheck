@@ -24,7 +24,7 @@ public class GoogleQuery {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public void main(String[] args) throws IOException, InterruptedException {
 
 		BufferedFileWriter writer = new BufferedFileWriter("/Users/gerb/Development/workspaces/tex/AKSW_Papers/2013/JWS_Temporal_Multilingual_Defacto/statistics/years.tsv", Encoding.UTF_8, WRITER_WRITE_MODE.OVERRIDE);
 		

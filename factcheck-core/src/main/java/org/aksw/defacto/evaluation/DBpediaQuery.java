@@ -14,7 +14,7 @@ import org.apache.jena.tdb.TDBFactory;
  */
 public class DBpediaQuery {
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		Dataset dataset = TDBFactory.createDataset("/Users/gerb/Development/workspaces/experimental/dbpedia/store");
 		Model dbpedia = dataset.getNamedModel("http://dbpedia.org");
 		

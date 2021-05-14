@@ -64,7 +64,7 @@ public class AzureBingSearchEngine extends DefaultSearchEngine {
 		return 0L;
 	}
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 
 		//        MetaQuery query0 = new MetaQuery(String.format("%s|-|%s|-|%s|-|%s", "Obama", "?D? is president of ?R?", "United States", "en"));
 		//        MetaQuery query  = new MetaQuery(String.format("%s|-|%s|-|%s|-|%s", "Montebelluna", "?R? Wii version of `` ?D?", "Procter & Gamble", "en"));

@@ -60,7 +60,7 @@ public class TestAndTrainSetCreator {
 	 * @param args
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws IOException {
+	public void main(String[] args) throws IOException {
 		
 		Defacto.init();
 		FACT_BENCH_PATH = Defacto.DEFACTO_CONFIG.getStringSetting("eval", "data-directory") + "factbench/v1/";

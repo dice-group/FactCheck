@@ -38,7 +38,7 @@ public class WekaModelGeneration {
 	 * @param args
 	 * @throws Exception
 	 */
-	public static void main(String[] args) throws Exception {
+	public void main(String[] args) throws Exception {
 
 		// test();
 //		startEval();

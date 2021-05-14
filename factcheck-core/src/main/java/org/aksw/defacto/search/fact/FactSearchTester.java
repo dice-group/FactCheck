@@ -200,7 +200,7 @@ public class FactSearchTester {
      * @param args
      * @throws IOException 
      */
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
 
         out = new BufferedWriter(new FileWriter("/Users/gerb/defacto-possible-proof.csv",true));
         

@@ -177,7 +177,7 @@ public class BoaFeature implements FactFeature {
 	}
 
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 
 		String longTest = "oubleCli . . . Aprimo 05/09/05 Selectica Acquires Determine Software Products - Selectica announced the acquisition of the contract managem".toLowerCase();
 		//    	String pattern = "was acquires by";

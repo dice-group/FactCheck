@@ -33,7 +33,7 @@ public class RegexTagger {
 	}
 	
 	
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		
 		String test = "This is a year 1872 this is not a year 345 this is also not a year 3323 but his 1293 2013";
 		RegexTagger t  = new RegexTagger();

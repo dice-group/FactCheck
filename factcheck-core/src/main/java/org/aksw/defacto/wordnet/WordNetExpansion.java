@@ -87,7 +87,7 @@ public class WordNetExpansion {
         return ((double)intersection.size())/((double)union.size());
     }
     
-    public static void main(String args[])
+    public void main(String args[])
     {
         WordNetExpansion wne = new WordNetExpansion("C:\\Program Files (x86)\\WordNet\\2.1\\dict");
         String token = "received the 1921";

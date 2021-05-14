@@ -56,7 +56,7 @@ public class DefactoServer {
         return httpServer;
     }
 
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
         try {
         	
             // the following statement is used to log any messages  

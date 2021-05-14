@@ -169,7 +169,7 @@ public class VectorUtil {
     }
 
     // test client
-    public static void main(String[] args) {
+    public void main(String[] args) {
         double[] xdata = {1, 100, 0, 1, 8, 9};
         double[] ydata = {1,0,0,1,0,1};
 

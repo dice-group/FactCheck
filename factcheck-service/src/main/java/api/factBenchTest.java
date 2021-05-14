@@ -41,7 +41,7 @@ public class factBenchTest {
         }
     }
 
-/*    public static void main(String[] args) {
+/*    public void main(String[] args) {
 
 
         factBechTest d = new factBechTest();

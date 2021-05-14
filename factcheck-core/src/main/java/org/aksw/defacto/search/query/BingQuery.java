@@ -46,7 +46,7 @@ System.out.println(propertyLabel);
         return propertyLabel.replaceAll(",", "").replace("`", "").replace(" 's", "'s").replace("?R?", "").replace("?D?", "").replaceAll(" +", " ").replaceAll("'[^s]", "").replaceAll("&", "and").trim();
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
         MetaQuery query1 = new MetaQuery("Franck Ribery|-| politician |-|Galatasaray|-|en");
         MetaQuery query2 = new MetaQuery("Mount Eccles National Park|-|?D? is a stupid ?R?|-|Texas|-|en");

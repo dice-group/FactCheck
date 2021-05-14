@@ -31,7 +31,7 @@ public class SimpleDefactoClient {
 //	public static final WebResource webResource = Client.create().resource("http://139.18.2.164:1234/getdefactotimes");
 	public static final WebResource webResource = Client.create().resource("http://localhost:1234/getdefactotimes");
 	
-	public static void main(String[] args) throws IOException, JSONException {
+	public void main(String[] args) throws IOException, JSONException {
 
 		System.out.println("Start");
 		long start = System.currentTimeMillis();

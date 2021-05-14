@@ -43,7 +43,7 @@ public class Configuration {
 		return Double.valueOf(df.format(value * 100).replace(",", "."));
 	}
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		System.out.println(df.format(0.1145343234234 * 100).replace(",", "."));
 	}
 }

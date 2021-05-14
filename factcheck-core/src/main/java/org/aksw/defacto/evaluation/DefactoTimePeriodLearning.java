@@ -49,7 +49,7 @@ public class DefactoTimePeriodLearning {
 	static Frequency medium = new Frequency();
 	static Frequency large = new Frequency();
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public void main(String[] args) throws FileNotFoundException {
 		
 		Defacto.init();
 		trainDirectory = Defacto.DEFACTO_CONFIG.getStringSetting("eval", "data-directory") 

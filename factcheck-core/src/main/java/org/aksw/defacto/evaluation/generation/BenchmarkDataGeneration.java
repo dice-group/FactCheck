@@ -155,7 +155,7 @@ public class BenchmarkDataGeneration {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws JSONException, IOException {
+	public void main(String[] args) throws JSONException, IOException {
 
 
 	    try{

@@ -53,7 +53,7 @@ public class TokenDistanceFeature implements FactFeature {
 		complexProof.getFeatures().setValue(AbstractFactFeatures.NUMBER_OF_NON_ALPHA_NUMERIC_CHARACTERS, Double.valueOf(nonAlphaSpaceCharacterCount));
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 		
     	System.out.println(StringUtils.countMatches("This , ,is ,a test", ","));
 	}

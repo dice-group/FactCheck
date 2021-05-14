@@ -92,7 +92,7 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
     }
     
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
 /*		OWLObjectProperty property = owlDataFactory.getOWLObjectProperty(IRI.create("http://dbpedia.org/ontology/author"));
 		OWLNamedIndividual subject = owlDataFactory.getOWLNamedIndividual(IRI.create("http://dbpedia.org/resource/The_Da_Vinci_Code"));

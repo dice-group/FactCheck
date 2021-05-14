@@ -101,7 +101,7 @@ public class SimpleQuery extends JFrame
         this.setVisible(true);
     }
     
-    public static void main( String[] args) {
+    public void main( String[] args) {
 
     	try {
     		query = new SimpleQuery();	

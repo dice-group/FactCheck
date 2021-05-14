@@ -192,7 +192,7 @@ public class PattyPatternFeature implements FactFeature {
 	}
 
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 
 		List<? extends AbstractStringMetric> metrics = Arrays.asList(
 				//    			new Levenshtein(),  new BlockDistance(), new OverlapCoefficient(), new DiceSimilarity(),

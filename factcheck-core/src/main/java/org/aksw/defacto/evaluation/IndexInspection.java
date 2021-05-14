@@ -8,7 +8,7 @@ import org.apache.lucene.store.FSDirectory;
 
 public class IndexInspection {
 
-	public static void main(String[] args) throws IOException  {
+	public void main(String[] args) throws IOException  {
 		
 		System.out.println("EN: " +  getNumDocs("/Users/gerb/Development/workspaces/experimental/boa/defacto/en/index/corpus"));
 		System.out.println("DE: " +  getNumDocs("/Users/gerb/Development/workspaces/experimental/boa/qa/de/index/corpus"));

@@ -186,7 +186,7 @@ public class BoaPatternSearcher {
         return patternList;
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
     	Defacto.init();
 //        queryPatterns("http://dbpedia.org/ontology/award");

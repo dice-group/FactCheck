@@ -290,7 +290,7 @@ public class DataWebResultFinder {
 		return (sVal + pVal + oVal) / 3;
 	}
 
-	public static void main(String args[]) throws SameAsServiceException {
+	public void main(String args[]) throws SameAsServiceException {
 
 		DataWebResultFinder finder = new DataWebResultFinder();
 

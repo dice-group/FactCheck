@@ -16,7 +16,7 @@ import org.aksw.defacto.util.Encoder.Encoding;
  */
 public class InOutLinkGenerator {
 
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		
 		Defacto.init();
 		

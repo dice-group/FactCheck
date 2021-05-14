@@ -56,7 +56,7 @@ public class TopicTermExtractor {
 
     private static TopicTermSolr4Cache cache = new TopicTermSolr4Cache();
     
-    public static void main(String[] args) throws InvalidFileFormatException, IOException {
+    public void main(String[] args) throws InvalidFileFormatException, IOException {
     	
     	Defacto.init();
     	cache = new TopicTermSolr4Cache();

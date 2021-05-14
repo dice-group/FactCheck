@@ -129,7 +129,7 @@ public class AbstractFactFeatures {
         factFeatures.setClass(CLASS);
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
     	System.out.println(AbstractFactFeatures.factFeatures.toString());
 	}
 }

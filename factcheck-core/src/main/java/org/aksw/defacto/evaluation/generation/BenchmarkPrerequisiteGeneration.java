@@ -73,7 +73,7 @@ public class BenchmarkPrerequisiteGeneration {
 		System.out.println("DONE!");
 	}
 	
-	public static void main(String[] args) throws JSONException, IOException {
+	public void main(String[] args) throws JSONException, IOException {
 		
 		Defacto.init();
 		new BenchmarkPrerequisiteGeneration();

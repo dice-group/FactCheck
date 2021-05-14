@@ -31,7 +31,7 @@ public class ModelEvaluation {
      * @throws IOException 
      * @throws InterruptedException 
      */
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public void main(String[] args) throws IOException, InterruptedException {
 
         List<String> playerUris = FileUtils.readLines(new File("/Users/gerb/Development/workspaces/experimental/temporal/gold_standard.csv"), "UTF-8");
         Frequency freq  = new Frequency();

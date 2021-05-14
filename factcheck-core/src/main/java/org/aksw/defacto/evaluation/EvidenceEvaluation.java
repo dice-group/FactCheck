@@ -45,7 +45,7 @@ public class EvidenceEvaluation {
 	private static Map<Integer,Integer> correctYearMap = new TreeMap<>();
 	private static Map<Integer,Integer> wrongYearMap = new TreeMap<>();
 	
-public static void main(String[] args) throws Exception {
+public void main(String[] args) throws Exception {
 		
 		Defacto.init();
 		loadClassifier();
@@ -128,7 +128,7 @@ public static void main(String[] args) throws Exception {
 		}
 	}
 	
-//	public static void main(String[] args) throws Exception {
+//	public void main(String[] args) throws Exception {
 //		
 //		Defacto.init();
 //		loadClassifier();

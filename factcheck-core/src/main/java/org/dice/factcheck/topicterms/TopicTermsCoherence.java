@@ -32,7 +32,7 @@ public class TopicTermsCoherence {
 	private static String NUMBER_OF_TERMS;
 
 	private static Logger logger = Logger.getLogger(TopicTermsCoherence.class);
-	public static void main(String[] args) throws InvalidFileFormatException, IOException {
+	public void main(String[] args) throws InvalidFileFormatException, IOException {
 		getTerms("Albert Einstein");
 	}
 

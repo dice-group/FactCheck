@@ -33,7 +33,7 @@ import edu.stanford.nlp.util.StringUtils;
 
 public class DefactoClient {
 
-	public static void main(String[] args) throws IOException, JSONException {
+	public void main(String[] args) throws IOException, JSONException {
 
 		Defacto.init();
 		

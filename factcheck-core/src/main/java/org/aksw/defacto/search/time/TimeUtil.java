@@ -149,7 +149,7 @@ public class TimeUtil {
 		return Math.log(getDomainNormalizedPopularity(year) + 1);
 	}
 	
-	public static void main(String[] args) {
+	public void main(String[] args) {
 		
 //		int year = 2013;
 //		System.out.println(String.format("%s\t%s\t%s", year, getGlobalNormalizedPopularity(year), getDomainNormalizedPopularity(year)));

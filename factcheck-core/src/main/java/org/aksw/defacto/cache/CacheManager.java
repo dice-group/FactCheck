@@ -224,7 +224,7 @@ public class CacheManager {
         executeUpdateQuery(searchResultIndex);
     }
     
-    public static void main(String[] args) {
+    public void main(String[] args) {
 
         CacheManager.getInstance();
     }

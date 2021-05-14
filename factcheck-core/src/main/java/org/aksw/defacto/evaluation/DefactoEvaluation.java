@@ -41,7 +41,7 @@ public class DefactoEvaluation {
 	 * @param args
 	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) throws FileNotFoundException {
+	public void main(String[] args) throws FileNotFoundException {
 		
 		Defacto.init();
 		for ( String trainOrTestAndSet : args) {
