@@ -20,6 +20,7 @@ import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.model.DefactoModel;
 import org.aksw.defacto.search.fact.FactSearcher;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.jena.dboe.sys.Sys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,21 +61,44 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 		try
 		{
+			Set<String> tmpSubjectLabels = new HashSet<String>();
+			Set<String> tmpObjectLabels = new HashSet<String>();
+
 			Set<String> subjectLabels = new HashSet<String>();
 			Set<String> objectLabels = new HashSet<String>();
 
+			for ( String language : model.getLanguages() ) {
+				tmpSubjectLabels.add(model.getSubjectLabelNoFallBack(language));
+				tmpSubjectLabels.addAll(model.getSubjectAltLabels(language));
+
+				tmpObjectLabels.add(model.getObjectLabelNoFallBack(language));
+				tmpObjectLabels.addAll(model.getObjectAltLabels(language));
+			}
+
+			tmpSubjectLabels.remove(Constants.NO_LABEL);
+			tmpObjectLabels.remove(Constants.NO_LABEL);
+
+// remove (XXXX) patterns
+			for(String s : tmpSubjectLabels){
+				subjectLabels.add(s.replaceAll("\\(.*\\)", ""));
+			}
+
+			for(String s : tmpObjectLabels){
+				objectLabels.add(s.replaceAll("\\(.*\\)", ""));
+			}
+
 			/****** Get the surface forms for Subject and Object *********/
 
-			for ( String language : model.getLanguages() ) {
+/*			for ( String language : model.getLanguages() ) {
 				subjectLabels.add(model.getSubjectLabelNoFallBack(language));
 				subjectLabels.addAll(model.getSubjectAltLabels(language));
 
 				objectLabels.add(model.getObjectLabelNoFallBack(language));
 				objectLabels.addAll(model.getObjectAltLabels(language));
-			}
-			subjectLabels.remove(Constants.NO_LABEL);
-			objectLabels.remove(Constants.NO_LABEL);
-			String subjectLabel = evidence.getModel().getSubjectLabel(null);
+			}*/
+
+			//remove () pattern example : XXX (File) become XXX
+			String subjectLabel = evidence.getModel().getSubjectLabel(null).replaceAll("\\(.*\\)", "");
 
 			for (String label : subjectLabel.split(" ")) {
 				if(label.length()>2)
@@ -85,23 +109,38 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 			List<java.util.regex.Pattern> subpatterns = new ArrayList<java.util.regex.Pattern>();
 			Iterator<String> it = subjectLabels.iterator();
-			while(it.hasNext())
-				subpatterns.add(java.util.regex.Pattern.compile(it.next().toString(), java.util.regex.Pattern.CASE_INSENSITIVE));
-
+			while(it.hasNext()) {
+				String tmpSubjet = it.next().toString();
+				subpatterns.add(java.util.regex.Pattern.compile(tmpSubjet, java.util.regex.Pattern.CASE_INSENSITIVE));
+				if(tmpSubjet.contains("(")){
+					subpatterns.add(java.util.regex.Pattern.compile(tmpSubjet.replaceAll("\\(.*\\)", ""), java.util.regex.Pattern.CASE_INSENSITIVE));
+				}
+			}
 			List<java.util.regex.Pattern> objpatterns = new ArrayList<java.util.regex.Pattern>();
 			Iterator<String> itob = objectLabels.iterator();
-			while(itob.hasNext())
-				objpatterns.add(java.util.regex.Pattern.compile(itob.next().toString(), java.util.regex.Pattern.CASE_INSENSITIVE));
-
+			while(itob.hasNext()) {
+				String tmpObjet = itob.next().toString();
+				objpatterns.add(java.util.regex.Pattern.compile(tmpObjet, java.util.regex.Pattern.CASE_INSENSITIVE));
+				if(tmpObjet.contains("(")){
+					objpatterns.add(java.util.regex.Pattern.compile(tmpObjet.replaceAll("\\(.*\\)", "").trim(), java.util.regex.Pattern.CASE_INSENSITIVE));
+				}
+			}
 			/**** Normalize website text using pattern replacement and store it in String ****/
 			// replace all the surface forms identified with normalized string
 
 			String normalizedText = website.getText();
+
+			System.out.println("there are "+subpatterns.size()+" subpatterns");
+
 			for (java.util.regex.Pattern pattern2 : subpatterns) {
 				normalizedText = pattern2.matcher(normalizedText).replaceAll("subjectFound");
+				//System.out.println("pattern is "+pattern2+" normalizedText is "+normalizedText);
 			}
+
+			System.out.println("there are "+objpatterns.size()+" objpatterns");
 			for (java.util.regex.Pattern pattern2 : objpatterns) {
 				normalizedText = pattern2.matcher(normalizedText).replaceAll("objectFound");
+				//System.out.println("pattern is "+pattern2+" normalizedText is "+normalizedText);
 			}
 
 			/**** Annotate the website text and normalized website text using SNLP sentence split "ssplit" ****/
@@ -110,6 +149,9 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 			Annotation docOriginal = model.corenlpClient.sentenceAnnotation(website.getText());
 
 			/**** Find proof phrases in both direction i.e., subject followed by object and vice-versa ****/
+
+			System.out.println("docOriginal  : "+docOriginal);
+			System.out.println("docNormalized: "+docNormalized);
 
 			HashMap<String, Integer> subOjectPhrases = findProofPhrase(docNormalized, docOriginal, "subjectFound", "objectFound");
 			HashMap<String, Integer> objSubjectPhrases = findProofPhrase(docNormalized, docOriginal, "objectFound", "subjectFound");
@@ -166,6 +208,8 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 	private void createProofsForEvidence(Evidence evidence, HashMap<String, Integer> matches, WebSite site, Set<String> surfaceForms, Set<String> subjectlabels, Set<String> objectlabels) {
 
+		System.out.println("in createProofsForEvidence "+matches.size()+" found");
+
 		for(Map.Entry<String, Integer> entry : matches.entrySet())
 		{
 			String tinyContext = "";
@@ -174,6 +218,7 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 			String proofPhrase = entry.getKey();
 			// it makes no sense to look at longer strings
 			Integer ll = Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES");
+			System.out.println("NUMBER_OF_TOKENS_BETWEEN_ENTITIES is "+proofPhrase.split(" ").length );
 			if ( proofPhrase.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
 
 				try

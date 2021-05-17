@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.dice-research</groupId>
 	<artifactId>factcheck-service</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.dice-research</groupId>
 		<artifactId>FactCheck</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<!--<parent> -->
 	<!--<groupId>org.springframework.boot</groupId> -->
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.dice-research</groupId>
 			<artifactId>factcheck-core</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.1</version>
+			<version>3.1.0</version>
 		</dependency>
 
 	</dependencies>
@@ -121,29 +121,6 @@
 				</executions>
 			</plugin>
 
-<!--			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<mainClass>api.Application</mainClass>
-				</configuration>
-				<executions>
-					<execution>
-						<goal>repackage</goal>
-					</execution>
-				</executions>
-			</plugin>-->
-
-<!--			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.0</version>
-				<configuration>
-					<archive>
-						<manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-				</configuration>
-			</plugin>-->
 
 		</plugins>
 

@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.aksw.defacto.Defacto;
-import org.aksw.gerbil.transfer.nif.Document;
+/*import org.aksw.gerbil.transfer.nif.Document;
 import org.aksw.simba.bengal.paraphrasing.Paraphrasing;
-import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;
+import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;*/
 import org.apache.log4j.Logger;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;

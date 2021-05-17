@@ -28,10 +28,10 @@ import wrapper.preprocessing.FCpreprocessor;
 public class Controller {
 
     private final Logger logger = LoggerFactory.getLogger(Controller.class);
-    private final Set<String> validPredicates = new HashSet<String>();
+    /*private final Set<String> validPredicates = new HashSet<String>();*/
 
     public Controller() {
-        validPredicates.add("http://dbpedia.org/ontology/award");
+       /* validPredicates.add("http://dbpedia.org/ontology/award");
         validPredicates.add("http://dbpedia.org/ontology/birthPlace");
         validPredicates.add("http://dbpedia.org/ontology/deathPlace");
         validPredicates.add("http://dbpedia.org/ontology/foundationPlace");
@@ -39,7 +39,7 @@ public class Controller {
         validPredicates.add("http://dbpedia.org/ontology/publicationDate");
         validPredicates.add("http://dbpedia.org/ontology/spouse");
         validPredicates.add("http://dbpedia.org/ontology/starring");
-        validPredicates.add("http://dbpedia.org/ontology/subsidiary");
+        validPredicates.add("http://dbpedia.org/ontology/subsidiary");*/
     }
 
     // To verify status of server
@@ -85,6 +85,10 @@ public class Controller {
         Integer taskId = generateRandomIntInRange(1,1000);
         response.taskid = taskId.toString();
 
+        subject = subject.replace("https","http");
+        object = object.replace("https","http");
+        predicate = predicate.replace("https","http");
+
         if(!isValidPredicate(predicate)){
             response.filedata="The Predicate is Not Acceptable ==> "+ predicate;
             return ResponseEntity
@@ -127,9 +131,9 @@ public class Controller {
     }
 
     private boolean isValidPredicate(String predicate) {
-        if(validPredicates.contains(predicate)){
+        /*if(validPredicates.contains(predicate)){
             return true;
-        }
+        }*/
         return true;
     }
 

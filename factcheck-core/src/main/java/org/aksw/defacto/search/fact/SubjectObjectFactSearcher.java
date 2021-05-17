@@ -116,12 +116,14 @@ public class SubjectObjectFactSearcher implements FactSearcher {
         	
         	// save some time
         	if ( !websiteText.contains(subjectLabel) ) continue;
-        	
+
+            LOGGER.info("there is "+objectLabels.size()+" objectLabels ");
+
             for ( String objectLabel : objectLabels ) { 
             	
             	if ( !websiteText.contains(objectLabel) ) continue;
             	
-            	LOGGER.debug("Search proof for: '" + subjectLabel + "' and '" + objectLabel + "'.");
+            	LOGGER.info("Search proof for: '" + subjectLabel + "' and '" + objectLabel + "'.");
             
             	if ( subjectLabel.equals(objectLabel) ) continue;
             	
@@ -187,10 +189,10 @@ public class SubjectObjectFactSearcher implements FactSearcher {
      * @param site
      */
     private void createProofsForEvidence(Evidence evidence, List<String> matches, String firstLabel, String secondLabel, String websiteTextLowerCase, WebSite site, Set<String> surfaceForms) {
-        
+        System.out.println(matches.size()+" matches are found.");
         for ( String occurrence : matches ) {
-            
-            // it makes no sense to look at longer strings 
+            System.out.println("NUMBER_OF_TOKENS_BETWEEN_ENTITIES is "+occurrence.split(" ").length );
+            // it makes no sense to look at longer strings
             if ( occurrence.split(" ").length < Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_OF_TOKENS_BETWEEN_ENTITIES") ) {
                 String tinyContext = this.getLeftAndRightContext(site.getText(), websiteTextLowerCase, firstLabel + occurrence + secondLabel, 25);
                 //System.out.println(firstLabel + occurrence + secondLabel);

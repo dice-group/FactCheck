@@ -92,7 +92,8 @@ public class EvidenceCrawler {
             for ( SearchResult result : searchResults ) {
             	totalHitCount += result.getTotalHitCount();  
             }
-                    
+
+            System.out.println("totalHitCount for is : "+totalHitCount+ " total result is : "+ searchResults.size());
             evidence = new Evidence(model, totalHitCount, patternToQueries.keySet());
             // basically downloads all websites in parallel
             //crawlSearchResults(searchResults, model, evidence);
@@ -212,10 +213,11 @@ public class EvidenceCrawler {
     	// 1. Score the websites 
     	 Set<WebSite> results = new HashSet<WebSite>();
         List<WebSiteScoreCallable> scoreCallables =  new ArrayList<WebSiteScoreCallable>();
+        LOGGER.info("searchResults size is "+searchResults.size());
         for ( SearchResult result : searchResults ) 
             for (WebSite site : result.getWebSites() )
                 scoreCallables.add(new WebSiteScoreCallable(site, evidence, model));
-        
+        LOGGER.info("in sum "+scoreCallables.size()+" callables added");
         // nothing found, nothing to score
         if ( scoreCallables.isEmpty() ) return;
                     
@@ -224,10 +226,11 @@ public class EvidenceCrawler {
         ExecutorService executor = Executors.newCachedThreadPool();
         try {
     		for ( Future<WebSite> result : executor.invokeAll(scoreCallables)) {
-
-    			results.add(result.get());
+                WebSite tmp = result.get();
+                LOGGER.info("website is  "+tmp);
+    			results.add(tmp);
             }
-    		
+            LOGGER.info("in sum "+results.size()+" results added");
         }
         catch (InterruptedException e) {
 
@@ -243,16 +246,18 @@ public class EvidenceCrawler {
     	// 2. parse the pages to look for dates
         List<RegexParseCallable> parsers = new ArrayList<RegexParseCallable>();
         List<ComplexProof> proofs = new ArrayList<ComplexProof>(evidence.getComplexProofs());
-        
+
+        LOGGER.info("there is  "+proofs.size()+" ComplexProof");
+
         // create |CPU| parsers for n websites and split them to the parsers
         for ( ComplexProof proofsSublist : proofs)
         	parsers.add(new RegexParseCallable(proofsSublist));
         
         start = System.currentTimeMillis();
-        LOGGER.debug(String.format("Proof parsing %s websites per parser, %s at a time!", parsers.size(), Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_NLP_STANFORD_MODELS")));
+        LOGGER.info(String.format("Proof parsing %s websites per parser, %s at a time!", parsers.size(), Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_NLP_STANFORD_MODELS")));
         executeAndWaitAndShutdownCallables(Executors.newFixedThreadPool(
         		Defacto.DEFACTO_CONFIG.getIntegerSetting("extract", "NUMBER_NLP_STANFORD_MODELS")), parsers);
-        LOGGER.debug(String.format("Proof parsing finished in %sms!", (System.currentTimeMillis() - start)));
+        LOGGER.info(String.format("Proof parsing finished in %sms!", (System.currentTimeMillis() - start)));
         
         this.extractDates(evidence);
     }

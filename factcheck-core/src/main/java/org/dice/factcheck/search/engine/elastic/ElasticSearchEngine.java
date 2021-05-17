@@ -101,6 +101,7 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 				//TODO check it is correct
 					docCount = Integer.parseInt(hitCount.asText());
 			}
+			System.out.println("documents number is :"+docCount+" for :"+subject+" "+property+" "+object);
 			int number_of_search_results = Integer.parseInt(NUMBER_OF_SEARCH_RESULTS);
 			if(!(docCount<number_of_search_results))
 				docCount = number_of_search_results;

@@ -8,11 +8,11 @@ import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.boa.RelativePredicates;
 import org.aksw.defacto.model.DefactoModel;
-import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;
+/*import org.aksw.simba.bengal.verbalizer.SemWeb2NLVerbalizer;*/
 import org.apache.jena.rdf.model.impl.StatementImpl;
 import org.dllearner.kb.sparql.SparqlEndpoint;
-import org.aksw.gerbil.transfer.nif.Document;
-import org.aksw.simba.bengal.paraphrasing.Paraphrasing;
+/*import org.aksw.gerbil.transfer.nif.Document;
+import org.aksw.simba.bengal.paraphrasing.Paraphrasing;*/
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.ParseException;

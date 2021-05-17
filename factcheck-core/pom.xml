@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>factcheck-core</artifactId>
 	<groupId>org.dice-research</groupId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 
 	<parent>
 		<groupId>org.dice-research</groupId>
 		<artifactId>FactCheck</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 
 	<properties>
@@ -200,6 +200,12 @@
 			<groupId>edu.stanford.nlp</groupId>
 			<artifactId>stanford-corenlp</artifactId>
 			<version>3.8.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>edu.stanford.nlp</groupId>
@@ -211,6 +217,13 @@
 			<version>4.1.0</version> <exclusions> <exclusion> <artifactId>slf4j-jdk14</artifactId> 
 			<groupId>org.slf4j</groupId> </exclusion> <exclusion> <groupId>org.apache.httpcomponents</groupId> 
 			<artifactId>httpcore</artifactId> </exclusion> </exclusions> </dependency> -->
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.solr</groupId>
 			<artifactId>solr-solrj</artifactId>
@@ -592,7 +605,7 @@
 			</exclusions>-->
 		</dependency>
 
-		<dependency>
+<!--		<dependency>
 			<groupId>org.aksw.simba</groupId>
 			<artifactId>BENGAL</artifactId>
 			<version>1.0-SNAPSHOT</version>
@@ -601,8 +614,12 @@
 					<groupId>edu.berkeley.compbio</groupId>
 					<artifactId>jlibsvm</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 
 		<!--<dependency> <groupId>com.github.AKSW.DL-Learner</groupId> <artifactId>components-core</artifactId> 
 			<version>1.2</version> </dependency> -->
