@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RelativePredicates {
+
     public List<String> all(String input){
         List<String> returnVal = null;
 
@@ -154,6 +155,9 @@ public class RelativePredicates {
             returnVal = Arrays.asList("deathPlace","");
         }
 
+        if(input.equals("nationality")){
+            returnVal = Arrays.asList("nationality", "born", "death", "die");
+        }
 
         if(returnVal==null){
             returnVal = new ArrayList<>();

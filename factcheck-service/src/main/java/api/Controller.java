@@ -89,13 +89,6 @@ public class Controller {
         object = object.replace("https","http");
         predicate = predicate.replace("https","http");
 
-        if(!isValidPredicate(predicate)){
-            response.filedata="The Predicate is Not Acceptable ==> "+ predicate;
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(response);
-        }
-
         RDFResource subjectResource;
         Property predicatePropery;
         RDFResource objectResource;
@@ -129,15 +122,6 @@ public class Controller {
 
         return ResponseEntity.ok(response);
     }
-
-    private boolean isValidPredicate(String predicate) {
-        /*if(validPredicates.contains(predicate)){
-            return true;
-        }*/
-        return true;
-    }
-
-
 
 
     public static Integer generateRandomIntInRange(int min, int max) {
