@@ -22,7 +22,8 @@ public class PropertyFeature implements FactFeature {
     public void extractFeature(ComplexProof proof, Evidence evidence) {
 
     	String uri = proof.getModel().getPropertyUri().replace("http://dbpedia.org/ontology/", "");
-    	if ( uri.equals("office") ) uri = "leaderName";
+    	//TODO : why ?
+    	//if ( uri.equals("office") ) uri = "leaderName";
         System.out.println("uri is "+uri+" AbstractFactFeatures.PROPERTY_NAME is "+AbstractFactFeatures.PROPERTY_NAME);
     	proof.getFeatures().setValue(AbstractFactFeatures.PROPERTY_NAME, uri);
     }

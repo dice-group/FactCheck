@@ -16,11 +16,11 @@ public class RelativePredicates {
         }
 
         if(input.equals("birthPlace")){
-            returnVal = Arrays.asList("birth place","was born in");
+            returnVal = Arrays.asList("birth place","born","grow");
         }
 
         if(input.equals("death place")){
-            returnVal = Arrays.asList("death place","");
+            returnVal = Arrays.asList("death place","died","passed away","buried");
         }
 
         if(input.equals("starring")){
@@ -40,19 +40,19 @@ public class RelativePredicates {
         }
 
         if(input.equals("instrument")){
-            returnVal = Arrays.asList("instrument","has Musical Role");
+            returnVal = Arrays.asList("instrument","has Musical Role","tool","device");
         }
 
         if(input.equals("location")){
-            returnVal = Arrays.asList("location","is located","is located in","placed","placed in");
+            returnVal = Arrays.asList("location","located","placed","position","place","site");
         }
 
         if(input.equals("editing")){
-            returnVal = Arrays.asList("editing","edited");
+            returnVal = Arrays.asList("editing","edited","edit","redaction");
         }
 
         if(input.equals("combatant")){
-            returnVal = Arrays.asList("combatant","participatedIn");
+            returnVal = Arrays.asList("combatant","participatedIn","warrior","champion","war","hero");
         }
 
         if(input.equals("currency")){
@@ -60,11 +60,11 @@ public class RelativePredicates {
         }
 
         if(input.equals("influences")){
-            returnVal = Arrays.asList("influences","dependence","attachment","cohesion","attachment");
+            returnVal = Arrays.asList("influences","dependence","attachment","cohesion","attachment","effect");
         }
 
         if(input.equals("workplaces")){
-            returnVal = Arrays.asList("workplaces","work at");
+            returnVal = Arrays.asList("workplaces","work at","location","located","placed","position","place","site");
         }
 
         if(input.equals("doctoralAdvisor")){
@@ -72,11 +72,11 @@ public class RelativePredicates {
         }
 
         if(input.equals("language")){
-            returnVal = Arrays.asList("language","has Official Language");
+            returnVal = Arrays.asList("language","has Official Language","speak","speaking");
         }
 
         if(input.equals("office")){
-            returnVal = Arrays.asList("office","is Politician Of");
+            returnVal = Arrays.asList("office","Politician","member","leader");
         }
 
         if(input.equals("capital")){
@@ -84,19 +84,19 @@ public class RelativePredicates {
         }
 
         if(input.equals("knownFor")){
-            returnVal = Arrays.asList("known For","is Known For");
+            returnVal = Arrays.asList("known For","is Known For","famous");
         }
 
         if(input.equals("child")){
-            returnVal = Arrays.asList("child","hasChild");
+            returnVal = Arrays.asList("child","hasChild","kid","son","daughter","progeny");
         }
 
         if(input.equals("nationality")){
-            returnVal = Arrays.asList("nationality","is Citizen Of");
+            returnVal = Arrays.asList("nationality","Citizen","born","citizenship");
         }
 
         if(input.equals("website")){
-            returnVal = Arrays.asList("website","has Website");
+            returnVal = Arrays.asList("website","has Website","site");
         }
 
         if(input.equals("affiliation")){
@@ -116,7 +116,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("leader")){
-            returnVal = Arrays.asList("leader","is Leader Of");
+            returnVal = Arrays.asList("leader","is Leader Of","boss");
         }
 
         if(input.equals("mainInterests")){
@@ -128,15 +128,15 @@ public class RelativePredicates {
         }
 
         if(input.equals("owner")){
-            returnVal = Arrays.asList("owns","owner");
+            returnVal = Arrays.asList("owns","owner","has","have");
         }
 
         if(input.equals("spouse")){
-            returnVal = Arrays.asList("spouse","is Married To");
+            returnVal = Arrays.asList("spouse","Married","partner","couple");
         }
 
         if(input.equals("place")){
-            returnVal = Arrays.asList("place","happenedIn");
+            returnVal = Arrays.asList("place","happenedIn","at");
         }
 
         if(input.equals("birthPlace")){
@@ -152,11 +152,11 @@ public class RelativePredicates {
         }
 
         if(input.equals("deathPlace")){
-            returnVal = Arrays.asList("deathPlace","");
+            returnVal = Arrays.asList("deathPlace","die","death place");
         }
 
         if(input.equals("nationality")){
-            returnVal = Arrays.asList("nationality", "born", "death", "die");
+            returnVal = Arrays.asList("nationality", "born","death", "die");
         }
 
         if(returnVal==null){
