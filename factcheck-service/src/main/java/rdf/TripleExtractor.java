@@ -17,10 +17,22 @@ public class TripleExtractor {
     private Model model;     // provides model after file has been read
 
     public String getSubject() {
+        if( subject.label == null){
+            if(subjectUri != null) {
+                String[] parts = subjectUri.split("/");
+                return parts[parts.length-1];
+            }
+        }
         return subject.label;
     }
 
     public String getObject() {
+        if( object.label==null){
+            if(objectUri != null) {
+                String[] parts = objectUri.split("/");
+                return parts[parts.length-1];
+            }
+        }
         return object.label;
     }
     private RDFResource subject;

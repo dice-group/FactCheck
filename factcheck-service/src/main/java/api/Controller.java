@@ -1,5 +1,6 @@
 package api;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,6 +46,30 @@ public class Controller {
     @RequestMapping("/default")
     public String defaultpage() {
         return "ok!";
+    }
+
+    @GetMapping("/factBechTest")
+    public void fbt() throws FileNotFoundException {
+        String factBenchPath = "/home/umair/Desktop/factcheck/datasets/factbench/factbench";
+
+        factBenchTest d = new factBenchTest();
+        try {
+            d.checkFacts(factBenchPath);
+        }catch (Exception exp){
+            System.out.println(exp);
+        }
+    }
+
+    @PostMapping("/factBechTestOneFile")
+    public void factBechTestOneFile(@RequestBody String singlefile) throws FileNotFoundException {
+//        String singleFile = "/home/farshad/Downloads/subsidiary_00007.ttl";
+//        String singleFile = "/home/farshad/repos/factBench/factbench/train/wrong/date/subsidiary/subsidiary_00002.ttl";
+        factBenchTest d = new factBenchTest();
+        try {
+            d.checkOneFile(singlefile);
+        }catch (Exception exp){
+            System.out.println(exp);
+        }
     }
 
     @GetMapping("/checkfact")
@@ -107,6 +132,9 @@ public class Controller {
         }
         return false;
     }
+
+
+
 
     public static Integer generateRandomIntInRange(int min, int max) {
         Random r = new Random();
@@ -194,7 +222,7 @@ public class Controller {
     private ArrayList<ComplexProofs> setProofSentences(Evidence evidence) {
         ArrayList<ComplexProofs> complexProofs = new ArrayList<>();
         evidence.getComplexProofs().forEach(p -> {
-            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase()));
+            complexProofs.add(new ComplexProofs(p.getWebSite().getUrl(), p.getProofPhrase(),p.getWebSite().getScore()));
         });
         return complexProofs;
     }
