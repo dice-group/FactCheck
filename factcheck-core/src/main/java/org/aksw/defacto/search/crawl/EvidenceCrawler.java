@@ -248,7 +248,7 @@ public class EvidenceCrawler {
         List<ComplexProof> proofs = new ArrayList<ComplexProof>(evidence.getComplexProofs());
 
         LOGGER.info("there is  "+proofs.size()+" ComplexProof");
-
+        // TODO  : what next line do , it seems the result did not used
         // create |CPU| parsers for n websites and split them to the parsers
         for ( ComplexProof proofsSublist : proofs)
         	parsers.add(new RegexParseCallable(proofsSublist));
