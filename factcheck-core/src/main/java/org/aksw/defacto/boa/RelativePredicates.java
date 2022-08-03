@@ -15,14 +15,6 @@ public class RelativePredicates {
             returnVal = Arrays.asList(input,"shared the","was awarded the","winners","along with","laureate the","winner","received the ","won the","recipient");
         }
 
-        if(input.equals("birthPlace")){
-            returnVal = Arrays.asList("birth place","born","grow");
-        }
-
-        if(input.equals("death place")){
-            returnVal = Arrays.asList("death place","died","passed away","buried");
-        }
-
         if(input.equals("starring")){
             returnVal = Arrays.asList("starring","start","prima","acted in","played in","Has played","played a role");
         }
@@ -88,7 +80,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("child")){
-            returnVal = Arrays.asList("child","hasChild","kid","son","daughter","progeny");
+            returnVal = Arrays.asList("child","has Child","kid","son","daughter","progeny");
         }
 
         if(input.equals("nationality")){
@@ -116,7 +108,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("leader")){
-            returnVal = Arrays.asList("leader","is Leader Of","boss");
+            returnVal = Arrays.asList("leader", "manager","chief", "head","principal","commander","captain","boss");
         }
 
         if(input.equals("mainInterests")){
@@ -132,7 +124,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("spouse")){
-            returnVal = Arrays.asList("spouse","Married","partner","couple");
+            returnVal = Arrays.asList("spouse","Married","partner","couple","engage");
         }
 
         if(input.equals("place")){
@@ -140,8 +132,9 @@ public class RelativePredicates {
         }
 
         if(input.equals("birthPlace")){
-            returnVal = Arrays.asList("birthPlace","birth Place","born","from");
+            returnVal = Arrays.asList("birthPlace","birth Place","born","from","grow");
         }
+
 
         if(input.equals("musicComposer")){
             returnVal = Arrays.asList("music Composer","composer","wrote Music For");
@@ -151,13 +144,35 @@ public class RelativePredicates {
             returnVal = Arrays.asList("live","live in");
         }
 
+        if(input.equals("residence")){
+            returnVal = Arrays.asList("live","live in","residence","home","address","place","seat");
+        }
+
         if(input.equals("deathPlace")){
-            returnVal = Arrays.asList("deathPlace","die","death place");
+            returnVal = Arrays.asList("deathPlace","die","death place","died","passed away","buried","kill","killed","terror","got shot","exhumed");
+        }
+
+        if(input.equals("producer")){
+            returnVal = Arrays.asList("producer", "manufacturer","maker", "builder","creator","manager");
         }
 
         if(input.equals("nationality")){
             returnVal = Arrays.asList("nationality", "born","death", "die");
         }
+
+        if(input.equals("knownFor")){
+            returnVal = Arrays.asList("known", "work","accepted", "established","noted","acknowledged");
+        }
+
+        if(input.equals("workInstitutions")){
+            returnVal = Arrays.asList("work", "Institution","institute","place","workplace");
+        }
+
+        if(input.equals("officialLanguage")){
+            returnVal = Arrays.asList("language","has Official Language","speak","speaking");
+        }
+
+
 
         if(returnVal==null){
             returnVal = new ArrayList<>();

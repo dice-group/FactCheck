@@ -92,7 +92,7 @@ public class TopicTermsCoherence {
 
 		catch (Exception e) {
 
-			logger.info("Issue with the running Elastic search instance. Please check if the instance is running!");
+			logger.info("1 . Issue with the running Elastic search instance. Please check if the instance is running!"+e.getMessage() + e.getStackTrace());
 			return wordList;
 		}
 		//System.out.println(wordList.get(12).getWord().toString());

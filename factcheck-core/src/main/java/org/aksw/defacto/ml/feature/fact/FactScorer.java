@@ -19,6 +19,8 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.Instance;
@@ -33,12 +35,12 @@ public class FactScorer {
 
     private Classifier classifier       = null;
     private Instances trainingInstances = null;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(FactScorer.class);
     /**
      * 
      */
     public FactScorer() {
-        
+
         this.classifier = loadClassifier();
         try {
             
@@ -62,13 +64,15 @@ public class FactScorer {
      * @param evidence
      */
     public void scoreEvidence(Evidence evidence) {
+        LOGGER.info("evidence is :"+evidence.toString());
 
     	Instances instancesWithStringVector = new Instances(trainingInstances);
         instancesWithStringVector.setClassIndex(26);
     	
         for ( ComplexProof proof : evidence.getComplexProofs() ) {
-        	
+            LOGGER.info("proof is :"+proof.toString());
             try {
+
                 
                 // create new instance and delete debugging features
                 Instance newInstance = new Instance(proof.getFeatures());
@@ -94,7 +98,7 @@ public class FactScorer {
                 instancesWithStringVector.add(newInstance);*/
                 //System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
                 proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
-               System.out.println("Proof score for " + " -> " + proof.getProofPhrase() +" -> "+proof.getScore());
+                LOGGER.info("Proof score for " + " -> " + proof.getProofPhrase() +" -> "+proof.getScore());
                 
                 // remove the new instance again
                 //instancesWithStringVector.delete();
@@ -107,13 +111,18 @@ public class FactScorer {
         }
         
         // set for each website the score by multiplying the proofs found on this site
+        LOGGER.info("we have "+evidence.getAllWebSites().size()+" websites");
         for ( WebSite website : evidence.getAllWebSites() ) {
             
             double score = 1D;
             
             for ( ComplexProof proof : evidence.getComplexProofs(website)) {
 
+                LOGGER.info("score is  "+score+" proofScore is "+ proof.getScore());
+
                 score *= ( 1D - proof.getScore() );
+
+                LOGGER.info(" new score is :"+ score);
             }
             website.setScore(1 - score);
         }

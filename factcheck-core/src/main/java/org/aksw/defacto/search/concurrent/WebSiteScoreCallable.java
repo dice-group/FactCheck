@@ -38,7 +38,21 @@ public class WebSiteScoreCallable implements Callable<WebSite> {
 
     @Override
     public WebSite call() {
-        
+        if(searcher==null){
+            System.out.println("searcher IS NULL");
+            searcher = new SubjectObjectProofExtractor();
+        }
+        System.out.println("searcher is"+searcher.toString());
+        System.out.println(" generate proofs is evidence : "+evidence.toString());
+        System.out.println(" generate proofs is website : "+website.toString());
+        System.out.println(" generate proofs is model : "+model.toString());
+
+        if (pattern==null){
+            System.out.println("pattern IS NULL");
+            pattern = new Pattern();
+        }
+
+        System.out.println(" generate proofs is pattern : "+pattern.toString());
     	searcher.generateProofs(evidence, website, model, pattern);
         return website;
     }

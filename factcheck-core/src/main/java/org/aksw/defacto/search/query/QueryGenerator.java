@@ -89,6 +89,8 @@ public class QueryGenerator {
 
         RelativePredicates relativePredicates = new RelativePredicates();
 
+        LOGGER.info("get relative predicates for : "+fact.getPredicate().getLocalName());
+        LOGGER.info("relatives predicates size : "+relativePredicates.all(fact.getPredicate().getLocalName()).size());
         for(String p:relativePredicates.all(fact.getPredicate().getLocalName())){
             Pattern pattern = new Pattern("?R? "+p+" ?D?",language);
             pattern.naturalLanguageRepresentationWithoutVariables = p;

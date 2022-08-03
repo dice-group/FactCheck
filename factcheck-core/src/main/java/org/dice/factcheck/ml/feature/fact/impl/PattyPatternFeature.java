@@ -147,7 +147,7 @@ public class PattyPatternFeature implements FactFeature {
 
 		catch (Exception e)
 		{
-			logger.info("Issue with the running Elastic search instance. Please check if the instance is running!");
+			logger.info("2 . Issue with the running Elastic search instance. Please check if the instance is running!"+e.getMessage()+ e.getStackTrace());
 		}
 	}
 	

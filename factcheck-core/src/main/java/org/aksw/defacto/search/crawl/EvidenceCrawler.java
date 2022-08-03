@@ -93,8 +93,9 @@ public class EvidenceCrawler {
             	totalHitCount += result.getTotalHitCount();  
             }
 
-            System.out.println("totalHitCount for is : "+totalHitCount+ " total result is : "+ searchResults.size());
+            LOGGER.info("totalHitCount for is : "+totalHitCount+ " total result is : "+ searchResults.size()+" patternToQueries size :"+patternToQueries.keySet().size());
             evidence = new Evidence(model, totalHitCount, patternToQueries.keySet());
+            LOGGER.info("evidence is : "+evidence.toString());
             // basically downloads all websites in parallel
             //crawlSearchResults(searchResults, model, evidence);
             // tries to find proofs and possible proofs and scores those
@@ -214,9 +215,14 @@ public class EvidenceCrawler {
     	 Set<WebSite> results = new HashSet<WebSite>();
         List<WebSiteScoreCallable> scoreCallables =  new ArrayList<WebSiteScoreCallable>();
         LOGGER.info("searchResults size is "+searchResults.size());
-        for ( SearchResult result : searchResults ) 
-            for (WebSite site : result.getWebSites() )
+        LOGGER.info("evidence is : "+evidence.toString());
+        LOGGER.info("model is : "+model.toString());
+        for ( SearchResult result : searchResults ) {
+            for (WebSite site : result.getWebSites()) {
+                LOGGER.info("add this site :"+site.toString());
                 scoreCallables.add(new WebSiteScoreCallable(site, evidence, model));
+            }
+        }
         LOGGER.info("in sum "+scoreCallables.size()+" callables added");
         // nothing found, nothing to score
         if ( scoreCallables.isEmpty() ) return;

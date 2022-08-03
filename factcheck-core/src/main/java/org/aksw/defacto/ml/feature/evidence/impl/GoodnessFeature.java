@@ -49,7 +49,7 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
 
 
 			//System.out.println(dbHost + ":" + dbPort + "/" + database +" ==> dbUser is : "+ dbUser + " pass is " + pw);
-            Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&useSSL=false");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&allowPublicKeyRetrieval=true&useSSL=false");
 			System.out.println ("endpoint is :"+endpoint);
 
 			metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);

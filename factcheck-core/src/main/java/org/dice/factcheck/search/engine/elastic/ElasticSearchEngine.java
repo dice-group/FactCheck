@@ -61,14 +61,20 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 	@Override
 	public SearchResult query(MetaQuery query, Pattern pattern) {
 
+		logger.info("query is "+query.toString() + "  and patter is " +pattern.toString());
 		try {
 			List<WebSite> results = new ArrayList<WebSite>();
+
+			logger.info("ELASTIC_SERVER is : "+ ELASTIC_SERVER + " and ELASTIC_PORT is : "+ELASTIC_PORT);
 
 			this.restClientobj = RestClient.builder(new HttpHost(ELASTIC_SERVER , Integer.parseInt(ELASTIC_PORT), "http")).build();
 			String subject  = query.getSubjectLabel().replace("&", "and");
 			String property = normalizePredicate(query.getPropertyLabel().trim());
 			String object   = query.getObjectLabel().replace("&", "and");
 			String q1 = "\""+subject+" "+property+" "+object+"\"";
+
+			logger.info("q1 is : "+q1);
+
 			if ( query.getPropertyLabel().equals("??? NONE ???") )
 				q1 = "\""+subject+" "+object+"\"";
 
@@ -87,8 +93,11 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			String index = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "INDEX");
 			String mapping = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "MAPPING");
 
+			logger.info("index: " + index+" ,mapping: "+mapping);
+
 			Response response = restClientobj.performRequest("GET", "/"+index+"/"+mapping+"/_search",Collections.singletonMap("pretty", "true"),entity1);
-			String json = EntityUtils.toString(response.getEntity());			
+			String json = EntityUtils.toString(response.getEntity());
+			logger.info("response is "+json);
 			//System.out.println(json);
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode rootNode = mapper.readValue(json, JsonNode.class);
@@ -126,8 +135,13 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 			return new DefaultSearchResult(results, new Long(docCount), query, pattern, false);
 		}
 		catch (Exception e) {
-
-			logger.info("Issue with the running Elastic search instance. Please check if the instance is running! "+e.getMessage());
+			e.printStackTrace();
+			System.out.println(e.toString());
+			System.out.println(e.getMessage());
+			logger.info("3 . Issue with the running Elastic search instance. Please check if the instance is running! ");
+			logger.info(e.toString());
+			logger.info(e.getLocalizedMessage());
+			logger.info(e.getStackTrace().toString());
 			return new DefaultSearchResult(new ArrayList<WebSite>(), 0L, query, pattern, false);
 		}
 		

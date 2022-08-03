@@ -58,7 +58,7 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 	@Override
 	public void generateProofs(Evidence evidence, WebSite website, DefactoModel model, Pattern pattern) {
-
+		LOGGER.info("start generating the proofs, evidence: "+evidence.toString()+" website: "+website.toString()+" model: "+model.toString()+" pattern: "+pattern.toString());
 		try
 		{
 			Set<String> tmpSubjectLabels = new HashSet<String>();
@@ -77,6 +77,8 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 			tmpSubjectLabels.remove(Constants.NO_LABEL);
 			tmpObjectLabels.remove(Constants.NO_LABEL);
+
+			LOGGER.info("tmpSubjectLabels size : "+ tmpSubjectLabels.size()+" tmpObjectLabels size: "+tmpObjectLabels.size());
 
 // remove (XXXX) patterns
 			for(String s : tmpSubjectLabels){
@@ -100,10 +102,14 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 			//remove () pattern example : XXX (File) become XXX
 			String subjectLabel = evidence.getModel().getSubjectLabel(null).replaceAll("\\(.*\\)", "");
 
+			LOGGER.info("subjectLabel is : "+subjectLabel);
+
 			for (String label : subjectLabel.split(" ")) {
 				if(label.length()>2)
 					subjectLabels.add(label.trim());
 			}	
+
+			LOGGER.info("subjectLabels size : "+subjectLabels.size());
 
 			/**** Create regex Patterns for Subject and Object forms and add to list ****/
 
@@ -116,6 +122,10 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 					subpatterns.add(java.util.regex.Pattern.compile(tmpSubjet.replaceAll("\\(.*\\)", ""), java.util.regex.Pattern.CASE_INSENSITIVE));
 				}
 			}
+
+
+			LOGGER.info(" subpatterns size: "+subpatterns.size());
+			LOGGER.info("objectLabels size : "+objectLabels.size());
 			List<java.util.regex.Pattern> objpatterns = new ArrayList<java.util.regex.Pattern>();
 			Iterator<String> itob = objectLabels.iterator();
 			while(itob.hasNext()) {
@@ -125,6 +135,7 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 					objpatterns.add(java.util.regex.Pattern.compile(tmpObjet.replaceAll("\\(.*\\)", "").trim(), java.util.regex.Pattern.CASE_INSENSITIVE));
 				}
 			}
+			LOGGER.info(" objpatterns size: "+objpatterns.size());
 			/**** Normalize website text using pattern replacement and store it in String ****/
 			// replace all the surface forms identified with normalized string
 
@@ -155,6 +166,10 @@ public class SubjectObjectProofExtractor implements FactSearcher {
 
 			HashMap<String, Integer> subOjectPhrases = findProofPhrase(docNormalized, docOriginal, "subjectFound", "objectFound");
 			HashMap<String, Integer> objSubjectPhrases = findProofPhrase(docNormalized, docOriginal, "objectFound", "subjectFound");
+
+			LOGGER.info("subOjectPhrases size: "+subOjectPhrases.size());
+			LOGGER.info("objSubjectPhrases size: "+objSubjectPhrases.size());
+
 			subOjectPhrases.putAll(objSubjectPhrases);
 
 			Set<String> surfaceForms = new HashSet<String>(subjectLabels);

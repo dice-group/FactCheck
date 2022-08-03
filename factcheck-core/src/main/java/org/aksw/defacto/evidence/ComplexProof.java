@@ -276,4 +276,27 @@ public class ComplexProof {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "ComplexProof{" +
+				"instance=" + instance +
+				", pattern=" + pattern +
+				", website=" + website +
+				", model=" + model +
+				", firstLabel='" + firstLabel + '\'' +
+				", secondLabel='" + secondLabel + '\'' +
+				", proofPhrase='" + proofPhrase + '\'' +
+				", normalizedProofPhrase='" + normalizedProofPhrase + '\'' +
+				", score=" + score +
+				", smallContext='" + smallContext + '\'' +
+				", taggedSmallContext='" + taggedSmallContext + '\'' +
+				", mediumContext='" + mediumContext + '\'' +
+				", taggedMediumContext='" + taggedMediumContext + '\'' +
+				", largeContext='" + largeContext + '\'' +
+				", taggedLargeContext='" + taggedLargeContext + '\'' +
+				", tinyContext='" + tinyContext + '\'' +
+				", taggedTinyContext='" + taggedTinyContext + '\'' +
+				'}';
+	}
 }
