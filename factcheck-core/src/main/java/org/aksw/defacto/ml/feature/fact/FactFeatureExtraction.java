@@ -58,7 +58,7 @@ public class FactFeatureExtraction {
                 
                 feature.extractFeature(proof, evidence);
             }
-            // all features for this proof are completed so add it to the instances data
+            // all features for this proof are completeto the ind so add it stances data
             // we only need to add the feature vector to the weka instances object if we plan to write the training file
             if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("fact", "OVERWRITE_FACT_TRAINING_FILE") )
                 AbstractFactFeatures.factFeatures.add(proof.getFeatures());

@@ -101,7 +101,7 @@ public class AbstractFactFeatures {
         LANGUAGE = new Attribute("language", languages);
         attributes.addElement(LANGUAGE);
         
-        FastVector propertyName = new FastVector(36);
+        FastVector propertyName = new FastVector(40);
         propertyName.addElement("team");
         propertyName.addElement("spouse");
         propertyName.addElement("foundationPlace");
@@ -137,6 +137,9 @@ public class AbstractFactFeatures {
         propertyName.addElement("knownFor");
         propertyName.addElement("workInstitutions");
         propertyName.addElement("officialLanguage");
+        propertyName.addElement("architect");
+        propertyName.addElement("artist");
+        propertyName.addElement("commander");
 
         PROPERTY_NAME = new Attribute("property_name", propertyName);
         attributes.addElement(PROPERTY_NAME);

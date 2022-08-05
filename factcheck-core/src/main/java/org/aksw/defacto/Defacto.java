@@ -122,7 +122,7 @@ public class Defacto {
 		featureCalculator.extractFeatureForEvidence(evidence);
 		LOGGER.info("Evidence feature extraction took " + TimeUtil.formatTime(System.currentTimeMillis() - startFeatureExtraction));
 		
-		if ( !Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE") ) {
+		if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE") ) {
 
 			long startScoring = System.currentTimeMillis();
 			EvidenceScorer scorer = new EvidenceScorer();

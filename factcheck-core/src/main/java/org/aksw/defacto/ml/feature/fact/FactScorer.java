@@ -3,11 +3,7 @@
  */
 package org.aksw.defacto.ml.feature.fact;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,6 +15,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.evidence.WebSite;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 
+import org.apache.xpath.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import weka.classifiers.Classifier;
@@ -65,27 +62,38 @@ public class FactScorer {
      */
     public void scoreEvidence(Evidence evidence) {
         LOGGER.info("evidence is :"+evidence.toString());
+        //Boolean isGeneratingTrainFile = false;
+    	//Instances instancesWithStringVector = new Instances(trainingInstances);
+        //instancesWithStringVector.setClassIndex(26);
+        String fileName ="/home/farshad/experiments/Trainfactchek/Fact/"+evidence.getModel().getPredicate().getLocalName()+"_train1.arff";
+        Instances withoutName = new Instances(AbstractFactFeatures.factFeatures);
+        try(FileWriter fw = new FileWriter(fileName, false);
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter out = new PrintWriter(bw))
+        {
+            out.println(withoutName.toString());
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage());
+        }
 
-    	Instances instancesWithStringVector = new Instances(trainingInstances);
-        instancesWithStringVector.setClassIndex(26);
-    	
         for ( ComplexProof proof : evidence.getComplexProofs() ) {
             LOGGER.info("proof is :"+proof.toString());
             try {
-
-                
+                withoutName = new Instances(AbstractFactFeatures.factFeatures);
                 // create new instance and delete debugging features
                 Instance newInstance = new Instance(proof.getFeatures());
+
                 newInstance.deleteAttributeAt(28);
                 newInstance.deleteAttributeAt(28);
                 newInstance.deleteAttributeAt(28);
                 newInstance.deleteAttributeAt(28);
                 newInstance.deleteAttributeAt(28);
-                Instances withoutName = new Instances(AbstractFactFeatures.factFeatures);
+
                 withoutName.setClassIndex(withoutName.numAttributes() - 1);
                 withoutName.deleteStringAttributes();
+
                 newInstance.setDataset(withoutName);
-                
+
                 // insert all the words which occur
                 /*for ( int i = 26 + 1 ; i < instancesWithStringVector.numAttributes(); i++) {
                     

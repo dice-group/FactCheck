@@ -137,7 +137,7 @@ public class RelativePredicates {
 
 
         if(input.equals("musicComposer")){
-            returnVal = Arrays.asList("music Composer","composer","wrote Music For");
+            returnVal = Arrays.asList("music Composer","composer","wrote Music For","melodist","symphonist","songwriter","songster","writer","tunesmith","songsmith");
         }
 
         if(input.equals("live")){
@@ -153,7 +153,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("producer")){
-            returnVal = Arrays.asList("producer", "manufacturer","maker", "builder","creator","manager");
+            returnVal = Arrays.asList("producer", "manufacturer","maker", "builder","creator","manager","farmer","fabricator");
         }
 
         if(input.equals("nationality")){
@@ -172,7 +172,21 @@ public class RelativePredicates {
             returnVal = Arrays.asList("language","has Official Language","speak","speaking");
         }
 
+        if(input.equals("architect")){
+            returnVal = Arrays.asList("designer", "planner", "builder", "draughtsman", "building consultant");
+        }
 
+        if(input.equals("artist")){
+            returnVal = Arrays.asList("creator", "originator", "designer", "producer", "fine artist", "old master");
+        }
+
+        if(input.equals("author")){
+            returnVal = Arrays.asList("writer", "wordsmith", "novelist", "dramatist", "playwright", "screenwriter", "scriptwriter", "poet", "essayist", "biographer", "journalist", "columnist");
+        }
+
+        if(input.equals("commander")){
+            returnVal = Arrays.asList("eader", "head", "boss", "chief", "director", "manager", "controller", "master", "commander-in-chief", "headman");
+        }
 
         if(returnVal==null){
             returnVal = new ArrayList<>();
