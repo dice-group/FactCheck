@@ -4,6 +4,8 @@ package org.dice.factcheck.ml.feature.fact.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.aksw.defacto.Defacto;
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.evidence.ComplexProof;
@@ -47,9 +49,13 @@ public class DependencyParseFeature implements FactFeature {
 
 		//TODO : BOA
 		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-
-		PaternGenerator pg = new PaternGenerator();
-		List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+		List<Pattern> patterns = new ArrayList<>();
+		if(Defacto.DEFACTO_CONFIG.getBooleanSetting("boa", "USE_BOA")){
+			patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+		}else{
+			PaternGenerator pg = new PaternGenerator();
+			patterns = pg.generate(evidence.getModel().getFact(), "en");
+		}
 
 		float score = (float) 0.0;
 		String patternString = "";

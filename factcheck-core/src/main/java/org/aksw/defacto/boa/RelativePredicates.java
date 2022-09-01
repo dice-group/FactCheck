@@ -75,10 +75,6 @@ public class RelativePredicates {
             returnVal = Arrays.asList("capital","has Capital");
         }
 
-        if(input.equals("knownFor")){
-            returnVal = Arrays.asList("known For","is Known For","famous");
-        }
-
         if(input.equals("child")){
             returnVal = Arrays.asList("child","has Child","kid","son","daughter","progeny");
         }
@@ -108,7 +104,7 @@ public class RelativePredicates {
         }
 
         if(input.equals("leader")){
-            returnVal = Arrays.asList("leader", "manager","chief", "head","principal","commander","captain","boss");
+            returnVal = Arrays.asList("leader", "manager","chief", "head","principal","commander","captain","boss","governor");
         }
 
         if(input.equals("mainInterests")){
@@ -186,6 +182,10 @@ public class RelativePredicates {
 
         if(input.equals("commander")){
             returnVal = Arrays.asList("eader", "head", "boss", "chief", "director", "manager", "controller", "master", "commander-in-chief", "headman");
+        }
+
+        if(input.equals("governor")){
+            returnVal = Arrays.asList("governor","leader", "manager","chief", "head","principal","commander","captain","boss");
         }
 
         if(returnVal==null){

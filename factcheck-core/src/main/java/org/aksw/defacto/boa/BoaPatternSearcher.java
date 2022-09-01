@@ -64,7 +64,7 @@ public class BoaPatternSearcher {
      */
     public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, String language){
 
-        List<Pattern> result =  querySolrIndex1(propertyUri,
+        List<Pattern> result =  querySolrIndex(propertyUri,
                 50,
                 Defacto.DEFACTO_CONFIG.getDoubleSetting("boa", "PATTERN_SCORE_THRESHOLD"), language);
 
@@ -81,7 +81,7 @@ public class BoaPatternSearcher {
      */
     public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, int numberOfBoaPatterns, String language){
 
-        return querySolrIndex1(propertyUri, numberOfBoaPatterns, 0.5D, language);
+        return querySolrIndex(propertyUri, numberOfBoaPatterns, 0.5D, language);
     }
     
     /**
@@ -94,7 +94,7 @@ public class BoaPatternSearcher {
      */
     public List<Pattern> getNaturalLanguageRepresentations1(String propertyUri, int numberOfBoaPatterns, double patternThreshold, String language){
 
-        return querySolrIndex1(propertyUri, numberOfBoaPatterns, patternThreshold, language);
+        return querySolrIndex(propertyUri, numberOfBoaPatterns, patternThreshold, language);
     }
     
     /**
@@ -105,7 +105,7 @@ public class BoaPatternSearcher {
      * @param language 
      * @return a list of patterns
      */
-    public List<Pattern> querySolrIndex1(String propertyUri, int numberOfBoaPatterns, double scoreThreshold, String language) {
+    public List<Pattern> querySolrIndex(String propertyUri, int numberOfBoaPatterns, double scoreThreshold, String language) {
 
     	
     	 this.logger.debug("Querying solr index for uri: " + propertyUri + " and language " + language + "."); 

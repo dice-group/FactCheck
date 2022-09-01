@@ -65,15 +65,18 @@ public class FactScorer {
         //Boolean isGeneratingTrainFile = false;
     	//Instances instancesWithStringVector = new Instances(trainingInstances);
         //instancesWithStringVector.setClassIndex(26);
-        String fileName ="/home/farshad/experiments/Trainfactchek/Fact/"+evidence.getModel().getPredicate().getLocalName()+"_train1.arff";
+        //String fileName ="/home/farshad/experiments/Trainfactchek/Fact/negative/"+evidence.getModel().getPredicate().getLocalName()+"_train1.arff";
         Instances withoutName = new Instances(AbstractFactFeatures.factFeatures);
-        try(FileWriter fw = new FileWriter(fileName, false);
-            BufferedWriter bw = new BufferedWriter(fw);
-            PrintWriter out = new PrintWriter(bw))
-        {
-            out.println(withoutName.toString());
-        } catch (IOException e) {
-            LOGGER.error(e.getMessage());
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE")){
+            String fileName=Defacto.DEFACTO_CONFIG.getStringSetting("settings", "TRAINING1_FILE_LOCATION");
+            try(FileWriter fw = new FileWriter(fileName, false);
+                BufferedWriter bw = new BufferedWriter(fw);
+                PrintWriter out = new PrintWriter(bw))
+            {
+                out.println(withoutName.toString());
+            } catch (IOException e) {
+                LOGGER.error(e.getMessage());
+            }
         }
 
         for ( ComplexProof proof : evidence.getComplexProofs() ) {

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 import org.aksw.defacto.Constants;
+import org.aksw.defacto.Defacto;
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.boa.RelativePredicates;
@@ -86,35 +87,33 @@ public class QueryGenerator {
         List<Statement> statements = new ArrayList<>();
 
         statements.add(fact);
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("boa", "USE_BOA")){
+            // TODO
+            // query boa index and generate the meta queries
+       for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations1(fact.getPredicate().getURI(), language)) {
 
-        RelativePredicates relativePredicates = new RelativePredicates();
-
-        LOGGER.info("get relative predicates for : "+fact.getPredicate().getLocalName());
-        LOGGER.info("relatives predicates size : "+relativePredicates.all(fact.getPredicate().getLocalName()).size());
-        for(String p:relativePredicates.all(fact.getPredicate().getLocalName())){
-            Pattern pattern = new Pattern("?R? "+p+" ?D?",language);
-            pattern.naturalLanguageRepresentationWithoutVariables = p;
-            pattern.normalize();
-
-            MetaQuery metaQueryq = new MetaQuery(subjectLabel, p, objectLabel, language, null);
-            System.out.println(metaQueryq);
-            queryStrings.put(pattern, metaQueryq);
-        }
-
-
-
-        // TODO
-        // query boa index and generate the meta queries
-/*       for (Pattern pattern : patternSearcher.getNaturalLanguageRepresentations1(fact.getPredicate().getURI(), language)) {
-        	
         	if ( !pattern.getNormalized().trim().isEmpty() ) {
-        		
+
         		MetaQuery metaQuery = new MetaQuery(subjectLabel, pattern.getNormalized(), objectLabel, language, null);
         		System.out.println(metaQuery);
         		queryStrings.put(pattern, metaQuery);
         	}
-        }*/
-       
+        }
+        }else{
+            RelativePredicates relativePredicates = new RelativePredicates();
+
+            LOGGER.info("get relative predicates for : "+fact.getPredicate().getLocalName());
+            LOGGER.info("relatives predicates size : "+relativePredicates.all(fact.getPredicate().getLocalName()).size());
+            for(String p:relativePredicates.all(fact.getPredicate().getLocalName())){
+                Pattern pattern = new Pattern("?R? "+p+" ?D?",language);
+                pattern.naturalLanguageRepresentationWithoutVariables = p;
+                pattern.normalize();
+
+                MetaQuery metaQueryq = new MetaQuery(subjectLabel, p, objectLabel, language, null);
+                System.out.println(metaQueryq);
+                queryStrings.put(pattern, metaQueryq);
+            }
+        }
         return queryStrings;
     }
 }

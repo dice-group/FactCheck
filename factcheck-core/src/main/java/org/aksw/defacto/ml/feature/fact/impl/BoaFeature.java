@@ -3,9 +3,11 @@
  */
 package org.aksw.defacto.ml.feature.fact.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.aksw.defacto.Defacto;
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
 import org.aksw.defacto.evidence.ComplexProof;
@@ -72,8 +74,14 @@ public class BoaFeature implements FactFeature {
 
 		//List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
 		//TODO : BOA
-		PaternGenerator pg = new PaternGenerator();
-		List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
+		List<Pattern> patterns = new ArrayList<>();
+		if(Defacto.DEFACTO_CONFIG.getBooleanSetting("boa", "USE_BOA")){
+			patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+		}else{
+			PaternGenerator pg = new PaternGenerator();
+			patterns = pg.generate(evidence.getModel().getFact(), "en");
+		}
+
 		//List<Pattern> patterns = searcher.getNaturalLanguageRepresentations(evidence.getModel().getPredicate().getURI(), proof.getLanguage());
 
 		for ( Pattern p : patterns ) {

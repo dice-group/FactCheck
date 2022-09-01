@@ -2,17 +2,10 @@ package org.aksw.defacto;
 
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.aksw.defacto.boa.BoaPatternSearcher;
 import org.aksw.defacto.boa.Pattern;
@@ -27,9 +20,7 @@ import org.aksw.defacto.ml.feature.fact.FactScorer;
 import org.aksw.defacto.ml.feature.fact.impl.WordnetExpensionFeature;
 import org.aksw.defacto.model.DefactoModel;
 import org.aksw.defacto.search.cache.solr.Solr4SearchResultCache;
-import org.aksw.defacto.search.concurrent.NlpModelManager;
 import org.aksw.defacto.search.crawl.EvidenceCrawler;
-import org.aksw.defacto.search.fact.SubjectObjectFactSearcher;
 import org.aksw.defacto.search.query.MetaQuery;
 import org.aksw.defacto.search.query.QueryGenerator;
 import org.aksw.defacto.util.BufferedFileWriter;
@@ -73,6 +64,13 @@ public class Defacto {
 	 * @return
 	 */
 	public static Evidence checkFact(DefactoModel model, TIME_DISTRIBUTION_ONLY onlyTimes) {
+
+		//FactClassifierModelTrainer factTrainer = new FactClassifierModelTrainer();
+		//factTrainer.trainClassifier();
+
+		//EvidenceClassifierModelTrainer evidenceTrainer = new EvidenceClassifierModelTrainer();
+		//evidenceTrainer.trainClassifier();
+
 
 		init();
 		LOGGER.info("Checking fact: " + model);
@@ -122,14 +120,14 @@ public class Defacto {
 		featureCalculator.extractFeatureForEvidence(evidence);
 		LOGGER.info("Evidence feature extraction took " + TimeUtil.formatTime(System.currentTimeMillis() - startFeatureExtraction));
 		
-		if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE") ) {
+		//if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE") ) {
 
 			long startScoring = System.currentTimeMillis();
-			EvidenceScorer scorer = new EvidenceScorer();
-			scorer.scoreEvidence(evidence);
+			EvidenceScorer scorer1 = new EvidenceScorer();
+			scorer1.scoreEvidence(evidence);
 			LOGGER.info("Evidence Scoring took " + TimeUtil.formatTime(System.currentTimeMillis() - startScoring));
 			
-		}
+		//}
 
 		LOGGER.info("Overall time for fact: " +  TimeUtil.formatTime(System.currentTimeMillis() - start));
 		
@@ -221,7 +219,7 @@ public class Defacto {
 
 		BufferedFileWriter writer = new BufferedFileWriter(DefactoConfig.DEFACTO_DATA_DIR + filename, Encoding.UTF_8, WRITER_WRITE_MODE.OVERRIDE);
 		PrintWriter out = new PrintWriter(writer);
-		//out.println(AbstractEvidenceFeature.provenance.toString());
+		out.println(AbstractEvidenceFeature.provenance.toString());
 		out.println();
 		writer.close();
 	}

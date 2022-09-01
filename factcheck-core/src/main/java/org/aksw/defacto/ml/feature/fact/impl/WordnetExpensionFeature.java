@@ -4,6 +4,7 @@
 package org.aksw.defacto.ml.feature.fact.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.aksw.defacto.Defacto;
@@ -43,11 +44,15 @@ public class WordnetExpensionFeature implements FactFeature {
         double similarity = 0;
 
 
-       // TODO : BOA
+        //TODO : BOA
         //List<Pattern> patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
-        PaternGenerator pg = new PaternGenerator();
-        List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
-
+        List<Pattern> patterns = new ArrayList<>();
+        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("boa", "USE_BOA")){
+            patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, proof.getLanguage());
+        }else{
+            PaternGenerator pg = new PaternGenerator();
+            patterns = pg.generate(evidence.getModel().getFact(), "en");
+        }
 
         for ( Pattern pattern : patterns ) {
         	similarity = Math.max(similarity, wordnetExpansion.getExpandedJaccardSimilarity(proof.getProofPhrase(), pattern.getNormalized()));

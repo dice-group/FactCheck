@@ -17,6 +17,7 @@ import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.functions.LinearRegression;
 import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.Filter;
@@ -31,8 +32,8 @@ public class EvidenceScorer implements Scorer {
 	private static final Logger LOGGER = LoggerFactory.getLogger(EvidenceScorer.class);
     
     private String pathToClassifier ;//    = new File(FactScorer.class.getResource("/classifier/evidence/" + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE") + ".model").getFile()).getAbsolutePath();
-    private String pathToEvaluation     = DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE") + ".eval.model";
-    private String pathToTrainingData   = DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_TRAINING_DATA_FILENAME");
+    private String pathToEvaluation     ="/home/farshad/experiments/Trainfactchek/Fact/finaltraining/train1NegativeAndPositiv.arff.eval.model" ;//DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE") + ".eval.model";
+    private String pathToTrainingData   = "/home/farshad/experiments/Trainfactchek/Fact/finaltraining/train2NegativeAndPositiv.arff";//DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_TRAINING_DATA_FILENAME");
     
     private Classifier classifier;
     
@@ -41,6 +42,7 @@ public class EvidenceScorer implements Scorer {
      */
     public EvidenceScorer() {
     	pathToClassifier = new File(DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE")).getAbsolutePath();
+        //pathToClassifier = "/home/farshad/experiments/Trainfactchek/Fact/finaltraining/model/testClzscassifier.model";
 
         
         if ( new File(pathToClassifier).exists() ) {
@@ -50,8 +52,10 @@ public class EvidenceScorer implements Scorer {
         }
         else {
         	//throw new RuntimeException("No classifier at: " + pathToClassifier);
-            LOGGER.info("Train classifier: " + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE"));
-            this.classifier = this.trainClassifier();
+            //LOGGER.info("Train classifier: " + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE"));
+
+            //this.classifier = this.trainClassifier();
+            LOGGER.info(" classifier can not found at : " + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE"));
         }
     }
     
@@ -66,7 +70,8 @@ public class EvidenceScorer implements Scorer {
         try {
 
             Classifier classifier;
-            if ( Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE").equals("LINEAR_REGRESSION_CLASSIFIER") )
+            classifier = new NaiveBayes();
+            /*if ( Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE").equals("LINEAR_REGRESSION_CLASSIFIER") )
                 classifier = new LinearRegression();
             else if ( Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE").equals("MULTILAYER_PERCEPTRON") )
                 classifier = new MultilayerPerceptron();
@@ -76,22 +81,36 @@ public class EvidenceScorer implements Scorer {
                 ((SMO) classifier).setBuildLogisticModels(true);
             }
             else
-                classifier = new NaiveBayes(); // fallback
+                classifier = new NaiveBayes(); // fallback*/
 
             // train
             Instances inst = new Instances(new BufferedReader(new FileReader(pathToTrainingData)));
-            inst.setClassIndex(17);
-            System.out.println(inst.attribute(17));
-            Remove remove = new Remove();                         // new instance of filter to remove model name  (SMO cant handle strings)
-            remove.setOptions(new String[] {"-R","1"});           // set options, remove first attribute
-            remove.setInputFormat(inst);                          // inform filter about dataset **AFTER** setting options
-            Instances filteredInst = Filter.useFilter(inst, remove);                // appply filter
-            filteredInst.setClassIndex(filteredInst.numAttributes() - 1);         // class index is the last on in the list
-            classifier.buildClassifier(filteredInst);
+
+            int[] tt = {0};
+
+            Remove removeFilter = new Remove();
+            removeFilter.setAttributeIndicesArray( tt);
+            removeFilter.setInputFormat(inst);
+            Instances newData = Filter.useFilter(inst, removeFilter);
+            /*inst.deleteAttributeAt(30);
+            inst.deleteAttributeAt(29);
+            inst.deleteAttributeAt(28);
+            inst.deleteAttributeAt(27);
+            inst.deleteAttributeAt(26);*/
+            newData.setClassIndex(newData.numAttributes() - 1);
+            //inst.setClassIndex(17);
+           // inst.setClassIndex(16);
+            //System.out.println(newData.attribute(16));
+           // Remove remove = new Remove();                         // new instance of filter to remove model name  (SMO cant handle strings)
+            //remove.setOptions(new String[] {"-R","1"});           // set options, remove first attribute
+           // remove.setInputFormat(inst);                          // inform filter about dataset **AFTER** setting options
+           // Instances filteredInst = Filter.useFilter(inst, remove);                // appply filter
+           // filteredInst.setClassIndex(filteredInst.numAttributes() - 1);         // class index is the last on in the list
+            classifier.buildClassifier(newData);
 
             // eval
-            Evaluation evaluation = new Evaluation(inst);
-            evaluation.crossValidateModel(classifier, inst, 2, new Random(1));
+            Evaluation evaluation = new Evaluation(newData);
+            evaluation.crossValidateModel(classifier, newData, 2, new Random(1));
 
             // write eval
             FileOutputStream fos = new FileOutputStream(pathToEvaluation);
@@ -146,10 +165,12 @@ public class EvidenceScorer implements Scorer {
 
         try {
             // write to file
-            String fileName ="/home/farshad/experiments/Trainfactchek/Fact/"+evidence.getModel().getPredicate().getLocalName()+"_Train2.arff";
+            //String fileName ="/home/farshad/experiments/Trainfactchek/Fact/negative/"+evidence.getModel().getPredicate().getLocalName()+"_Train2.arff";
+            //String fileName ="/home/farshad/experiments/Trainfactchek/Fact/positiv/_Train2.arff";
             Instances withoutName = new Instances(AbstractEvidenceFeature.provenance);
-
-            try(FileWriter fw = new FileWriter(fileName, false);
+            if(Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE")){
+                String fileName=Defacto.DEFACTO_CONFIG.getStringSetting("settings", "TRAINING2_FILE_LOCATION");
+             try(FileWriter fw = new FileWriter(fileName, false);
                 BufferedWriter bw = new BufferedWriter(fw);
                 PrintWriter out = new PrintWriter(bw))
             {
@@ -157,19 +178,26 @@ public class EvidenceScorer implements Scorer {
             } catch (IOException e) {
                 LOGGER.error(e.getMessage());
             }
+            }
 
 
             withoutName.setClassIndex(withoutName.numAttributes() - 1);
             withoutName.deleteStringAttributes();
             
             Instance newInstance = new Instance(evidence.getFeatures());
-            newInstance.deleteAttributeAt(1);
+            newInstance.deleteAttributeAt(0);
             newInstance.setDataset(withoutName);
 
             // this gives us the probability distribution for an input triple
             // [0.33, 0.66] means it's 33% likely to be true and 66% likely to be false
             // we are only interested in the true value
-            evidence.setDeFactoScore(this.classifier.distributionForInstance(newInstance)[0]);
+            double temp = this.classifier.distributionForInstance(newInstance)[0];
+            double classifyingResult = classifier.classifyInstance(newInstance);
+/*            if(evidence.getComplexProofs().size()==0){
+                temp = 0;
+            }*/
+            System.out.print(newInstance.toString()+" : "+ temp +" class:"+classifyingResult);
+            evidence.setDeFactoScore(temp);
         }
         catch (Exception e) {
 

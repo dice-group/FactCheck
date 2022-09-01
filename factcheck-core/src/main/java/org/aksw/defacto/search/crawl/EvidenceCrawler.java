@@ -136,13 +136,17 @@ public class EvidenceCrawler {
         				topicTerms.add(subject);
         				topicTerms.add(object);
         				//TODO : BOA
-                        PaternGenerator pg = new PaternGenerator();
-                        List<Pattern> patterns = pg.generate(evidence.getModel().getFact(), "en");
-        				//List<Pattern> patterns = searcher.querySolrIndex1(evidence.getModel().getPropertyUri(), 20, 0, language);
-        				for ( Pattern p : patterns ) {
-        					Word predicate = new Word(p.getNormalized().trim(), 0);
-        					topicTerms.add(predicate);
-        				}
+                        List<Pattern> patterns = new ArrayList<>();
+                        if(Defacto.DEFACTO_CONFIG.getBooleanSetting("boa", "USE_BOA")){
+                            patterns = searcher.querySolrIndex(evidence.getModel().getPropertyUri(), 20, 0, language);
+                        }else{
+                            PaternGenerator pg = new PaternGenerator();
+                            patterns = pg.generate(evidence.getModel().getFact(), "en");
+                        }
+                        for ( Pattern p : patterns ) {
+                            Word predicate = new Word(p.getNormalized().trim(), 0);
+                            topicTerms.add(predicate);
+                        }
         			}
         			evidence.setTopicTerms(language, topicTerms);
             		evidence.setTopicTermVectorForWebsites(language);

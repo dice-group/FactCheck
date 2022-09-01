@@ -49,7 +49,8 @@ public class EvidenceFeatureExtractor {
             feature.extractFeature(evidence);
         
         // we only need to add the feature vector to the weka instances object if we plan to write the training file
-        if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("evidence", "OVERWRITE_EVIDENCE_TRAINING_FILE") )
+        if ( Defacto.DEFACTO_CONFIG.getBooleanSetting("evidence", "OVERWRITE_EVIDENCE_TRAINING_FILE") ) {
             AbstractEvidenceFeature.provenance.add(evidence.getFeatures());
+        }
     }
 }
