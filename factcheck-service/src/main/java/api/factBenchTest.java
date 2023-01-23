@@ -58,7 +58,7 @@ public class factBenchTest {
         String result = checkFactFromFile(file, Integer.toString(TaskID));
         TaskID = TaskID+1;
         // add Progress
-        progress.put(file.getPath(),result);
+        /*progress.put(file.getPath(),result);
         // write to file
         String FileName = "result_"+file.getName();
         try (PrintWriter out = new PrintWriter(file.getParent()+"/"+FileName+"r")) {
@@ -67,7 +67,7 @@ public class factBenchTest {
             System.out.println(TaskID);
             System.out.println(file.toPath());
             System.out.println(result);
-            System.out.println("-=-=-=-=-=-=-==-=-==-=-=-=-==-=-=-=-=-=-=-==-=-=-=-");
+            System.out.println("-=-=-=-=-=-=-==-=-==-=-=-=-==-=-=-=-=-=-=-==-=-=-=-");*/
     }
 
     public void checkFacts(String path) throws IOException {
