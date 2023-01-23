@@ -9,6 +9,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.util.FileReader;
 import org.aksw.sparql.metrics.DatabaseBackedSPARQLEndpointMetrics;
+import org.apache.log4j.Logger;
 import org.dllearner.kb.sparql.SparqlEndpoint;
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
@@ -30,7 +31,7 @@ import java.sql.SQLException;
 public class GoodnessFeature extends AbstractEvidenceFeature {
 
 	//public static OWLDataFactoryImpl owlDataFactory = new OWLDataFactoryImpl();
-
+	private static Logger logger = Logger.getLogger(GoodnessFeature.class);
     private static DatabaseBackedSPARQLEndpointMetrics metric = null;
 	private static SparqlEndpoint endpoint = SparqlEndpoint.getEndpointDBpedia();
 	
@@ -41,6 +42,7 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
 			File targetFile = FileReader.read("org.aksw.defacto.ml.feature.evidence.impl.GoodnessFeature","defacto.ini");
 			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(targetFile));
 
+			//String dbHost = "host.docker.internal";
 			String dbHost = "localhost";
 			String dbPort = "3306";
 			String database = "dbpedia_metrics";
@@ -48,9 +50,10 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
             String pw = Defacto.DEFACTO_CONFIG.getStringSetting("mysql", "PASSWORD");
 
 
-			//System.out.println(dbHost + ":" + dbPort + "/" + database +" ==> dbUser is : "+ dbUser + " pass is " + pw);
-            Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&allowPublicKeyRetrieval=true&useSSL=false");
-			System.out.println ("endpoint is :"+endpoint);
+			logger.info(dbHost + ":" + dbPort + "/" + database +" ==> dbUser is : "+ dbUser + " pass is " + pw);
+			logger.info("endpoint is :"+endpoint);
+			Connection conn = DriverManager.getConnection("jdbc:mysql://" + dbHost + ":" + dbPort + "/" + database + "?" + "user=" + dbUser + "&password=" + pw+"&allowPublicKeyRetrieval=true&useSSL=false");
+
 
 			metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, (String) null, conn);
 			//metric = new DatabaseBackedSPARQLEndpointMetrics(endpoint, "pmi-cache", conn);

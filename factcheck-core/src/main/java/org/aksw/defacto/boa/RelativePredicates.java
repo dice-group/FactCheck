@@ -188,6 +188,23 @@ public class RelativePredicates {
             returnVal = Arrays.asList("governor","leader", "manager","chief", "head","principal","commander","captain","boss");
         }
 
+        //productionCompany
+        if(input.equals("productionCompany")){
+            returnVal = Arrays.asList("production company","manufacture","company","construction","creation");
+        }
+        //academicDiscipline
+        if(input.equals("academicDiscipline")){
+            returnVal = Arrays.asList("academic discipline","field of study","study","field","discipline");
+        }
+        //chancellor
+        if(input.equals("chancellor")){
+            returnVal = Arrays.asList("chancellor","leader","president","principal","dean","master","chief");
+        }
+        //city
+        if(input.equals("city")){
+            returnVal = Arrays.asList("city","location","address","position");
+        }
+
         if(returnVal==null){
             returnVal = new ArrayList<>();
             returnVal.add(input);

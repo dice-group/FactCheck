@@ -45,9 +45,10 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 	public static void init()
 	{
 		if ( Defacto.DEFACTO_CONFIG != null ) {
-
+			logger.info("loading config ini file");
 			ELASTIC_SERVER = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "SERVER_ADDRESS");
 			ELASTIC_PORT = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "PORT_NUMBER");
+			logger.info("ELASTIC_SERVER is : "+ ELASTIC_SERVER + " and ELASTIC_PORT is : "+ELASTIC_PORT);
 			NUMBER_OF_SEARCH_RESULTS = Defacto.DEFACTO_CONFIG.getStringSetting("crawl", "NUMBER_OF_SEARCH_RESULTS");
 		}
 	}
@@ -65,7 +66,6 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 		try {
 			List<WebSite> results = new ArrayList<WebSite>();
 
-			logger.info("ELASTIC_SERVER is : "+ ELASTIC_SERVER + " and ELASTIC_PORT is : "+ELASTIC_PORT);
 
 			this.restClientobj = RestClient.builder(new HttpHost(ELASTIC_SERVER , Integer.parseInt(ELASTIC_PORT), "http")).build();
 			String subject  = query.getSubjectLabel().replace("&", "and");
