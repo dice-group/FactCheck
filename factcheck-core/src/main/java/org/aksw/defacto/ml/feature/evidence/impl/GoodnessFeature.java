@@ -9,6 +9,7 @@ import org.aksw.defacto.evidence.Evidence;
 import org.aksw.defacto.ml.feature.evidence.AbstractEvidenceFeature;
 import org.aksw.defacto.util.FileReader;
 import org.aksw.sparql.metrics.DatabaseBackedSPARQLEndpointMetrics;
+import org.apache.jena.base.Sys;
 import org.apache.log4j.Logger;
 import org.dllearner.kb.sparql.SparqlEndpoint;
 import org.ini4j.Ini;
@@ -20,6 +21,8 @@ import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -33,13 +36,20 @@ public class GoodnessFeature extends AbstractEvidenceFeature {
 	//public static OWLDataFactoryImpl owlDataFactory = new OWLDataFactoryImpl();
 	private static Logger logger = Logger.getLogger(GoodnessFeature.class);
     private static DatabaseBackedSPARQLEndpointMetrics metric = null;
-	private static SparqlEndpoint endpoint = SparqlEndpoint.getEndpointDBpedia();
+	private static SparqlEndpoint endpoint;
 	
 	static {
-		
+
+		try {
+			endpoint = new SparqlEndpoint(new URL("https://synthg-fact.dice-research.org/sparql"));
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
+			logger.info(" read defacto ini file from class org.aksw.defacto.ml.feature.evidence.impl.GoodnessFeature");
 			File targetFile = FileReader.read("org.aksw.defacto.ml.feature.evidence.impl.GoodnessFeature","defacto.ini");
+			logger.info(".ini file path is : "+ targetFile.getAbsolutePath());
 			Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(targetFile));
 
 			//String dbHost = "host.docker.internal";

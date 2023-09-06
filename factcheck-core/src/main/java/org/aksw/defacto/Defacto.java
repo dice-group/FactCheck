@@ -30,6 +30,7 @@ import org.aksw.defacto.util.FileReader;
 
 import org.aksw.defacto.util.TimeUtil;
 
+import org.apache.jena.base.Sys;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.dice.factcheck.search.engine.elastic.ElasticSearchEngine;
@@ -53,7 +54,6 @@ public class Defacto {
 
 	public static DefactoConfig DEFACTO_CONFIG;
 	public static TIME_DISTRIBUTION_ONLY onlyTimes;
-
 	private static final Logger LOGGER = LoggerFactory.getLogger(Defacto.class);
 
 	/**
@@ -151,9 +151,10 @@ public class Defacto {
 		try {
 
 			if ( Defacto.DEFACTO_CONFIG  == null ) {
-
+				LOGGER.info("read defacto config from class org.aksw.defacto.Defacto: ");
 				File targetFile = FileReader.read("org.aksw.defacto.Defacto","defacto.ini");
-
+				LOGGER.info(" ini file path is "+ targetFile.getAbsolutePath());
+				LOGGER.info("read defacto config from : ");
 				Defacto.DEFACTO_CONFIG = new DefactoConfig(new Ini(targetFile));
 
 			}
@@ -255,7 +256,7 @@ public class Defacto {
 			min = Math.min(min, j);
 		}
 
-		System.out.println("MAX: " + max);
-		System.out.println("MIN: " + min);
+		LOGGER.info("MAX: " + max);
+		LOGGER.info("MIN: " + min);
 	}
 }

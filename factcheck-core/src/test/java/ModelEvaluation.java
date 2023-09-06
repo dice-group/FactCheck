@@ -42,8 +42,9 @@ public class ModelEvaluation {
         			"{ <%s> <http://dbpedia.org/ontology/birthPlace> ?country . " +  
         			" ?country rdf:type <http://dbpedia.org/ontology/Country> } UNION { <%s> <http://dbpedia.org/ontology/birthPlace> ?place . ?place <http://dbpedia.org/ontology/isPartOf> ?country . ?country rdf:type <http://dbpedia.org/ontology/Country> } } ", playerUri, playerUri);
         	
-        	ResultSet results = SparqlUtil.executeSelectQuery("http://dbpedia.org/sparql", "http://dbpedia.org", query);
-        	
+        	//ResultSet results = SparqlUtil.executeSelectQuery("http://dbpedia.org/sparql", "http://dbpedia.org", query);
+			ResultSet results = SparqlUtil.executeSelectQuery("https://synthg-fact.dice-research.org/sparql",null, query);
+
         	String country = "";
         	while ( results.hasNext() ) {
         		

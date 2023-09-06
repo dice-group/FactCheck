@@ -38,7 +38,7 @@ public class FactScorer {
      */
     public FactScorer() {
 
-        this.classifier = loadClassifier();
+        /*this.classifier = loadClassifier();
         try {
             
 //            this.trainingInstances = new Instances(new BufferedReader(new FileReader(
@@ -53,7 +53,7 @@ public class FactScorer {
         catch (IOException e) {
             
             throw new RuntimeException(e);
-        }
+        }*/
     }
     
     /**
@@ -61,11 +61,22 @@ public class FactScorer {
      * @param evidence
      */
     public void scoreEvidence(Evidence evidence) {
+        this.classifier = loadClassifier(evidence.getModel().predicate.getURI());
         LOGGER.info("evidence is :"+evidence.toString());
         //Boolean isGeneratingTrainFile = false;
     	//Instances instancesWithStringVector = new Instances(trainingInstances);
         //instancesWithStringVector.setClassIndex(26);
         //String fileName ="/home/farshad/experiments/Trainfactchek/Fact/negative/"+evidence.getModel().getPredicate().getLocalName()+"_train1.arff";
+
+        // TODO: maybe should add flag to not run in training mode !
+        String[] segments = evidence.getModel().predicate.getURI().split("/");
+        if(segments.length>0) {
+            String predicate = segments[segments.length - 1];
+            this.classifier = loadClassifier(predicate);
+        }else{
+            LOGGER.info("For this evidence can not load the model based on predicate because the predicate is empty then used the last model");
+        }
+
         Instances withoutName = new Instances(AbstractFactFeatures.factFeatures);
         if(Defacto.DEFACTO_CONFIG.getBooleanSetting("settings", "TRAINING_MODE")){
             String fileName=Defacto.DEFACTO_CONFIG.getStringSetting("settings", "TRAINING1_FILE_LOCATION");
@@ -108,7 +119,8 @@ public class FactScorer {
                 newInstance.setDataset(instancesWithStringVector);
                 instancesWithStringVector.add(newInstance);*/
                 //System.out.println(this.classifier.distributionForInstance(newInstance)[0]);
-                proof.setScore(this.classifier.distributionForInstance(newInstance)[0]);
+                    double[] scores = this.classifier.distributionForInstance(newInstance);
+                proof.setScore(scores[0]);
                 LOGGER.info("Proof score for " + " -> " + proof.getProofPhrase() +" -> "+proof.getScore());
                 
                 // remove the new instance again
@@ -156,7 +168,44 @@ public class FactScorer {
             		DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("fact", "FACT_CLASSIFIER_TYPE"), e);
         }
     }
-    
+
+    private Classifier loadClassifier(String predicate) {
+
+        try {
+            String modelToUse = whichModelShouldUse(predicate);
+            LOGGER.info(" we are using this model :  "+modelToUse);
+            return (Classifier) weka.core.SerializationHelper.read(
+                    DefactoConfig.DEFACTO_DATA_DIR + modelToUse);
+        }
+        catch (Exception e) {
+
+            throw new RuntimeException("Could not load classifier from: " +
+                    DefactoConfig.DEFACTO_DATA_DIR + whichModelShouldUse(predicate));
+        }
+    }
+
+    private String whichModelShouldUse(String predicate) {
+        List<String> predicates =  Arrays.asList(Defacto.DEFACTO_CONFIG.getArray("predicates","predicate"));
+        String[] modelIndex = Defacto.DEFACTO_CONFIG.getArray("predicates","FACT_CLASSIFIER_TYPE_model_index");
+        String[] factClassifiers = Defacto.DEFACTO_CONFIG.getArray("predicates","FACT_CLASSIFIER_TYPE");
+
+        if(predicate.contains("/")){
+            String[] parts = predicate.split("/");
+            predicate = parts[parts.length-1];
+        }
+
+        if(predicates.contains(predicate)){
+            int index = predicates.indexOf(predicate);
+            return factClassifiers[Integer.parseInt(modelIndex[index])];
+        }else{
+            if(factClassifiers.length > 0 && modelIndex.length>0) {
+                return factClassifiers[Integer.parseInt(modelIndex[0])];
+            }else{
+                return "ERROR";
+            }
+        }
+    }
+
     public String loadFileName(String name){
     	
     	return new File(FactScorer.class.getResource(name).getFile()).getAbsolutePath(); 

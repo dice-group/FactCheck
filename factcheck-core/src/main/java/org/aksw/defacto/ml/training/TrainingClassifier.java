@@ -3,6 +3,7 @@ package org.aksw.defacto.ml.training;
 import weka.classifiers.Classifier;
 import weka.classifiers.functions.LibSVM;
 import weka.classifiers.functions.MultilayerPerceptron;
+import weka.classifiers.functions.SMO;
 import weka.classifiers.trees.J48;
 
 public class TrainingClassifier {
@@ -10,7 +11,8 @@ public class TrainingClassifier {
     public enum classifierName {
         MultilayerPerceptron,
         J48,
-        LibSVM
+        LibSVM,
+        SMO
     }
 
     public TrainingClassifier() {
@@ -18,8 +20,8 @@ public class TrainingClassifier {
 
     public void train(classifierName cn, String pathToClassifier, String pathToEvaluation, String pathToTrainingData,int[] removeFilterAttributes){
 
-        Classifier classifier = new MultilayerPerceptron();;
-
+        Classifier classifier = new MultilayerPerceptron();
+        System.out.println("the name of classifier which announced bu user is :"+cn.name());
         switch (cn){
             case J48:
                 classifier = new J48();
@@ -29,6 +31,9 @@ public class TrainingClassifier {
                 break;
             case MultilayerPerceptron:
                 classifier = new MultilayerPerceptron();
+                break;
+            case SMO:
+                classifier = new SMO();
                 break;
         }
 

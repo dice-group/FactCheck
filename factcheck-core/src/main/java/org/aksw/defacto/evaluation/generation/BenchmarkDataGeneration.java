@@ -940,8 +940,8 @@ public class BenchmarkDataGeneration {
 		// use dbpedia as default
 		if ( model == null ) {
 		
-			qexec = new QueryEngineHTTP("http://dbpedia.org/sparql", query);
-			((QueryEngineHTTP) qexec).addDefaultGraph("http://dbpedia.org");
+			qexec = new QueryEngineHTTP("https://synthg-fact.dice-research.org/sparql", query);
+			//((QueryEngineHTTP) qexec).addDefaultGraph("http://dbpedia.org");
 		}
 		// take the provided model
 		else qexec = QueryExecutionFactory.create(QueryFactory.create(query, Syntax.syntaxARQ), model);

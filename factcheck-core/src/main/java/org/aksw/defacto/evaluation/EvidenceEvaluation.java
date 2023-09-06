@@ -29,6 +29,8 @@ import org.aksw.defacto.model.DefactoModel;
 import org.aksw.defacto.reader.DefactoModelReader;
 import org.aksw.defacto.util.Frequency;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -38,7 +40,7 @@ import weka.core.Instances;
  *
  */
 public class EvidenceEvaluation {
-	
+	private static final Logger LOGGER = LoggerFactory.getLogger(EvidenceEvaluation.class);
 	private static Classifier classifier = null; 
 	private static Instances trainingInstances = null;
 	private static Instances backupInstances = null;
@@ -49,6 +51,7 @@ public void main(String[] args) throws Exception {
 		
 		Defacto.init();
 		loadClassifier();
+	    //loadClassifier(predicate);
 		initYearMap();
 //		testFactArff();
 		
@@ -246,8 +249,40 @@ public void main(String[] args) throws Exception {
         }
         catch (Exception e) {
 
-            throw new RuntimeException("Could not load classifier from: " + 
+            throw new RuntimeException("Could not loa7d classifier from: " +
             		DefactoConfig.DEFACTO_DATA_DIR + Defacto.DEFACTO_CONFIG.getStringSetting("evidence", "EVIDENCE_CLASSIFIER_TYPE"), e);
         }
     }
+
+	private Classifier loadClassifier(String predicate) {
+
+		try {
+			String modelToUse = whichModelShouldUse(predicate);
+			LOGGER.info(" Evidence Evaluation use this model :  "+modelToUse);
+			return (Classifier) weka.core.SerializationHelper.read(
+					DefactoConfig.DEFACTO_DATA_DIR + modelToUse);
+		}
+		catch (Exception e) {
+
+			throw new RuntimeException("Could not load classifier from: " +
+					DefactoConfig.DEFACTO_DATA_DIR + whichModelShouldUse(predicate));
+		}
+	}
+
+	private String whichModelShouldUse(String predicate) {
+		List<String> predicates =  Arrays.asList(Defacto.DEFACTO_CONFIG.getArray("predicates","predicate"));
+		String[] modelIndex = Defacto.DEFACTO_CONFIG.getArray("predicates","EVIDENCE_CLASSIFIER_TYPE_model_index");
+		String[] factClassifiers = Defacto.DEFACTO_CONFIG.getArray("predicates","EVIDENCE_CLASSIFIER_TYPE");
+
+		if(predicates.contains(predicate)){
+			int index = predicates.indexOf(predicate);
+			return factClassifiers[Integer.parseInt(modelIndex[index])];
+		}else{
+			if(factClassifiers.length > 0 && modelIndex.length>0) {
+				return factClassifiers[Integer.parseInt(modelIndex[0])];
+			}else{
+				return "ERROR";
+			}
+		}
+	}
 }

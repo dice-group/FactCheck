@@ -45,7 +45,6 @@ public class ElasticSearchEngine extends DefaultSearchEngine {
 	public static void init()
 	{
 		if ( Defacto.DEFACTO_CONFIG != null ) {
-			logger.info("loading config ini file");
 			ELASTIC_SERVER = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "SERVER_ADDRESS");
 			ELASTIC_PORT = Defacto.DEFACTO_CONFIG.getStringSetting("elastic", "PORT_NUMBER");
 			logger.info("ELASTIC_SERVER is : "+ ELASTIC_SERVER + " and ELASTIC_PORT is : "+ELASTIC_PORT);

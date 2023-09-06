@@ -26,7 +26,7 @@ public class FactcheckTrainerApplication implements CommandLineRunner {
 		if (args.length ==  1 && args[0].equals("h")) {
 			System.out.println("this is help");
 			System.out.println("1 . use 'train' for train the classifier ");
-			System.out.println("\t \t train [full path for save classifier] [full path for save evaluation] [full path to training file] [classifier one of these options: MultilayerPerceptron, J48, LibSVM] [comma separated index of the training data for delete like this : 29,27,5]");
+			System.out.println("\t \t train [full path for save classifier] [full path for save evaluation] [full path to training file] [classifier one of these options: MultilayerPerceptron, J48, LibSVM, SMO] [comma separated index of the training data for delete like this : 29,27,5]");
 		}
 
 		System.out.println("args len is  " + args.length);
@@ -51,6 +51,8 @@ public class FactcheckTrainerApplication implements CommandLineRunner {
 				inicesToRemove[i] = tempIndicesArral.get(i);
 			}
 
+			System.out.println(classifier);
+			System.out.println("start");
 			c.train(TrainingClassifier.classifierName.valueOf(classifier), pathToClassifier,pathToEvaluation,pathToTrainingData,inicesToRemove);
 
 			System.out.println("done");

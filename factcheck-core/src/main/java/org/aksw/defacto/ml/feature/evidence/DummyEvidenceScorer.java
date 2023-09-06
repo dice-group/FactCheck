@@ -29,6 +29,11 @@ public class DummyEvidenceScorer implements Scorer {
 		return null;
     }
 
+    @Override
+    public Classifier loadClassifier(String predicate) {
+        return null;
+    }
+
     /**
      * 
      * @param evidence

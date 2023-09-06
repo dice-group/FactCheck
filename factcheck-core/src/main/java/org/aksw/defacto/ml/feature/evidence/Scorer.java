@@ -7,6 +7,7 @@ import weka.classifiers.Classifier;
 public interface Scorer {
 
 	public Classifier loadClassifier();
+    public Classifier loadClassifier(String predicate);
 	
     public Double scoreEvidence(Evidence evidence);
 }

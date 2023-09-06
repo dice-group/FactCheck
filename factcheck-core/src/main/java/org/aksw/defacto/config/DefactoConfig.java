@@ -3,10 +3,6 @@
  */
 package org.aksw.defacto.config;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.ini4j.Ini;
 
 
@@ -21,7 +17,7 @@ public class DefactoConfig {
     public static String DEFACTO_DATA_DIR;
 
     public DefactoConfig(Ini config) {
-        
+        System.out.println("ini size : "+config.size());
         this.defactoConfig =  config;
         DEFACTO_DATA_DIR = this.defactoConfig.get("eval", "data-directory");
     }
@@ -83,5 +79,17 @@ public class DefactoConfig {
     public Double getDoubleSetting(String section, String key) {
 
         return Double.valueOf(this.defactoConfig.get(section, key));
+    }
+
+    /**
+     * returns array values from the config
+     * the value should be with space spited
+     * @param key
+     * @return
+     */
+    public String[] getArray(String section,String key){
+        String ll = this.defactoConfig.get(section,key);
+        String[] results = ll.split(" ");
+        return results;
     }
 }
